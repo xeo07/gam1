@@ -108,6 +108,31 @@ layout_mode = 2
 disabled = true
 text = "Оскорбить"
 
+[node name="ContractsLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer"]
+layout_mode = 2
+text = "Действующих договоров нет"
+autowrap_mode = 2
+
+[node name="TradeTreatyButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer"]
+layout_mode = 2
+disabled = true
+text = "Предложить торговый договор"
+
+[node name="PactButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer"]
+layout_mode = 2
+disabled = true
+text = "Предложить пакт о ненападении"
+
+[node name="MilitaryObligationButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer"]
+layout_mode = 2
+disabled = true
+text = "Предложить военное обязательство"
+
+[node name="BreakContractButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer"]
+layout_mode = 2
+disabled = true
+text = "Разорвать действующий договор"
+
 [node name="CooldownLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer"]
 layout_mode = 2
 

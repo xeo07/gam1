@@ -40,6 +40,7 @@ const REQUIRED_SECTIONS: Array[String] = [
 @onready var event_manager: EventManager = $"../EventManager" as EventManager
 @onready var world_manager: WorldManager = $"../WorldManager" as WorldManager
 @onready var diplomacy_manager: DiplomacyManager = $"../DiplomacyManager" as DiplomacyManager
+@onready var contract_manager: ContractManager = $"../ContractManager" as ContractManager
 @onready var trade_manager: TradeManager = $"../TradeManager" as TradeManager
 @onready var spy_manager: SpyManager = $"../SpyManager" as SpyManager
 @onready var messenger_manager: MessengerManager = $"../MessengerManager" as MessengerManager
@@ -184,6 +185,7 @@ func build_save_data() -> Dictionary:
 		"events": event_manager.get_save_data(),
 		"world": world_manager.get_save_data(),
 		"diplomacy": diplomacy_manager.get_save_data(),
+		"contracts": contract_manager.get_save_data(),
 		"trade": trade_manager.get_save_data(),
 		"spy": spy_manager.get_save_data(),
 		"messenger": messenger_manager.get_save_data(),
@@ -248,6 +250,7 @@ func _apply_sections(data: Dictionary) -> bool:
 	var war_data: Dictionary = data["war"]
 	var world_data: Dictionary = data["world"]
 	var diplomacy_data: Dictionary = data["diplomacy"]
+	var contracts_data: Dictionary = data.get("contracts", {})
 	var trade_data: Dictionary = data["trade"]
 	var spy_data: Dictionary = data["spy"]
 	var messenger_data: Dictionary = data.get("messenger", {})
@@ -280,6 +283,8 @@ func _apply_sections(data: Dictionary) -> bool:
 	if not world_manager.load_save_data(world_data):
 		return false
 	if not diplomacy_manager.load_save_data(diplomacy_data):
+		return false
+	if not contract_manager.load_save_data(contracts_data):
 		return false
 	if not trade_manager.load_save_data(trade_data):
 		return false

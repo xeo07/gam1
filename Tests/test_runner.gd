@@ -20,9 +20,10 @@ func _initialize() -> void:
 	_test_story_chains()
 	_test_relation_profiles()
 	_test_contextual_diplomacy()
+	_test_diplomatic_contracts()
 
 	if _failures.is_empty():
-		print("KINGDOOM tests passed: 16")
+		print("KINGDOOM tests passed: 17")
 		quit(0)
 		return
 
@@ -613,6 +614,49 @@ func _test_contextual_diplomacy() -> void:
 		var preview := DiplomaticActionResolver.build(action_id, merchant, rival)
 		_expect(not String(preview.get("context", "")).is_empty(), "Every diplomatic action must explain its context")
 		_expect(preview.has("cost") and preview.has("forecast"), "Every diplomatic action must show cost and forecast")
+
+
+func _test_diplomatic_contracts() -> void:
+	var merchant := StateData.create(&"merchant_contract", "Торговая марка", "Князь", 50, 50, 50, 50, 10, &"neutral", &"merchant")
+	var trade_preview := DiplomaticContract.get_preview(&"trade_treaty", merchant, 10)
+	_expect(bool(trade_preview["accepted"]), "Merchant AI must value a viable trade treaty")
+	_expect(trade_preview.has_all(["duration", "condition", "benefit", "breach"]), "Contract must expose term, condition, benefit and breach consequence")
+	var warlike := StateData.create(&"warlike_contract", "Военная марка", "Князь", 50, 50, 50, 50, 8, &"neutral", &"warlike")
+	var pact_preview := DiplomaticContract.get_preview(&"non_aggression", warlike, 8)
+	_expect(not bool(pact_preview["accepted"]), "Warlike AI must resist a weak non-aggression offer")
+
+	var session := GameSessionManager.new()
+	var time := TimeManager.new()
+	var resources := ResourceManager.new()
+	var world := WorldManager.new()
+	var contracts := ContractManager.new()
+	session.initialize_new_game("Договоры", 11223, [], [])
+	resources.initialize_new_game()
+	world.game_session_manager = session
+	world.time_manager = time
+	world.initialize_new_game()
+	contracts.time_manager = time
+	contracts.world_manager = world
+	contracts.resource_manager = resources
+	var state_id := WorldGenerator.AI_STATE_IDS[0]
+	world.set_relation(state_id, 60)
+	var initial_gold := resources.gold
+	_expect(contracts.propose(&"trade_treaty", state_id), "A strong trade treaty proposal must be accepted")
+	_expect(contracts.has_active_contract(state_id, &"trade_treaty"), "Accepted contract must become active")
+	_expect(resources.gold < initial_gold, "Signing a contract must pay its visible cost")
+	var saved := contracts.get_save_data()
+	var restored := ContractManager.new()
+	_expect(restored.load_save_data(saved), "Contracts must survive save-data round-trip")
+	_expect(restored.has_active_contract(state_id), "Loaded contract must remain active")
+	var relation_before_breach := world.get_relation(state_id)
+	_expect(contracts.break_contract(state_id), "Active contract must be breakable")
+	_expect(world.get_relation(state_id) < relation_before_breach, "Breaking a contract must damage relations")
+	restored.free()
+	contracts.free()
+	world.free()
+	resources.free()
+	time.free()
+	session.free()
 
 
 func _expect(condition: bool, message: String) -> void:

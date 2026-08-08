@@ -11,6 +11,7 @@ const MAX_ENTRIES := 200
 @onready var messenger_manager: MessengerManager = $"../MessengerManager" as MessengerManager
 @onready var war_manager: WarManager = $"../WarManager" as WarManager
 @onready var diplomacy_manager: DiplomacyManager = $"../DiplomacyManager" as DiplomacyManager
+@onready var contract_manager: ContractManager = $"../ContractManager" as ContractManager
 
 var _entries: Array[Dictionary] = []
 var _sequence := 0
@@ -23,6 +24,8 @@ func _ready() -> void:
 	war_manager.war_declared.connect(_on_war_declared)
 	war_manager.campaign_completed.connect(_on_campaign_completed)
 	diplomacy_manager.diplomatic_action_completed.connect(_on_diplomatic_action)
+	contract_manager.contract_signed.connect(_on_contract_signed)
+	contract_manager.contract_ended.connect(_on_contract_ended)
 
 
 func add_entry(entry: Dictionary) -> bool:
@@ -152,6 +155,24 @@ func _on_diplomatic_action(
 		"Дипломатический поступок", message, [state_id], &"confirmed",
 		{"action": String(action_id), "relation_change": relation_change},
 		2 if action_id == &"insult" else 1
+	))
+
+
+func _on_contract_signed(contract: Dictionary, message: String) -> void:
+	add_entry(EventJournalEntry.create(
+		_next_id("contract"), time_manager.get_absolute_day(), &"diplomacy",
+		"Заключён международный договор", message,
+		[StringName(contract.get("state_id", &""))], &"confirmed",
+		{"contract": String(contract.get("contract_id", &"")), "status": "active"}, 3
+	))
+
+
+func _on_contract_ended(contract: Dictionary, reason: String) -> void:
+	add_entry(EventJournalEntry.create(
+		_next_id("contract"), time_manager.get_absolute_day(), &"diplomacy",
+		"Изменился международный договор", reason,
+		[StringName(contract.get("state_id", &""))], &"confirmed",
+		{"contract": String(contract.get("contract_id", &"")), "status": String(contract.get("status", &""))}, 3
 	))
 
 

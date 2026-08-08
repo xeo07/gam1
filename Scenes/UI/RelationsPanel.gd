@@ -22,6 +22,11 @@ const STATUS_DISPLAY_NAMES: Dictionary = {
 @onready var threat_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/ThreatButton
 @onready var agreement_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/AgreementButton
 @onready var insult_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/InsultButton
+@onready var contracts_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/ContractsLabel
+@onready var trade_treaty_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/TradeTreatyButton
+@onready var pact_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/PactButton
+@onready var military_obligation_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/MilitaryObligationButton
+@onready var break_contract_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/BreakContractButton
 @onready var action_confirmation: ConfirmationDialog = $ActionConfirmation
 @onready var cooldown_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/CooldownLabel
 @onready var action_status_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/ActionStatusLabel
@@ -32,6 +37,7 @@ const STATUS_DISPLAY_NAMES: Dictionary = {
 @onready var close_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CloseButton
 @onready var world_manager: WorldManager = $"../WorldManager" as WorldManager
 @onready var diplomacy_manager: DiplomacyManager = $"../DiplomacyManager" as DiplomacyManager
+@onready var contract_manager: ContractManager = $"../ContractManager" as ContractManager
 @onready var spy_manager: SpyManager = $"../SpyManager" as SpyManager
 @onready var messenger_manager: MessengerManager = $"../MessengerManager" as MessengerManager
 @onready var resource_manager: ResourceManager = $"../ResourceManager" as ResourceManager
@@ -40,6 +46,7 @@ const STATUS_DISPLAY_NAMES: Dictionary = {
 var _state_ids: Array[StringName] = []
 var _selected_state_id: StringName = &""
 var _pending_action_id: StringName = &""
+var _pending_contract_id: StringName = &""
 
 
 func _ready() -> void:
@@ -49,6 +56,13 @@ func _ready() -> void:
 	agreement_button.pressed.connect(_request_action.bind(&"agreement"))
 	insult_button.pressed.connect(_request_action.bind(&"insult"))
 	action_confirmation.confirmed.connect(_on_action_confirmed)
+	trade_treaty_button.pressed.connect(_request_contract.bind(&"trade_treaty"))
+	pact_button.pressed.connect(_request_contract.bind(&"non_aggression"))
+	military_obligation_button.pressed.connect(_request_contract.bind(&"military_obligation"))
+	break_contract_button.pressed.connect(_request_break_contract)
+	contract_manager.contract_signed.connect(_on_contract_changed)
+	contract_manager.contract_ended.connect(_on_contract_changed)
+	contract_manager.contract_failed.connect(_on_contract_failed)
 	send_spy_button.pressed.connect(_on_send_spy_pressed)
 	send_messenger_button.pressed.connect(_on_send_messenger_pressed)
 	close_button.pressed.connect(close_panel)
@@ -137,9 +151,38 @@ func _request_action(action_id: StringName) -> void:
 
 
 func _on_action_confirmed() -> void:
-	if _pending_action_id != &"" and _selected_state_id != &"":
+	if _pending_contract_id != &"" and _selected_state_id != &"":
+		contract_manager.propose(_pending_contract_id, _selected_state_id)
+	elif _pending_action_id != &"" and _selected_state_id != &"":
 		diplomacy_manager.perform_action(_pending_action_id, _selected_state_id)
 	_pending_action_id = &""
+	_pending_contract_id = &""
+
+
+func _request_contract(contract_id: StringName) -> void:
+	var preview := contract_manager.get_preview(contract_id, _selected_state_id)
+	if preview.is_empty():
+		return
+	_pending_action_id = &""
+	_pending_contract_id = contract_id
+	action_confirmation.title = String(preview["name"])
+	action_confirmation.dialog_text = "%s\n\nСрок: %d дней\nЦена: %d золота\nУсловие: %s\nВыгода: %s\nНарушение: %s\n\nВероятная реакция: %s" % [String(preview["name"]), int(preview["duration"]), int(preview["cost"]), String(preview["condition"]), String(preview["benefit"]), String(preview["breach"]), String(preview["reaction"])]
+	action_confirmation.popup_centered(Vector2i(560, 340))
+
+
+func _request_break_contract() -> void:
+	contract_manager.break_contract(_selected_state_id)
+
+
+func _on_contract_changed(contract: Dictionary, message: String) -> void:
+	if contract.get("state_id", &"") == _selected_state_id:
+		action_status_label.text = message
+		_update_contract_controls()
+
+
+func _on_contract_failed(state_id: StringName, reason: String) -> void:
+	if state_id == _selected_state_id:
+		action_status_label.text = reason
 
 
 func _on_send_spy_pressed() -> void:
@@ -246,6 +289,7 @@ func _show_state(state_id: StringName) -> void:
 		String(state.get("freshness_text", "")),
 	]
 	_update_action_controls()
+	_update_contract_controls()
 	_update_spy_controls()
 	_update_messenger_controls()
 
@@ -306,6 +350,30 @@ func _update_action_controls() -> void:
 		var preview := diplomacy_manager.get_action_preview(action_data[1], _selected_state_id)
 		button.disabled = cooldown_remaining > 0 or not resource_manager.has_resource(&"gold", int(preview.get("cost", 0)))
 		button.tooltip_text = "%s Цена: %d золота." % [String(preview.get("forecast", "")), int(preview.get("cost", 0))]
+
+
+func _update_contract_controls() -> void:
+	var buttons: Array[Button] = [trade_treaty_button, pact_button, military_obligation_button]
+	if _selected_state_id == &"":
+		contracts_label.text = ""
+		for button in buttons:
+			button.disabled = true
+		break_contract_button.disabled = true
+		return
+	var active := contract_manager.get_active_contract(_selected_state_id)
+	if not active.is_empty():
+		contracts_label.text = "Действует: %s · до дня %d\nУсловие: %s" % [String(active["name"]), int(active["end_day"]), String(active["condition"])]
+		for button in buttons:
+			button.disabled = true
+		break_contract_button.disabled = false
+		return
+	contracts_label.text = "Действующих договоров нет"
+	break_contract_button.disabled = true
+	for pair in [[trade_treaty_button, &"trade_treaty"], [pact_button, &"non_aggression"], [military_obligation_button, &"military_obligation"]]:
+		var preview := contract_manager.get_preview(pair[1], _selected_state_id)
+		var button: Button = pair[0]
+		button.disabled = not resource_manager.has_resource(&"gold", int(preview.get("cost", 0)))
+		button.tooltip_text = String(preview.get("reaction", ""))
 
 
 func _update_spy_controls() -> void:
@@ -387,9 +455,14 @@ func _clear_details() -> void:
 	action_status_label.text = ""
 	spy_status_label.text = ""
 	messenger_status_label.text = ""
+	contracts_label.text = ""
 	gift_button.disabled = true
 	threat_button.disabled = true
 	agreement_button.disabled = true
 	insult_button.disabled = true
+	trade_treaty_button.disabled = true
+	pact_button.disabled = true
+	military_obligation_button.disabled = true
+	break_contract_button.disabled = true
 	send_spy_button.disabled = true
 	send_messenger_button.disabled = true

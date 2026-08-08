@@ -54,6 +54,7 @@ const RESULT_EFFECTS: Dictionary = {
 @onready var army_manager: ArmyManager = $"../ArmyManager" as ArmyManager
 @onready var world_manager: WorldManager = $"../WorldManager" as WorldManager
 @onready var resource_manager: ResourceManager = $"../ResourceManager" as ResourceManager
+@onready var contract_manager: ContractManager = $"../ContractManager" as ContractManager
 
 var _current_war_state_id: StringName = &""
 var _active_campaign: Dictionary = {}
@@ -88,6 +89,8 @@ func declare_war(state_id: StringName) -> bool:
 	var failure_reason := get_declare_war_failure_reason(state_id)
 	if not failure_reason.is_empty():
 		return _fail_action(failure_reason)
+	if contract_manager.has_active_contract(state_id, &"non_aggression"):
+		contract_manager.break_contract(state_id, "корона нарушила пакт и объявила войну")
 	if not world_manager.set_state_relation_and_status(state_id, -100, &"war"):
 		return _fail_action("Государство не найдено")
 	_current_war_state_id = state_id
