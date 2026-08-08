@@ -18,7 +18,9 @@ const LAST_ERROR_PATH := "user://last_menu_error.txt"
 @onready var story_chain_manager: StoryChainManager = $StoryChainManager as StoryChainManager
 @onready var world_manager: WorldManager = $WorldManager as WorldManager
 @onready var save_manager: SaveManager = $SaveManager as SaveManager
+@onready var news_manager: NewsManager = $NewsManager as NewsManager
 @onready var bottom_hud: BottomHUD = $BottomHUD as BottomHUD
+@onready var situation_dashboard: SituationDashboard = $SituationDashboard as SituationDashboard
 @onready var corner_menu_button: CornerMenuButton = $CornerMenuButton as CornerMenuButton
 @onready var population_quick_menu: PopulationQuickMenu = $PopulationQuickMenu as PopulationQuickMenu
 @onready var army_quick_menu: ArmyQuickMenu = $ArmyQuickMenu as ArmyQuickMenu
@@ -67,6 +69,9 @@ func _ready() -> void:
 	bottom_hud.resources_section_pressed.connect(_on_resources_section_pressed)
 	bottom_hud.next_day_pressed.connect(_on_next_day_pressed)
 	bottom_hud.relations_pressed.connect(_on_relations_pressed)
+	situation_dashboard.decision_pressed.connect(_show_active_event)
+	situation_dashboard.diplomacy_pressed.connect(_on_relations_pressed)
+	situation_dashboard.news_pressed.connect(_on_dashboard_news_pressed)
 	get_viewport().size_changed.connect(_update_game_area)
 	side_menu.save_pressed.connect(_on_save_pressed)
 	side_menu.load_pressed.connect(_on_load_pressed)
@@ -426,12 +431,19 @@ func _on_hud_height_changed(_height: float) -> void:
 func _update_game_area() -> void:
 	var viewport_size := get_viewport().get_visible_rect().size
 	var hud_height := bottom_hud.get_hud_height()
+	var dashboard_width := situation_dashboard.layout_for_viewport(hud_height)
 	kingdom_grid.position = Vector2(GRID_MARGIN, GRID_MARGIN)
 	kingdom_grid.size = Vector2(
-		maxf(viewport_size.x - GRID_MARGIN * 2.0, 1.0),
+		maxf(viewport_size.x - dashboard_width - GRID_MARGIN * 3.0, 1.0),
 		maxf(viewport_size.y - hud_height - GRID_MARGIN * 2.0, 1.0)
 	)
 	_update_window_layouts(hud_height)
+
+
+func _on_dashboard_news_pressed() -> void:
+	var edition: Dictionary = news_manager.get_latest_weekly_edition()
+	if not edition.is_empty():
+		foreign_news_panel.open_report(edition)
 
 
 func open_regular_panel(panel: CanvasLayer) -> void:

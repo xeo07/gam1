@@ -39,14 +39,12 @@ func _queue_position_update() -> void:
 func _update_position() -> void:
 	if not is_inside_tree():
 		return
-	var viewport_size := get_viewport().get_visible_rect().size
 	var actual_button_size := Vector2(
 		maxf(BUTTON_SIZE.x, menu_button.get_combined_minimum_size().x),
 		maxf(BUTTON_SIZE.y, menu_button.get_combined_minimum_size().y)
 	)
-	var available_height := maxf(viewport_size.y - _bottom_hud_height, actual_button_size.y)
 	menu_container.position = Vector2(
-		maxf(viewport_size.x - actual_button_size.x - RIGHT_MARGIN, 0.0),
-		maxf((available_height - actual_button_size.y) * 0.5, 0.0)
+		RIGHT_MARGIN,
+		20.0
 	)
 	menu_container.size = actual_button_size

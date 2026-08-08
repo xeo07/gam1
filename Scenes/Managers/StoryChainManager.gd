@@ -55,6 +55,10 @@ func get_selected_choice() -> StringName:
 	return _selected_choice
 
 
+func get_choice_deadline_day() -> int:
+	return _choice_deadline_day
+
+
 func get_chain_order() -> Array[StringName]:
 	return _chain_order.duplicate()
 

@@ -23,9 +23,10 @@ func _initialize() -> void:
 	_test_diplomatic_contracts()
 	_test_political_crisis()
 	_test_territorial_expansion()
+	_test_main_interface_layout()
 
 	if _failures.is_empty():
-		print("KINGDOOM tests passed: 19")
+		print("KINGDOOM tests passed: 20")
 		quit(0)
 		return
 
@@ -765,6 +766,17 @@ func _test_territorial_expansion() -> void:
 	resources.free()
 	time.free()
 	session.free()
+
+
+func _test_main_interface_layout() -> void:
+	for viewport in [Vector2(1280, 720), Vector2(1600, 900)]:
+		var layout := UILayoutMetrics.calculate(viewport, BottomHUD.DEFAULT_HUD_HEIGHT)
+		var grid: Rect2 = layout["grid_rect"]
+		var dashboard: Rect2 = layout["dashboard_rect"]
+		_expect(grid.end.x <= dashboard.position.x, "Kingdom field and situation dashboard must not overlap")
+		_expect(dashboard.end.x <= viewport.x and dashboard.end.y <= viewport.y - BottomHUD.DEFAULT_HUD_HEIGHT + 1.0, "Situation dashboard must remain visible above HUD")
+		_expect(grid.size.x >= 500.0, "Kingdom field must remain usable at supported window sizes")
+		_expect(dashboard.size.x >= 380.0, "Situation panel must remain readable at supported window sizes")
 
 
 func _expect(condition: bool, message: String) -> void:

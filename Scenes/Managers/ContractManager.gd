@@ -72,6 +72,14 @@ func get_active_contract(state_id: StringName) -> Dictionary:
 	return {}
 
 
+func get_active_contracts() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for contract in _contracts:
+		if contract.get("status", &"") == &"active":
+			result.append(contract.duplicate(true))
+	return result
+
+
 func get_save_data() -> Dictionary:
 	return {"contracts": _contracts.duplicate(true)}
 

@@ -1,0 +1,146 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scenes/UI/SituationDashboard.gd" id="1_dashboard"]
+
+[node name="SituationDashboard" type="CanvasLayer"]
+layer = 2
+script = ExtResource("1_dashboard")
+
+[node name="Dashboard" type="PanelContainer" parent="."]
+offset_left = 804.0
+offset_top = 16.0
+offset_right = 1264.0
+offset_bottom = 509.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Dashboard"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 14
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Dashboard/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Header" type="VBoxContainer" parent="Dashboard/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="Dashboard/MarginContainer/VBoxContainer/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TitleLabel"
+text = "КОРОЛЕВСКИЙ СОВЕТ"
+
+[node name="DateLabel" type="Label" parent="Dashboard/MarginContainer/VBoxContainer/Header"]
+layout_mode = 2
+text = "День 1"
+
+[node name="ResourcesCard" type="PanelContainer" parent="Dashboard/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Dashboard/MarginContainer/VBoxContainer/ResourcesCard"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="ResourcesLabel" type="Label" parent="Dashboard/MarginContainer/VBoxContainer/ResourcesCard/MarginContainer"]
+layout_mode = 2
+text = "ЕДА 0   ДЕРЕВО 0
+КАМЕНЬ 0   ЗОЛОТО 0"
+autowrap_mode = 2
+
+[node name="SituationCard" type="PanelContainer" parent="Dashboard/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Dashboard/MarginContainer/VBoxContainer/SituationCard"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Dashboard/MarginContainer/VBoxContainer/SituationCard/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SituationTitle" type="Label" parent="Dashboard/MarginContainer/VBoxContainer/SituationCard/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+theme_override_font_sizes/font_size = 20
+text = "ТЕКУЩАЯ СИТУАЦИЯ"
+autowrap_mode = 2
+
+[node name="SituationBody" type="Label" parent="Dashboard/MarginContainer/VBoxContainer/SituationCard/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Совет собирает сведения."
+autowrap_mode = 2
+
+[node name="DecisionButton" type="Button" parent="Dashboard/MarginContainer/VBoxContainer/SituationCard/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Принять решение"
+
+[node name="ConsequencesCard" type="PanelContainer" parent="Dashboard/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Dashboard/MarginContainer/VBoxContainer/ConsequencesCard"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Dashboard/MarginContainer/VBoxContainer/ConsequencesCard/MarginContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Dashboard/MarginContainer/VBoxContainer/ConsequencesCard/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "БЛИЖАЙШИЕ ПОСЛЕДСТВИЯ"
+
+[node name="ConsequencesLabel" type="Label" parent="Dashboard/MarginContainer/VBoxContainer/ConsequencesCard/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "• Срочных последствий не ожидается"
+autowrap_mode = 2
+
+[node name="NewsCard" type="PanelContainer" parent="Dashboard/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Dashboard/MarginContainer/VBoxContainer/NewsCard"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Dashboard/MarginContainer/VBoxContainer/NewsCard/MarginContainer"]
+layout_mode = 2
+
+[node name="NewsTitle" type="Label" parent="Dashboard/MarginContainer/VBoxContainer/NewsCard/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "ВЕСТНИК"
+
+[node name="NewsBody" type="Label" parent="Dashboard/MarginContainer/VBoxContainer/NewsCard/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Гонцы собирают известия."
+autowrap_mode = 2
+
+[node name="Actions" type="HBoxContainer" parent="Dashboard/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="DiplomacyButton" type="Button" parent="Dashboard/MarginContainer/VBoxContainer/Actions"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Геополитика"
+
+[node name="NewsButton" type="Button" parent="Dashboard/MarginContainer/VBoxContainer/Actions"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Читать вестник"
