@@ -15,6 +15,7 @@ const LAST_ERROR_PATH := "user://last_menu_error.txt"
 @onready var economy_manager: EconomyManager = $EconomyManager as EconomyManager
 @onready var stability_manager: StabilityManager = $StabilityManager as StabilityManager
 @onready var event_manager: EventManager = $EventManager as EventManager
+@onready var story_chain_manager: StoryChainManager = $StoryChainManager as StoryChainManager
 @onready var world_manager: WorldManager = $WorldManager as WorldManager
 @onready var save_manager: SaveManager = $SaveManager as SaveManager
 @onready var bottom_hud: BottomHUD = $BottomHUD as BottomHUD
@@ -185,6 +186,7 @@ func _initialize_session() -> void:
 		stability_manager.initialize_new_game()
 		event_manager.initialize_new_game()
 		world_manager.initialize_new_game()
+		story_chain_manager.initialize_new_game()
 		_finish_initialization()
 		return
 

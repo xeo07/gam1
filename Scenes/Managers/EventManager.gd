@@ -21,6 +21,9 @@ const KNOWN_EVENT_IDS: Array[StringName] = [
 	&"merchant_caravan",
 	&"military_petition",
 	&"craftsmen_initiative",
+	&"chain_border_refugees",
+	&"chain_grain_blight",
+	&"chain_disputed_succession",
 ]
 const CRISIS_EVENT_IDS: Array[StringName] = [
 	&"hunger_crisis",
@@ -48,6 +51,15 @@ const EVENT_CHOICE_IDS: Dictionary = {
 	],
 	&"craftsmen_initiative": [
 		&"support_workshops", &"take_materials", &"reject_initiative",
+	],
+	&"chain_border_refugees": [
+		&"shelter_refugees", &"close_border", &"escort_refugees",
+	],
+	&"chain_grain_blight": [
+		&"buy_seed", &"ration_grain", &"ignore_blight",
+	],
+	&"chain_disputed_succession": [
+		&"support_claimant", &"stay_neutral", &"mediate_succession",
 	],
 }
 
@@ -133,18 +145,16 @@ func try_generate_event(stability_data: Dictionary) -> bool:
 	var created_event := create_event(selected_event_id)
 	if created_event.is_empty():
 		return false
-	active_event = created_event.duplicate(true)
-	has_active_event_flag = true
-	last_event_day = absolute_day
-	last_event_id = selected_event_id
-	event_last_triggered_days[selected_event_id] = absolute_day
-	internal_event_ready.emit(get_active_event())
-	event_state_changed.emit()
-	print("Internal event created:")
-	print("Event: %s" % String(selected_event_id))
-	print("Day: %d" % absolute_day)
-	print("Choices: %d" % (active_event["choices"] as Array).size())
-	return true
+	return _activate_event(selected_event_id, created_event, absolute_day)
+
+
+func present_story_event(event_id: StringName) -> bool:
+	if has_active_event() or StoryChainDefinition.chain_from_event(event_id) == &"":
+		return false
+	var created_event := create_event(event_id)
+	if created_event.is_empty():
+		return false
+	return _activate_event(event_id, created_event, time_manager.get_absolute_day())
 
 
 func get_eligible_event_ids(economy_report: Dictionary) -> Array[StringName]:
@@ -250,6 +260,21 @@ func create_event(event_id: StringName) -> Dictionary:
 				_choice(&"take_materials", "Потребовать материалы для казны", "Получить материалы, но вызвать недовольство.", {}, {"wood": 4, "stone": 2, "stability": -1}, "Часть материалов изъята для государственных нужд."),
 				_choice(&"reject_initiative", "Отклонить предложение", "Не менять состояние государства.", {}, {}, "Предложение ремесленников осталось без поддержки."),
 			]
+		&"chain_border_refugees", &"chain_grain_blight", &"chain_disputed_succession":
+			var chain_id := StoryChainDefinition.chain_from_event(event_id)
+			var warning := StoryChainDefinition.get_warning(chain_id)
+			title = String(warning.get("title", ""))
+			body = String(warning.get("body", ""))
+			for choice_value in warning.get("choices", []):
+				var choice: Dictionary = choice_value
+				choices.append(_choice(
+					StringName(choice.get("choice_id", &"")),
+					String(choice.get("text", "")),
+					String(choice.get("description", "")),
+					choice.get("requirements", {}),
+					choice.get("effects", {}),
+					String(choice.get("result_text", ""))
+				))
 		_:
 			return {}
 	return {
@@ -396,6 +421,21 @@ func emit_event_state() -> void:
 
 func _on_stability_day_completed(stability_data: Dictionary) -> void:
 	try_generate_event(stability_data.duplicate(true))
+
+
+func _activate_event(event_id: StringName, event: Dictionary, absolute_day: int) -> bool:
+	active_event = event.duplicate(true)
+	has_active_event_flag = true
+	last_event_day = absolute_day
+	last_event_id = event_id
+	event_last_triggered_days[event_id] = absolute_day
+	internal_event_ready.emit(get_active_event())
+	event_state_changed.emit()
+	print("Internal event created:")
+	print("Event: %s" % String(event_id))
+	print("Day: %d" % absolute_day)
+	print("Choices: %d" % (active_event["choices"] as Array).size())
+	return true
 
 
 func _is_event_off_cooldown(event_id: StringName, absolute_day: int) -> bool:

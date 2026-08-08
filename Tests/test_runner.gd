@@ -17,9 +17,10 @@ func _initialize() -> void:
 	_test_spy_outcomes()
 	_test_event_journal_entry()
 	_test_weekly_newspaper()
+	_test_story_chains()
 
 	if _failures.is_empty():
-		print("KINGDOOM tests passed: 13")
+		print("KINGDOOM tests passed: 14")
 		quit(0)
 		return
 
@@ -438,6 +439,97 @@ func _test_weekly_newspaper() -> void:
 	restored_news.free()
 	news.free()
 	journal.free()
+
+
+func _test_story_chains() -> void:
+	var first_order := StoryChainDefinition.build_order(24680)
+	var second_order := StoryChainDefinition.build_order(24680)
+	_expect(first_order == second_order, "Fixed seed must reproduce story-chain order")
+	_expect(first_order.size() == 3, "There must be three story chains")
+	var unique: Dictionary = {}
+	for chain_id in first_order:
+		unique[chain_id] = true
+		var warning := StoryChainDefinition.get_warning(chain_id)
+		var choices: Array = warning.get("choices", [])
+		_expect(choices.size() == 3, "Each story warning must offer three decisions")
+		var first_choice: StringName = choices[0]["choice_id"]
+		var second_choice: StringName = choices[1]["choice_id"]
+		_expect(
+			StoryChainDefinition.get_development(chain_id, first_choice)
+				!= StoryChainDefinition.get_development(chain_id, second_choice),
+			"Player choice must change story development"
+		)
+		_expect(
+			StoryChainDefinition.get_consequence(chain_id, first_choice)
+				!= StoryChainDefinition.get_consequence(chain_id, second_choice),
+			"Player choice must change story consequence"
+		)
+	_expect(unique.size() == 3, "Initial story cycle must contain three distinct chains")
+
+	var session := GameSessionManager.new()
+	var time := TimeManager.new()
+	var resources := ResourceManager.new()
+	var population := PopulationManager.new()
+	var stability := StabilityManager.new()
+	var events := EventManager.new()
+	var journal := EventJournalManager.new()
+	var stories := StoryChainManager.new()
+	session.initialize_new_game("Цепочки", 24680, [], [])
+	resources.initialize_new_game()
+	stability.time_manager = time
+	stability.initialize_new_game()
+	events.time_manager = time
+	events.resource_manager = resources
+	events.population_manager = population
+	events.stability_manager = stability
+	stories.game_session_manager = session
+	stories.time_manager = time
+	stories.event_manager = events
+	stories.resource_manager = resources
+	stories.stability_manager = stability
+	stories.event_journal_manager = journal
+	events.internal_event_resolved.connect(stories._on_internal_event_resolved)
+	stories.initialize_new_game()
+	time.day = StoryChainManager.FIRST_CHAIN_DAY
+	stories._on_day_changed(time.day, time.month, time.year)
+	_expect(events.has_active_event(), "Story warning must become a player decision")
+	var active := events.get_active_event()
+	var selected_choice: StringName = active["choices"][0]["choice_id"]
+	_expect(events.resolve_choice(selected_choice), "Story decision must resolve through the event UI model")
+	_expect(stories.get_selected_choice() == selected_choice, "Story chain must remember player choice")
+	var saved_story := stories.get_save_data()
+	var restored_story := StoryChainManager.new()
+	restored_story.game_session_manager = session
+	restored_story.time_manager = time
+	_expect(restored_story.load_save_data(saved_story), "Active story chain must survive save data")
+	_expect(restored_story.get_selected_choice() == selected_choice, "Save must preserve story branch")
+	restored_story.free()
+
+	time.day += StoryChainManager.DEVELOPMENT_DELAY_DAYS
+	stories._on_day_changed(time.day, time.month, time.year)
+	_expect(stories.get_phase() == &"waiting_consequence", "Story must reach development stage")
+	time.day += StoryChainManager.CONSEQUENCE_DELAY_DAYS
+	stories._on_day_changed(time.day, time.month, time.year)
+	_expect(stories.get_phase() == &"idle", "Story must finish with a consequence")
+	var story_entries := journal.get_entries()
+	_expect(story_entries.size() == 4, "Warning, decision, development and consequence must reach journal")
+	_expect(
+		String(story_entries[-1]["consequences"].get("stage", "")) == "consequence",
+		"Final story entry must be marked as a consequence for future news"
+	)
+	var followup_edition := NewspaperEdition.create(2, 14, story_entries)
+	_expect(
+		String(followup_edition["headline"]) == String(story_entries[-1]["title"]),
+		"Story consequence must become a headline in a future newspaper"
+	)
+	stories.free()
+	journal.free()
+	events.free()
+	stability.free()
+	population.free()
+	resources.free()
+	time.free()
+	session.free()
 
 
 func _expect(condition: bool, message: String) -> void:

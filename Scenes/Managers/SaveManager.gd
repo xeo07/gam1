@@ -44,6 +44,7 @@ const REQUIRED_SECTIONS: Array[String] = [
 @onready var spy_manager: SpyManager = $"../SpyManager" as SpyManager
 @onready var messenger_manager: MessengerManager = $"../MessengerManager" as MessengerManager
 @onready var event_journal_manager: EventJournalManager = $"../EventJournalManager" as EventJournalManager
+@onready var story_chain_manager: StoryChainManager = $"../StoryChainManager" as StoryChainManager
 @onready var news_manager: NewsManager = $"../NewsManager" as NewsManager
 @onready var kingdom_grid: KingdomGrid = $"../KingdomGrid" as KingdomGrid
 
@@ -187,6 +188,7 @@ func build_save_data() -> Dictionary:
 		"spy": spy_manager.get_save_data(),
 		"messenger": messenger_manager.get_save_data(),
 		"event_journal": event_journal_manager.get_save_data(),
+		"story_chains": story_chain_manager.get_save_data(),
 		"news": news_manager.get_save_data(),
 	}
 
@@ -250,6 +252,7 @@ func _apply_sections(data: Dictionary) -> bool:
 	var spy_data: Dictionary = data["spy"]
 	var messenger_data: Dictionary = data.get("messenger", {})
 	var event_journal_data: Dictionary = data.get("event_journal", {})
+	var story_chain_data: Dictionary = data.get("story_chains", {})
 	var news_data: Dictionary = data["news"]
 
 	if not game_session_manager.load_save_data(session_data):
@@ -285,6 +288,8 @@ func _apply_sections(data: Dictionary) -> bool:
 	if not messenger_manager.load_save_data(messenger_data):
 		return false
 	if not event_journal_manager.load_save_data(event_journal_data):
+		return false
+	if not story_chain_manager.load_save_data(story_chain_data):
 		return false
 	if not news_manager.load_save_data(news_data):
 		return false
