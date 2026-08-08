@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dpsm7q4k2v5ra" path="res://Scenes/UI/PauseMenu.gd" id="1_pause"]
 [ext_resource type="PackedScene" uid="uid://bsdg7q4k2v5ra" path="res://Scenes/UI/SettingsDialog.tscn" id="2_settings"]
-[ext_resource type="Texture2D" path="res://Assets/UI/Medieval/wood_game_panel.png" id="3_wood"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Medieval/parchment_menu.png" id="3_parchment"]
 
 [node name="PauseMenu" type="CanvasLayer"]
 process_mode = 2
@@ -29,10 +29,10 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="MedievalFrame" type="Control" parent="Overlay/CenterContainer"]
-custom_minimum_size = Vector2(620, 620)
+custom_minimum_size = Vector2(480, 675)
 layout_mode = 2
 
-[node name="WoodPanel" type="TextureRect" parent="Overlay/CenterContainer/MedievalFrame"]
+[node name="Parchment" type="TextureRect" parent="Overlay/CenterContainer/MedievalFrame"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -40,27 +40,27 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("3_wood")
+texture = ExtResource("3_parchment")
 expand_mode = 1
 stretch_mode = 5
 
 [node name="Content" type="VBoxContainer" parent="Overlay/CenterContainer/MedievalFrame"]
 layout_mode = 0
 offset_left = 104.0
-offset_top = 112.0
-offset_right = 516.0
-offset_bottom = 584.0
+offset_top = 20.0
+offset_right = 424.0
+offset_bottom = 630.0
 theme_override_constants/separation = 8
 
 [node name="TitleLabel" type="Label" parent="Overlay/CenterContainer/MedievalFrame/Content"]
 custom_minimum_size = Vector2(0, 82)
 layout_mode = 2
 theme_type_variation = &"TitleLabel"
-theme_override_colors/font_color = Color(0.96, 0.82, 0.47, 1)
-theme_override_colors/font_shadow_color = Color(0.08, 0.04, 0.02, 0.95)
+theme_override_colors/font_color = Color(0.24, 0.12, 0.045, 1)
+theme_override_colors/font_shadow_color = Color(0.95, 0.78, 0.42, 0.35)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
-theme_override_font_sizes/font_size = 34
+theme_override_font_sizes/font_size = 26
 text = "КОРОЛЕВСКИЙ СОВЕТ"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -98,7 +98,7 @@ text = "×  Выйти из игры"
 [node name="StatusLabel" type="Label" parent="Overlay/CenterContainer/MedievalFrame/Content"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.23, 0.12, 0.055, 1)
+theme_override_colors/font_color = Color(0.3, 0.14, 0.055, 1)
 horizontal_alignment = 1
 autowrap_mode = 2
 

@@ -6,6 +6,7 @@ const GRID_ROWS := 6
 const MAXIMUM_CELL_SIZE := 64.0
 const MINIMUM_CELL_SIZE := 12.0
 const GRID_SIZE := Vector2i(GRID_COLUMNS, GRID_ROWS)
+const MAP_TEXTURE := preload("res://Assets/UI/Medieval/parchment_wide.png")
 
 @export var house_definition: BuildingDefinition
 @export var lumber_camp_definition: BuildingDefinition
@@ -54,14 +55,20 @@ func clear_selection() -> void:
 
 
 func _draw() -> void:
+	draw_texture_rect(
+		MAP_TEXTURE,
+		Rect2(Vector2.ZERO, size),
+		false,
+		Color(0.42, 0.52, 0.34, 0.95)
+	)
 	for row in GRID_ROWS:
 		for column in GRID_COLUMNS:
 			var cell_rect := Rect2(
 				Vector2(column * _cell_size, row * _cell_size),
 				Vector2(_cell_size, _cell_size)
 			)
-			draw_rect(cell_rect, Color(0.16, 0.20, 0.16), true)
-			draw_rect(cell_rect, Color(0.45, 0.50, 0.45), false, 1.0)
+			draw_rect(cell_rect, Color(0.08, 0.16, 0.09, 0.42), true)
+			draw_rect(cell_rect, Color(0.29, 0.24, 0.13, 0.82), false, 1.5)
 
 
 func _gui_input(event: InputEvent) -> void:
