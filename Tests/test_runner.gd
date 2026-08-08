@@ -10,9 +10,10 @@ func _initialize() -> void:
 	_test_state_name_generation()
 	_test_world_generation()
 	_test_state_personalities()
+	_test_world_events()
 
 	if _failures.is_empty():
-		print("KINGDOOM tests passed: 6")
+		print("KINGDOOM tests passed: 7")
 		quit(0)
 		return
 
@@ -195,6 +196,34 @@ func _test_state_personalities() -> void:
 		int(merchant_bias["relation"]) > int(warlike_bias["relation"]),
 		"Personalities must influence diplomatic posture"
 	)
+
+
+func _test_world_events() -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 123456
+	var state := StateData.create(
+		&"event_state", "Торговая республика", "Канцлер Ида",
+		80, 40, 60, 70, 0, &"neutral", &"merchant"
+	)
+	var event := WorldEventGenerator.generate_for_state(state, 12, rng)
+	var before := state.duplicate(true)
+	WorldEventGenerator.apply_event(state, event)
+
+	_expect(not event.is_empty(), "World event must be generated for a valid state")
+	_expect(not String(event["cause"]).is_empty(), "World event must explain its cause")
+	_expect(not String(event["summary"]).is_empty(), "World event must describe consequences")
+	_expect(
+		int(state["wealth"]) > int(before["wealth"]),
+		"Merchant event must change the state's wealth"
+	)
+	_expect(
+		int(state["relation"]) > int(before["relation"]),
+		"Merchant event must also change diplomatic relations"
+	)
+	var parsed := WorldEventGenerator.parse_save_data(
+		WorldEventGenerator.to_save_data(event)
+	)
+	_expect(bool(parsed.get("valid", false)), "World event must survive save-data round-trip")
 
 
 func _expect(condition: bool, message: String) -> void:

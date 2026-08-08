@@ -7,6 +7,7 @@ signal world_day_processed(
 	absolute_day: int,
 	updates: Array[Dictionary]
 )
+signal world_event_occurred(event: Dictionary)
 
 const LEGACY_STATE_IDS: Array[StringName] = [
 	&"northrealm",
@@ -20,6 +21,7 @@ const VALID_STATUSES: Array[StringName] = StateData.VALID_STATUSES
 @onready var game_session_manager: GameSessionManager = $"../GameSessionManager" as GameSessionManager
 
 var _latest_world_updates: Array[Dictionary] = []
+var _world_events: Array[Dictionary] = []
 var _last_processed_absolute_day: int
 var _initialized := false
 
@@ -36,6 +38,7 @@ func initialize_new_game() -> void:
 		return
 	_states = WorldGenerator.generate_states(game_session_manager.get_world_seed())
 	_latest_world_updates.clear()
+	_world_events.clear()
 	_last_processed_absolute_day = time_manager.get_absolute_day()
 	_initialized = true
 	print("Loaded states: %d" % _states.size())
@@ -126,6 +129,16 @@ func process_world_day() -> Array[Dictionary]:
 		updates.append(changes)
 		state_updated.emit(state_id, changes.duplicate(true))
 
+	var world_event := WorldEventGenerator.try_generate_event(
+		_states, absolute_day, game_session_manager.get_rng()
+	)
+	if not world_event.is_empty():
+		_apply_world_event(world_event, updates)
+		_world_events.append(world_event.duplicate(true))
+		if _world_events.size() > WorldEventGenerator.MAX_EVENT_HISTORY:
+			_world_events.pop_front()
+		world_event_occurred.emit(world_event.duplicate(true))
+
 	_latest_world_updates = _duplicate_updates(updates)
 	emit_states_changed()
 	world_day_processed.emit(
@@ -140,6 +153,10 @@ func get_latest_world_updates() -> Array[Dictionary]:
 	return _duplicate_updates(_latest_world_updates)
 
 
+func get_world_events() -> Array[Dictionary]:
+	return _duplicate_updates(_world_events)
+
+
 func get_save_data() -> Dictionary:
 	var states: Array[Dictionary] = []
 	for state in _states:
@@ -150,11 +167,15 @@ func get_save_data() -> Dictionary:
 		var saved_update := update.duplicate(true)
 		saved_update["state_id"] = String(update.get("state_id", &""))
 		latest_updates.append(saved_update)
+	var world_events: Array[Dictionary] = []
+	for event in _world_events:
+		world_events.append(WorldEventGenerator.to_save_data(event))
 
 	return {
 		"states": states,
 		"last_processed_absolute_day": _last_processed_absolute_day,
 		"latest_world_updates": latest_updates,
+		"world_events": world_events,
 	}
 
 
@@ -250,12 +271,28 @@ func load_save_data(data: Dictionary) -> bool:
 			loaded_update[numeric_field] = int(update[numeric_field])
 		loaded_updates.append(loaded_update)
 
+	var loaded_events: Array[Dictionary] = []
+	var saved_events: Variant = data.get("world_events", [])
+	if not saved_events is Array:
+		return false
+	for event_value in saved_events:
+		var parsed_event := WorldEventGenerator.parse_save_data(event_value)
+		if not bool(parsed_event.get("valid", false)):
+			return false
+		var loaded_event: Dictionary = parsed_event["event"]
+		if not state_ids.has(loaded_event["state_id"]):
+			return false
+		loaded_events.append(loaded_event)
+	if loaded_events.size() > WorldEventGenerator.MAX_EVENT_HISTORY:
+		return false
+
 	var loaded_last_day := int(data["last_processed_absolute_day"])
 	if loaded_last_day < 1:
 		return false
 
 	_states = loaded_states
 	_latest_world_updates = loaded_updates
+	_world_events = loaded_events
 	_last_processed_absolute_day = loaded_last_day
 	_initialized = true
 	emit_states_changed()
@@ -391,6 +428,26 @@ func _find_state_index(state_id: StringName) -> int:
 		if _states[index]["id"] == state_id:
 			return index
 	return -1
+
+
+func _apply_world_event(event: Dictionary, updates: Array[Dictionary]) -> void:
+	var state_id := StringName(event.get("state_id", &""))
+	var state_index := _find_state_index(state_id)
+	if state_index == -1:
+		return
+	WorldEventGenerator.apply_event(_states[state_index], event)
+	var effects: Dictionary = event.get("effects", {})
+	for update in updates:
+		if update.get("state_id", &"") != state_id:
+			continue
+		for field in ["population", "military_strength", "wealth", "stability", "relation"]:
+			var change_field := (
+				"military_change" if field == "military_strength" else "%s_change" % field
+			)
+			update[change_field] = int(update.get(change_field, 0)) + int(effects.get(field, 0))
+			update[field] = int(_states[state_index].get(field, 0))
+		update["event"] = event.duplicate(true)
+		break
 
 
 func _print_state(state: Dictionary) -> void:
