@@ -41,7 +41,9 @@ theme_override_constants/separation = 8
 
 [node name="TitleLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Вести из других государств"
+theme_type_variation = &"TitleLabel"
+text = "КОРОЛЕВСКАЯ ГАЗЕТА"
+horizontal_alignment = 1
 
 [node name="DateLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2

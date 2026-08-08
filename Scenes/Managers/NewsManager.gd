@@ -3,8 +3,9 @@ class_name NewsManager
 
 signal daily_report_ready(report: Dictionary)
 signal foreign_news_ready(report: Dictionary)
+signal weekly_edition_ready(edition: Dictionary)
 
-const FOREIGN_NEWS_INTERVAL_DAYS := 3
+const WEEKLY_EDITION_INTERVAL_DAYS := 7
 
 @onready var time_manager: TimeManager = $"../TimeManager" as TimeManager
 @onready var resource_manager: ResourceManager = $"../ResourceManager" as ResourceManager
@@ -14,9 +15,12 @@ const FOREIGN_NEWS_INTERVAL_DAYS := 3
 @onready var stability_manager: StabilityManager = $"../StabilityManager" as StabilityManager
 @onready var army_manager: ArmyManager = $"../ArmyManager" as ArmyManager
 @onready var world_manager: WorldManager = $"../WorldManager" as WorldManager
+@onready var event_journal_manager: EventJournalManager = $"../EventJournalManager" as EventJournalManager
 
 var _latest_report: Dictionary = {}
 var _latest_foreign_news: Dictionary = {}
+var _latest_weekly_edition: Dictionary = {}
+var _last_edition_day := 0
 
 
 func _ready() -> void:
@@ -63,6 +67,24 @@ func has_foreign_news() -> bool:
 	return not _latest_foreign_news.is_empty()
 
 
+func get_latest_weekly_edition() -> Dictionary:
+	return _latest_weekly_edition.duplicate(true)
+
+
+func has_weekly_edition() -> bool:
+	return not _latest_weekly_edition.is_empty()
+
+
+func create_weekly_edition(absolute_day: int) -> Dictionary:
+	var first_day := maxi(1, absolute_day - WEEKLY_EDITION_INTERVAL_DAYS + 1)
+	var entries := event_journal_manager.get_entries_between(first_day, absolute_day)
+	return NewspaperEdition.create(
+		absolute_day / WEEKLY_EDITION_INTERVAL_DAYS,
+		absolute_day,
+		entries
+	)
+
+
 func get_save_data() -> Dictionary:
 	var daily_report := _latest_report.duplicate(true)
 	if daily_report.has("stability") and daily_report["stability"] is Dictionary:
@@ -84,6 +106,13 @@ func get_save_data() -> Dictionary:
 		"has_daily_report": has_report(),
 		"latest_foreign_news": foreign_news,
 		"has_foreign_news": has_foreign_news(),
+		"latest_weekly_edition": (
+			NewspaperEdition.to_save_data(_latest_weekly_edition)
+			if has_weekly_edition()
+			else {}
+		),
+		"has_weekly_edition": has_weekly_edition(),
+		"last_edition_day": _last_edition_day,
 	}
 
 
@@ -157,6 +186,28 @@ func load_save_data(data: Dictionary) -> bool:
 
 	_latest_report = loaded_daily.duplicate(true) if has_loaded_daily else {}
 	_latest_foreign_news = loaded_foreign.duplicate(true) if has_loaded_foreign else {}
+	var has_loaded_weekly := bool(data.get("has_weekly_edition", false))
+	var loaded_weekly_value: Variant = data.get("latest_weekly_edition", {})
+	if not loaded_weekly_value is Dictionary:
+		return false
+	var loaded_weekly: Dictionary = loaded_weekly_value
+	if has_loaded_weekly != (not loaded_weekly.is_empty()):
+		return false
+	var last_edition_value: Variant = data.get("last_edition_day", 0)
+	if not _is_integer_value(last_edition_value) or int(last_edition_value) < 0:
+		return false
+	if has_loaded_weekly:
+		var parsed_edition := NewspaperEdition.parse_save_data(loaded_weekly)
+		if not bool(parsed_edition.get("valid", false)):
+			return false
+		_latest_weekly_edition = parsed_edition["edition"]
+		if int(_latest_weekly_edition["last_day"]) != int(last_edition_value):
+			return false
+	else:
+		_latest_weekly_edition = {}
+		if int(last_edition_value) != 0:
+			return false
+	_last_edition_day = int(last_edition_value)
 	return true
 
 
@@ -378,15 +429,18 @@ func _on_stability_day_completed(stability_data: Dictionary) -> void:
 
 func _on_world_day_processed(
 	absolute_day: int,
-	updates: Array[Dictionary]
+	_updates: Array[Dictionary]
 ) -> void:
-	if absolute_day % FOREIGN_NEWS_INTERVAL_DAYS != 0:
+	if absolute_day % WEEKLY_EDITION_INTERVAL_DAYS != 0:
+		return
+	if absolute_day <= _last_edition_day:
 		return
 
-	var report := create_foreign_news(updates)
-	_latest_foreign_news = report.duplicate(true)
-	foreign_news_ready.emit(report.duplicate(true))
-	_print_foreign_news(report)
+	var edition := create_weekly_edition(absolute_day)
+	_latest_weekly_edition = edition.duplicate(true)
+	_last_edition_day = absolute_day
+	weekly_edition_ready.emit(edition.duplicate(true))
+	_print_weekly_edition(edition)
 
 
 func _create_state_summary(update: Dictionary) -> String:
@@ -442,3 +496,14 @@ func _print_foreign_news(report: Dictionary) -> void:
 		% [report["day"], report["month"], report["year"]]
 	)
 	print("States included: %d" % states.size())
+
+
+func _print_weekly_edition(edition: Dictionary) -> void:
+	var articles: Array = edition.get("articles", [])
+	print("Weekly newspaper created:")
+	print(
+		"Issue %d | Days %d-%d"
+		% [edition["issue_number"], edition["first_day"], edition["last_day"]]
+	)
+	print("Headline: %s" % String(edition["headline"]))
+	print("Articles: %d" % articles.size())

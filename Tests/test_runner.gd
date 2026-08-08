@@ -16,9 +16,10 @@ func _initialize() -> void:
 	_test_messenger_mission()
 	_test_spy_outcomes()
 	_test_event_journal_entry()
+	_test_weekly_newspaper()
 
 	if _failures.is_empty():
-		print("KINGDOOM tests passed: 12")
+		print("KINGDOOM tests passed: 13")
 		quit(0)
 		return
 
@@ -387,6 +388,56 @@ func _test_event_journal_entry() -> void:
 		not bool(EventJournalEntry.parse_save_data(invalid).get("valid", false)),
 		"Journal must reject unsupported reliability"
 	)
+
+
+func _test_weekly_newspaper() -> void:
+	var minor := EventJournalEntry.create(
+		"minor:3", 3, &"diplomacy", "Обычный визит",
+		"Гонец доставил привычные приветствия.", [&"state_04"], &"confirmed", {}, 1
+	)
+	var important := EventJournalEntry.create(
+		"war:6", 6, &"war", "Войска выступили к границе",
+		"После долгих споров соседний двор начал собирать полки.",
+		[&"state_05"], &"reported", {"military_strength": 4}, 3
+	)
+	var edition := NewspaperEdition.create(1, 7, [minor, important])
+	var articles: Array = edition["articles"]
+	_expect(edition["first_day"] == 1 and edition["last_day"] == 7, "First edition must cover seven days")
+	_expect(articles.size() == 1, "Newspaper must omit routine low-importance entries")
+	_expect(articles[0]["source_id"] == "war:6", "Most important story must lead the edition")
+	_expect(not articles[0].has("consequences"), "Newspaper must not expose internal consequence data")
+	var parsed := NewspaperEdition.parse_save_data(NewspaperEdition.to_save_data(edition))
+	_expect(bool(parsed.get("valid", false)), "Newspaper edition must survive save-data round-trip")
+
+	var quiet := NewspaperEdition.create(2, 14, [])
+	var quiet_articles: Array = quiet["articles"]
+	_expect(quiet_articles.size() == 1, "Quiet week must still create one readable article")
+	_expect(
+		String(quiet_articles[0]["body"]).contains("не принесли"),
+		"Quiet-week article must contain narrative text"
+	)
+
+	var journal := EventJournalManager.new()
+	var news := NewsManager.new()
+	news.event_journal_manager = journal
+	var emitted: Array[Dictionary] = []
+	news.weekly_edition_ready.connect(func(value: Dictionary) -> void: emitted.append(value))
+	news._on_world_day_processed(6, [])
+	news._on_world_day_processed(7, [])
+	news._on_world_day_processed(7, [])
+	news._on_world_day_processed(14, [])
+	_expect(emitted.size() == 2, "Newspaper must emit exactly once on each seventh day")
+	_expect(emitted[0]["issue_number"] == 1, "Day seven must create the first issue")
+	_expect(emitted[1]["issue_number"] == 2, "Day fourteen must create the second issue")
+	var restored_news := NewsManager.new()
+	_expect(restored_news.load_save_data(news.get_save_data()), "Newspaper state must load from save data")
+	_expect(
+		restored_news.get_latest_weekly_edition() == emitted[1],
+		"Loaded save must preserve the latest newspaper issue"
+	)
+	restored_news.free()
+	news.free()
+	journal.free()
 
 
 func _expect(condition: bool, message: String) -> void:
