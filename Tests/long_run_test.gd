@@ -33,6 +33,17 @@ func _run() -> void:
 	var news := game.get_node("NewsManager") as NewsManager
 	var journal := game.get_node("EventJournalManager") as EventJournalManager
 	var save_manager := game.get_node("SaveManager") as SaveManager
+	var build_panel := game.get_node("BuildPanel") as BuildPanel
+	var kingdom_grid := game.get_node("KingdomGrid") as KingdomGrid
+	build_panel.open_panel()
+	game.call("_on_lumber_camp_selected")
+	_expect(not build_panel.visible, "Building selection did not uncover the kingdom grid")
+	_expect(
+		kingdom_grid.selected_building != null
+		and kingdom_grid.selected_building.id == &"lumber_camp",
+		"Lumber camp was not selected for placement"
+	)
+	kingdom_grid.clear_selection()
 	news.weekly_edition_ready.connect(func(_edition: Dictionary) -> void: _weekly_editions += 1)
 	spy.spy_mission_resolved.connect(func(_state: StringName, _outcome: Dictionary) -> void: _spy_resolutions += 1)
 	messenger.report_ready.connect(func(_report: Dictionary) -> void: _messenger_reports += 1)

@@ -566,22 +566,33 @@ func _update_window_layouts(hud_height: float) -> void:
 
 func _on_house_selected() -> void:
 	kingdom_grid.select_house()
+	_finish_building_selection()
 
 
 func _on_lumber_camp_selected() -> void:
 	kingdom_grid.select_lumber_camp()
+	_finish_building_selection()
 
 
 func _on_farm_selected() -> void:
 	kingdom_grid.select_farm()
+	_finish_building_selection()
 
 
 func _on_mine_selected() -> void:
 	kingdom_grid.select_mine()
+	_finish_building_selection()
 
 
 func _on_barracks_selected() -> void:
 	kingdom_grid.select_barracks()
+	_finish_building_selection()
+
+
+func _finish_building_selection() -> void:
+	# Keep the selected building, but uncover the grid so the player can place it.
+	build_panel.close_panel()
+	UIWindowLayout.release_focus(build_panel)
 
 
 func _on_build_cancelled() -> void:
