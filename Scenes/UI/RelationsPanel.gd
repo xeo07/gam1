@@ -12,6 +12,7 @@ const STATUS_DISPLAY_NAMES: Dictionary = {
 @onready var state_name_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/StateNameLabel
 @onready var ruler_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/RulerLabel
 @onready var relation_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/RelationLabel
+@onready var relation_reasons_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/RelationReasonsLabel
 @onready var status_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/StatusLabel
 @onready var population_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/PopulationLabel
 @onready var military_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/MilitaryLabel
@@ -205,7 +206,19 @@ func _show_state(state_id: StringName) -> void:
 
 	state_name_label.text = "Государство: %s" % String(state.get("name", ""))
 	ruler_label.text = "Правитель: %s" % String(state.get("ruler_text", "неизвестно"))
-	relation_label.text = "Отношения: %s" % String(state.get("relation_text", "неизвестно"))
+	var relation_summary := diplomacy_manager.get_relation_summary(state_id)
+	relation_label.text = "Отношения: %s" % String(
+		relation_summary.get("label", state.get("relation_text", "неизвестно"))
+	)
+	var reasons: Array = relation_summary.get("reasons", [])
+	var reason_lines: Array[String] = []
+	for reason in reasons:
+		reason_lines.append("• %s" % String(reason))
+	relation_reasons_label.text = (
+		"Почему так:\n%s" % "\n".join(PackedStringArray(reason_lines))
+		if not reason_lines.is_empty()
+		else "Почему так: сведений недостаточно"
+	)
 	status_label.text = "Статус: %s" % String(state.get("status_text", "неизвестно"))
 	population_label.text = "Население: %s" % String(state.get("population_text", "неизвестно"))
 	military_label.text = "Военная сила: %s" % String(state.get("military_text", "неизвестно"))
@@ -348,6 +361,7 @@ func _clear_details() -> void:
 	state_name_label.text = ""
 	ruler_label.text = ""
 	relation_label.text = ""
+	relation_reasons_label.text = ""
 	status_label.text = ""
 	population_label.text = ""
 	military_label.text = ""

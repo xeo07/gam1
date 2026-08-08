@@ -57,8 +57,12 @@ static func apply_event(state: Dictionary, event: Dictionary) -> void:
 		state[field] = clampi(
 			int(state.get(field, 0)) + int(effects.get(field, 0)), 0, 100
 		)
-	state["relation"] = clampi(
-		int(state.get("relation", 0)) + int(effects.get("relation", 0)), -100, 100
+	var relation_change := int(effects.get("relation", 0))
+	state["relation_profile"] = RelationProfile.adjust_base(
+		state.get("relation_profile", {}), relation_change, 0, relation_change
+	)
+	state["relation"] = RelationProfile.get_score(
+		state["relation_profile"], int(event.get("day", 1))
 	)
 
 
@@ -159,4 +163,3 @@ static func _template(
 
 static func _is_integer_value(value: Variant) -> bool:
 	return value is int or (value is float and value == floor(value))
-

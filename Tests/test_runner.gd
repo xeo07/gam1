@@ -18,9 +18,10 @@ func _initialize() -> void:
 	_test_event_journal_entry()
 	_test_weekly_newspaper()
 	_test_story_chains()
+	_test_relation_profiles()
 
 	if _failures.is_empty():
-		print("KINGDOOM tests passed: 14")
+		print("KINGDOOM tests passed: 15")
 		quit(0)
 		return
 
@@ -527,6 +528,72 @@ func _test_story_chains() -> void:
 	events.free()
 	stability.free()
 	population.free()
+	resources.free()
+	time.free()
+	session.free()
+
+
+func _test_relation_profiles() -> void:
+	var legacy := RelationProfile.create_from_legacy(32)
+	_expect(RelationProfile.get_score(legacy, 1) == 32, "Legacy relation must keep its old score")
+	var remembered := RelationProfile.add_memory(
+		legacy, "gift:10", 10, "корона прислала щедрый подарок", 18, 0, 12, 20
+	)
+	var fresh_score := RelationProfile.get_score(remembered, 10)
+	var fading_score := RelationProfile.get_score(remembered, 25)
+	_expect(fresh_score > fading_score, "Remembered action must gradually lose weight")
+	_expect(RelationProfile.get_score(remembered, 30) == 32, "Expired memory must stop affecting relation")
+	_expect(
+		"Помнят: корона прислала щедрый подарок" in RelationProfile.get_reason_lines(remembered, 10),
+		"Visible reasons must explain remembered actions without exposing a formula"
+	)
+	var parsed_profile := RelationProfile.parse_save_data(RelationProfile.to_save_data(remembered))
+	_expect(bool(parsed_profile.get("valid", false)), "Relation memory must survive save-data round-trip")
+
+	var legacy_state := StateData.to_save_data(StateData.create(
+		&"legacy_relation", "Старая держава", "Князь", 80, 50, 50, 50, -20
+	))
+	legacy_state.erase("relation_profile")
+	var migrated_state := StateData.parse_save_data(legacy_state)
+	_expect(bool(migrated_state.get("valid", false)), "Old state save without relation profile must migrate")
+	_expect(
+		RelationProfile.get_score(migrated_state["state"]["relation_profile"], 1) == -20,
+		"Migrated relation profile must preserve old relation"
+	)
+
+	var session := GameSessionManager.new()
+	var time := TimeManager.new()
+	var resources := ResourceManager.new()
+	var world := WorldManager.new()
+	var diplomacy := DiplomacyManager.new()
+	session.initialize_new_game("Дипломатия", 97531, [], [])
+	resources.initialize_new_game()
+	world.game_session_manager = session
+	world.time_manager = time
+	world.initialize_new_game()
+	diplomacy.world_manager = world
+	diplomacy.resource_manager = resources
+	diplomacy.time_manager = time
+	var state_id := WorldGenerator.AI_STATE_IDS[0]
+	var initial_gold := resources.gold
+	_expect(diplomacy.send_gift(state_id), "Gift must create a diplomatic memory")
+	_expect(resources.gold == initial_gold - DiplomacyManager.GIFT_GOLD_COST, "Gift must keep its visible cost")
+	var reasons := world.get_relation_reasons(state_id)
+	_expect(
+		"Помнят: корона прислала щедрый подарок" in reasons,
+		"Diplomatic panel reasons must include the gift"
+	)
+	var components := world.get_relation_components(state_id)
+	_expect(components.has_all(["trust", "fear", "benefit"]), "Relation must expose three named components")
+	var saved_state := StateData.to_save_data(world.get_state_by_id(state_id))
+	var restored_state := StateData.parse_save_data(saved_state)
+	_expect(bool(restored_state.get("valid", false)), "State save must preserve diplomatic history")
+	_expect(
+		restored_state["state"]["relation_profile"] == world.get_state_by_id(state_id)["relation_profile"],
+		"Loaded state must restore every remembered action"
+	)
+	diplomacy.free()
+	world.free()
 	resources.free()
 	time.free()
 	session.free()

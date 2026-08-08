@@ -46,6 +46,15 @@ func get_state_relation_label(state_id: StringName) -> String:
 	return get_relation_label(world_manager.get_relation(state_id))
 
 
+func get_relation_summary(state_id: StringName) -> Dictionary:
+	if world_manager.get_state_by_id(state_id).is_empty():
+		return {}
+	return {
+		"label": get_state_relation_label(state_id),
+		"reasons": world_manager.get_relation_reasons(state_id),
+	}
+
+
 func send_gift(state_id: StringName) -> bool:
 	if not _validate_state_and_cooldown(state_id, GIFT_ACTION_ID):
 		return false
@@ -54,13 +63,21 @@ func send_gift(state_id: StringName) -> bool:
 		return false
 
 	resource_manager.remove_resource(&"gold", GIFT_GOLD_COST)
-	world_manager.change_relation(state_id, GIFT_RELATION_CHANGE)
+	var relation_change := world_manager.add_relation_memory(
+		state_id,
+		&"gift",
+		"корона прислала щедрый подарок",
+		14,
+		-4,
+		10,
+		45
+	)
 	_record_action(state_id)
 	_complete_action(
 		state_id,
 		GIFT_ACTION_ID,
-		GIFT_RELATION_CHANGE,
-		"Подарок принят. Отношения улучшились на 10."
+		relation_change,
+		"Подарок принят. Двор стал доверять нам больше."
 	)
 	return true
 
@@ -69,13 +86,21 @@ func send_insult(state_id: StringName) -> bool:
 	if not _validate_state_and_cooldown(state_id, INSULT_ACTION_ID):
 		return false
 
-	world_manager.change_relation(state_id, INSULT_RELATION_CHANGE)
+	var relation_change := world_manager.add_relation_memory(
+		state_id,
+		&"insult",
+		"посол публично оскорбил их двор",
+		-18,
+		8,
+		-10,
+		60
+	)
 	_record_action(state_id)
 	_complete_action(
 		state_id,
 		INSULT_ACTION_ID,
-		INSULT_RELATION_CHANGE,
-		"Послание доставлено. Отношения ухудшились на 15."
+		relation_change,
+		"Послание доставлено. Оскорбление запомнят надолго."
 	)
 	return true
 

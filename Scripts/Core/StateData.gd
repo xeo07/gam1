@@ -33,7 +33,8 @@ static func create(
 	status: StringName = &"neutral",
 	personality: StringName = &"traditionalist",
 	interests: Array[StringName] = [],
-	strategic_goal: StringName = &"continuity"
+	strategic_goal: StringName = &"continuity",
+	relation_profile: Dictionary = {}
 ) -> Dictionary:
 	if not StatePersonality.is_valid(personality):
 		personality = &"traditionalist"
@@ -41,6 +42,12 @@ static func create(
 		interests = StatePersonality.get_interests(personality)
 	if strategic_goal == &"":
 		strategic_goal = StatePersonality.get_strategic_goal(personality)
+	var parsed_profile := RelationProfile.parse_save_data(relation_profile)
+	var normalized_profile: Dictionary = (
+		parsed_profile["profile"]
+		if bool(parsed_profile.get("valid", false))
+		else RelationProfile.create_from_legacy(relation)
+	)
 	return {
 		"id": state_id,
 		"name": display_name,
@@ -50,6 +57,7 @@ static func create(
 		"wealth": clampi(wealth, 0, 100),
 		"stability": clampi(stability, 0, 100),
 		"relation": clampi(relation, -100, 100),
+		"relation_profile": normalized_profile,
 		"status": status if status in VALID_STATUSES else &"neutral",
 		"personality": personality,
 		"interests": interests.duplicate(),
@@ -67,6 +75,11 @@ static func to_save_data(state: Dictionary) -> Dictionary:
 		"wealth": int(state.get("wealth", 0)),
 		"stability": int(state.get("stability", 0)),
 		"relation": int(state.get("relation", 0)),
+		"relation_profile": RelationProfile.to_save_data(
+			state.get("relation_profile", RelationProfile.create_from_legacy(
+				int(state.get("relation", 0))
+			))
+		),
 		"status": String(state.get("status", &"neutral")),
 		"personality": String(state.get("personality", &"traditionalist")),
 		"interests": _string_names_to_strings(state.get("interests", [])),
@@ -103,6 +116,12 @@ static func parse_save_data(value: Variant) -> Dictionary:
 	var personality := StringName(data.get("personality", "traditionalist"))
 	var strategic_goal := StringName(data.get("strategic_goal", "continuity"))
 	var interests: Array[StringName] = []
+	var relation_profile := RelationProfile.create_from_legacy(relation)
+	if data.has("relation_profile"):
+		var parsed_profile := RelationProfile.parse_save_data(data["relation_profile"])
+		if not bool(parsed_profile.get("valid", false)):
+			return {"valid": false}
+		relation_profile = parsed_profile["profile"]
 	var saved_interests: Variant = data.get("interests", [])
 	if not saved_interests is Array:
 		return {"valid": false}
@@ -141,7 +160,8 @@ static func parse_save_data(value: Variant) -> Dictionary:
 			status,
 			personality,
 			interests,
-			strategic_goal
+			strategic_goal,
+			relation_profile
 		),
 	}
 

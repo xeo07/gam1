@@ -10,6 +10,7 @@ const MAX_ENTRIES := 200
 @onready var spy_manager: SpyManager = $"../SpyManager" as SpyManager
 @onready var messenger_manager: MessengerManager = $"../MessengerManager" as MessengerManager
 @onready var war_manager: WarManager = $"../WarManager" as WarManager
+@onready var diplomacy_manager: DiplomacyManager = $"../DiplomacyManager" as DiplomacyManager
 
 var _entries: Array[Dictionary] = []
 var _sequence := 0
@@ -21,6 +22,7 @@ func _ready() -> void:
 	messenger_manager.report_ready.connect(_on_messenger_report)
 	war_manager.war_declared.connect(_on_war_declared)
 	war_manager.campaign_completed.connect(_on_campaign_completed)
+	diplomacy_manager.diplomatic_action_completed.connect(_on_diplomatic_action)
 
 
 func add_entry(entry: Dictionary) -> bool:
@@ -139,6 +141,20 @@ func _on_campaign_completed(report: Dictionary) -> void:
 	))
 
 
+func _on_diplomatic_action(
+	state_id: StringName,
+	action_id: StringName,
+	relation_change: int,
+	message: String
+) -> void:
+	add_entry(EventJournalEntry.create(
+		_next_id("diplomacy"), time_manager.get_absolute_day(), &"diplomacy",
+		"Дипломатический поступок", message, [state_id], &"confirmed",
+		{"action": String(action_id), "relation_change": relation_change},
+		2 if action_id == &"insult" else 1
+	))
+
+
 func _next_id(prefix: String) -> String:
 	_sequence += 1
 	return "%s:%d:%d" % [prefix, time_manager.get_absolute_day(), _sequence]
@@ -149,4 +165,3 @@ func _duplicate_entries(entries: Array[Dictionary]) -> Array[Dictionary]:
 	for entry in entries:
 		result.append(entry.duplicate(true))
 	return result
-

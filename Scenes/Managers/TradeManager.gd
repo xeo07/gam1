@@ -231,6 +231,15 @@ func execute_offer(offer_id: StringName) -> bool:
 		world_manager.change_state_wealth(state_id, -gold_price)
 
 	_offer_uses[offer_id] = get_offer_uses_today(offer_id) + 1
+	world_manager.add_relation_memory(
+		state_id,
+		&"trade",
+		"между державами состоялась выгодная сделка",
+		1,
+		0,
+		4,
+		21
+	)
 	trade_completed.emit(
 		state_id,
 		offer_id,

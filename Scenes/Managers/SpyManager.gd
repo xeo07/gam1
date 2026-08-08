@@ -238,8 +238,14 @@ func _complete_mission(state_id: StringName) -> void:
 	var outcome := SpyMissionOutcome.resolve(game_session_manager.get_rng().randf())
 	if not bool(outcome.get("success", false)):
 		if bool(outcome.get("exposed", false)):
-			world_manager.change_relation(
-				state_id, int(outcome.get("relation_change", 0))
+			world_manager.add_relation_memory(
+				state_id,
+				&"spy_exposed",
+				"нашего шпиона разоблачили при дворе",
+				-24,
+				14,
+				-12,
+				75
 			)
 		spy_mission_resolved.emit(state_id, outcome.duplicate(true))
 		_fail_mission(state_id, String(outcome.get("message", "Миссия провалена")))

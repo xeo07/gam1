@@ -127,9 +127,11 @@ func process_world_day() -> Array[Dictionary]:
 			0,
 			100
 		)
-		state["relation"] = clampi(
-			previous_relation + int(bias.get("relation", 0)), -100, 100
+		var relation_bias := int(bias.get("relation", 0))
+		state["relation_profile"] = RelationProfile.adjust_base(
+			state.get("relation_profile", {}), relation_bias, 0, relation_bias
 		)
+		_sync_relation(state, absolute_day)
 
 		var state_id: StringName = state.get("id", &"")
 		var changes: Dictionary = {
@@ -360,6 +362,8 @@ func load_save_data(data: Dictionary) -> bool:
 		return false
 
 	_states = loaded_states
+	for state in _states:
+		_sync_relation(state, loaded_last_day)
 	_latest_world_updates = loaded_updates
 	_world_events = loaded_events
 	_intelligence = loaded_intelligence
@@ -383,6 +387,26 @@ func get_relation(state_id: StringName) -> int:
 	if state_index == -1:
 		return 0
 	return int(_states[state_index]["relation"])
+
+
+func get_relation_components(state_id: StringName) -> Dictionary:
+	var state_index := _find_state_index(state_id)
+	if state_index == -1:
+		return {}
+	return RelationProfile.get_components(
+		_states[state_index].get("relation_profile", {}),
+		time_manager.get_absolute_day()
+	)
+
+
+func get_relation_reasons(state_id: StringName) -> Array[String]:
+	var state_index := _find_state_index(state_id)
+	if state_index == -1:
+		return []
+	return RelationProfile.get_reason_lines(
+		_states[state_index].get("relation_profile", {}),
+		time_manager.get_absolute_day()
+	)
 
 
 func change_state_wealth(state_id: StringName, amount: int) -> bool:
@@ -410,7 +434,8 @@ func set_relation(state_id: StringName, value: int) -> bool:
 	if state_index == -1:
 		return false
 
-	_states[state_index]["relation"] = clampi(value, -100, 100)
+	_states[state_index]["relation_profile"] = RelationProfile.create_from_legacy(value)
+	_sync_relation(_states[state_index], time_manager.get_absolute_day())
 	emit_states_changed()
 	return true
 
@@ -420,10 +445,41 @@ func change_relation(state_id: StringName, amount: int) -> bool:
 	if state_index == -1:
 		return false
 
-	var new_relation := int(_states[state_index]["relation"]) + amount
-	_states[state_index]["relation"] = clampi(new_relation, -100, 100)
+	_states[state_index]["relation_profile"] = RelationProfile.adjust_base(
+		_states[state_index].get("relation_profile", {}), amount, 0, amount
+	)
+	_sync_relation(_states[state_index], time_manager.get_absolute_day())
 	emit_states_changed()
 	return true
+
+
+func add_relation_memory(
+	state_id: StringName,
+	memory_id: StringName,
+	summary: String,
+	trust_change: int,
+	fear_change: int,
+	benefit_change: int,
+	duration_days: int = RelationProfile.DEFAULT_MEMORY_DURATION_DAYS
+) -> int:
+	var state_index := _find_state_index(state_id)
+	if state_index == -1:
+		return 0
+	var previous_relation := int(_states[state_index]["relation"])
+	var absolute_day := time_manager.get_absolute_day()
+	_states[state_index]["relation_profile"] = RelationProfile.add_memory(
+		_states[state_index].get("relation_profile", {}),
+		"%s:%d" % [String(memory_id), absolute_day],
+		absolute_day,
+		summary,
+		trust_change,
+		fear_change,
+		benefit_change,
+		duration_days
+	)
+	_sync_relation(_states[state_index], absolute_day)
+	emit_states_changed()
+	return int(_states[state_index]["relation"]) - previous_relation
 
 
 func set_state_status(state_id: StringName, status: StringName) -> bool:
@@ -447,7 +503,8 @@ func set_state_relation_and_status(
 	var state_index := _find_state_index(state_id)
 	if state_index == -1:
 		return false
-	_states[state_index]["relation"] = clampi(relation, -100, 100)
+	_states[state_index]["relation_profile"] = RelationProfile.create_from_legacy(relation)
+	_sync_relation(_states[state_index], time_manager.get_absolute_day())
 	_states[state_index]["status"] = status
 	emit_states_changed()
 	return true
@@ -500,6 +557,15 @@ func _find_state_index(state_id: StringName) -> int:
 		if _states[index]["id"] == state_id:
 			return index
 	return -1
+
+
+func _sync_relation(state: Dictionary, absolute_day: int) -> void:
+	var profile: Dictionary = state.get(
+		"relation_profile",
+		RelationProfile.create_from_legacy(int(state.get("relation", 0)))
+	)
+	state["relation_profile"] = RelationProfile.prune_expired(profile, absolute_day)
+	state["relation"] = RelationProfile.get_score(state["relation_profile"], absolute_day)
 
 
 func _apply_world_event(event: Dictionary, updates: Array[Dictionary]) -> void:
