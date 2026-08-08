@@ -4,6 +4,7 @@ class_name SpyManager
 signal spy_mission_started(state_id: StringName, completion_day: int)
 signal spy_mission_failed(state_id: StringName, reason: String)
 signal spy_report_ready(report: Dictionary)
+signal spy_mission_resolved(state_id: StringName, outcome: Dictionary)
 
 const SPY_GOLD_COST := 15
 const SPY_MISSION_DURATION_DAYS := 3
@@ -11,6 +12,7 @@ const SPY_MISSION_DURATION_DAYS := 3
 @onready var time_manager: TimeManager = $"../TimeManager" as TimeManager
 @onready var world_manager: WorldManager = $"../WorldManager" as WorldManager
 @onready var resource_manager: ResourceManager = $"../ResourceManager" as ResourceManager
+@onready var game_session_manager: GameSessionManager = $"../GameSessionManager" as GameSessionManager
 
 var _active_missions: Dictionary = {}
 var _latest_reports: Dictionary = {}
@@ -233,6 +235,15 @@ func _complete_mission(state_id: StringName) -> void:
 	if state.is_empty():
 		_fail_mission(state_id, "Государство не найдено")
 		return
+	var outcome := SpyMissionOutcome.resolve(game_session_manager.get_rng().randf())
+	if not bool(outcome.get("success", false)):
+		if bool(outcome.get("exposed", false)):
+			world_manager.change_relation(
+				state_id, int(outcome.get("relation_change", 0))
+			)
+		spy_mission_resolved.emit(state_id, outcome.duplicate(true))
+		_fail_mission(state_id, String(outcome.get("message", "Миссия провалена")))
+		return
 
 	var report: Dictionary = {
 		"state_id": state_id,
@@ -253,6 +264,7 @@ func _complete_mission(state_id: StringName) -> void:
 	world_manager.improve_intelligence(
 		state_id, StateIntelligence.LEVEL_ESPIONAGE, &"spy"
 	)
+	spy_mission_resolved.emit(state_id, outcome.duplicate(true))
 	spy_report_ready.emit(report.duplicate(true))
 	print("Spy report ready:")
 	print("State: %s" % state_id)

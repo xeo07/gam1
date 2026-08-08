@@ -292,7 +292,7 @@ func _update_spy_controls() -> void:
 	else:
 		var latest_report := spy_manager.get_latest_report(_selected_state_id)
 		if latest_report.is_empty():
-			spy_status_label.text = "Шпион доступен"
+			spy_status_label.text = "3 дня · %s" % SpyMissionOutcome.risk_text()
 		else:
 			spy_status_label.text = (
 				"Последний отчёт получен: День %d, Месяц %d, Год %d"

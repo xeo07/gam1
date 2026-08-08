@@ -14,9 +14,10 @@ func _initialize() -> void:
 	_test_state_intelligence()
 	_test_state_observation()
 	_test_messenger_mission()
+	_test_spy_outcomes()
 
 	if _failures.is_empty():
-		print("KINGDOOM tests passed: 10")
+		print("KINGDOOM tests passed: 11")
 		quit(0)
 		return
 
@@ -344,6 +345,30 @@ func _test_messenger_mission() -> void:
 		"Completed messenger mission must create a report"
 	)
 	test_root.free()
+
+
+func _test_spy_outcomes() -> void:
+	var exposed := SpyMissionOutcome.resolve(0.0)
+	var failed := SpyMissionOutcome.resolve(0.20)
+	var success := SpyMissionOutcome.resolve(0.80)
+	_expect(exposed["id"] == &"exposed", "Low spy roll must expose the spy")
+	_expect(
+		int(exposed["relation_change"]) == SpyMissionOutcome.EXPOSURE_RELATION_CHANGE,
+		"Exposure must have a diplomatic consequence"
+	)
+	_expect(failed["id"] == &"failed", "Middle-low spy roll must fail without exposure")
+	_expect(int(failed["relation_change"]) == 0, "Undetected failure must not change relations")
+	_expect(success["id"] == &"success", "High spy roll must succeed")
+	_expect(bool(success["success"]), "Successful spy outcome must grant intelligence")
+	_expect(
+		is_equal_approx(
+			SpyMissionOutcome.SUCCESS_CHANCE
+				+ SpyMissionOutcome.UNDETECTED_FAILURE_CHANCE
+				+ SpyMissionOutcome.EXPOSURE_CHANCE,
+			1.0
+		),
+		"Spy outcome probabilities must add up to one"
+	)
 
 
 func _expect(condition: bool, message: String) -> void:

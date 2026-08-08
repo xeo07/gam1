@@ -122,6 +122,7 @@ text = "Разведка"
 layout_mode = 2
 disabled = true
 text = "Отправить шпиона — 15 золота"
+tooltip_text = "3 дня. Успех 65%, провал 20%, разоблачение 15% и ухудшение отношений."
 
 [node name="SpyStatusLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer"]
 layout_mode = 2
