@@ -100,6 +100,20 @@ layout_mode = 2
 [node name="ActionStatusLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer"]
 layout_mode = 2
 
+[node name="MessengerTitleLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer"]
+layout_mode = 2
+text = "Дипломатические сведения"
+
+[node name="SendMessengerButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer"]
+layout_mode = 2
+disabled = true
+text = "Отправить гонца — 5 золота"
+tooltip_text = "Низкий риск. Через 2 дня даст широкие диапазоны показателей."
+
+[node name="MessengerStatusLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer"]
+layout_mode = 2
+text = "Низкий риск · результат через 2 дня"
+
 [node name="SpyTitleLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer"]
 layout_mode = 2
 text = "Разведка"

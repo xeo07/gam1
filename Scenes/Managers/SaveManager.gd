@@ -42,6 +42,7 @@ const REQUIRED_SECTIONS: Array[String] = [
 @onready var diplomacy_manager: DiplomacyManager = $"../DiplomacyManager" as DiplomacyManager
 @onready var trade_manager: TradeManager = $"../TradeManager" as TradeManager
 @onready var spy_manager: SpyManager = $"../SpyManager" as SpyManager
+@onready var messenger_manager: MessengerManager = $"../MessengerManager" as MessengerManager
 @onready var news_manager: NewsManager = $"../NewsManager" as NewsManager
 @onready var kingdom_grid: KingdomGrid = $"../KingdomGrid" as KingdomGrid
 
@@ -183,6 +184,7 @@ func build_save_data() -> Dictionary:
 		"diplomacy": diplomacy_manager.get_save_data(),
 		"trade": trade_manager.get_save_data(),
 		"spy": spy_manager.get_save_data(),
+		"messenger": messenger_manager.get_save_data(),
 		"news": news_manager.get_save_data(),
 	}
 
@@ -244,6 +246,7 @@ func _apply_sections(data: Dictionary) -> bool:
 	var diplomacy_data: Dictionary = data["diplomacy"]
 	var trade_data: Dictionary = data["trade"]
 	var spy_data: Dictionary = data["spy"]
+	var messenger_data: Dictionary = data.get("messenger", {})
 	var news_data: Dictionary = data["news"]
 
 	if not game_session_manager.load_save_data(session_data):
@@ -275,6 +278,8 @@ func _apply_sections(data: Dictionary) -> bool:
 	if not trade_manager.load_save_data(trade_data):
 		return false
 	if not spy_manager.load_save_data(spy_data):
+		return false
+	if not messenger_manager.load_save_data(messenger_data):
 		return false
 	if not news_manager.load_save_data(news_data):
 		return false

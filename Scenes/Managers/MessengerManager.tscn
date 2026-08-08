@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scenes/Managers/MessengerManager.gd" id="1_messenger"]
+
+[node name="MessengerManager" type="Node"]
+script = ExtResource("1_messenger")

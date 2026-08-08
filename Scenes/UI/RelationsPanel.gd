@@ -23,10 +23,13 @@ const STATUS_DISPLAY_NAMES: Dictionary = {
 @onready var action_status_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/ActionStatusLabel
 @onready var send_spy_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/SendSpyButton
 @onready var spy_status_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/SpyStatusLabel
+@onready var send_messenger_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/SendMessengerButton
+@onready var messenger_status_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/MessengerStatusLabel
 @onready var close_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CloseButton
 @onready var world_manager: WorldManager = $"../WorldManager" as WorldManager
 @onready var diplomacy_manager: DiplomacyManager = $"../DiplomacyManager" as DiplomacyManager
 @onready var spy_manager: SpyManager = $"../SpyManager" as SpyManager
+@onready var messenger_manager: MessengerManager = $"../MessengerManager" as MessengerManager
 @onready var resource_manager: ResourceManager = $"../ResourceManager" as ResourceManager
 @onready var time_manager: TimeManager = $"../TimeManager" as TimeManager
 
@@ -39,6 +42,7 @@ func _ready() -> void:
 	gift_button.pressed.connect(_on_gift_pressed)
 	insult_button.pressed.connect(_on_insult_pressed)
 	send_spy_button.pressed.connect(_on_send_spy_pressed)
+	send_messenger_button.pressed.connect(_on_send_messenger_pressed)
 	close_button.pressed.connect(close_panel)
 	world_manager.states_changed.connect(_on_states_changed)
 	diplomacy_manager.diplomatic_action_completed.connect(_on_diplomatic_action_completed)
@@ -46,6 +50,9 @@ func _ready() -> void:
 	spy_manager.spy_mission_started.connect(_on_spy_mission_started)
 	spy_manager.spy_mission_failed.connect(_on_spy_mission_failed)
 	spy_manager.spy_report_ready.connect(_on_spy_report_ready)
+	messenger_manager.mission_started.connect(_on_messenger_started)
+	messenger_manager.mission_failed.connect(_on_messenger_failed)
+	messenger_manager.report_ready.connect(_on_messenger_report_ready)
 	resource_manager.resources_changed.connect(_on_resources_changed)
 	time_manager.day_changed.connect(_on_day_changed)
 	time_manager.time_loaded.connect(_on_day_changed)
@@ -123,6 +130,28 @@ func _on_send_spy_pressed() -> void:
 	spy_manager.start_spy_mission(_selected_state_id)
 
 
+func _on_send_messenger_pressed() -> void:
+	if _selected_state_id != &"":
+		messenger_manager.start_mission(_selected_state_id)
+
+
+func _on_messenger_started(state_id: StringName, _completion_day: int) -> void:
+	if visible and state_id == _selected_state_id:
+		_update_messenger_controls()
+
+
+func _on_messenger_failed(state_id: StringName, reason: String) -> void:
+	if visible and state_id == _selected_state_id:
+		messenger_status_label.text = reason
+		_update_messenger_button()
+
+
+func _on_messenger_report_ready(report: Dictionary) -> void:
+	if visible and report.get("state_id", &"") == _selected_state_id:
+		messenger_status_label.text = String(report.get("summary", "Гонец вернулся"))
+		_show_state(_selected_state_id)
+
+
 func _on_diplomatic_action_completed(
 	state_id: StringName,
 	_action_id: StringName,
@@ -157,12 +186,14 @@ func _on_resources_changed(
 	if visible:
 		_update_action_controls()
 		_update_spy_controls()
+		_update_messenger_controls()
 
 
 func _on_day_changed(_day: int, _month: int, _year: int) -> void:
 	if visible:
 		_update_action_controls()
 		_update_spy_controls()
+		_update_messenger_controls()
 
 
 func _show_state(state_id: StringName) -> void:
@@ -186,6 +217,7 @@ func _show_state(state_id: StringName) -> void:
 	]
 	_update_action_controls()
 	_update_spy_controls()
+	_update_messenger_controls()
 
 
 func _on_spy_mission_started(
@@ -285,6 +317,33 @@ func _update_spy_button() -> void:
 	)
 
 
+func _update_messenger_controls() -> void:
+	if _selected_state_id == &"":
+		messenger_status_label.text = ""
+		send_messenger_button.disabled = true
+		return
+	if messenger_manager.has_active_mission(_selected_state_id):
+		messenger_status_label.text = "Гонец вернётся через %d дн. · низкий риск" % (
+			messenger_manager.get_days_remaining(_selected_state_id)
+		)
+	else:
+		var latest := messenger_manager.get_latest_report(_selected_state_id)
+		messenger_status_label.text = (
+			MessengerManager.BENEFIT_TEXT
+			if latest.is_empty()
+			else String(latest.get("summary", MessengerManager.BENEFIT_TEXT))
+		)
+	_update_messenger_button()
+
+
+func _update_messenger_button() -> void:
+	send_messenger_button.disabled = (
+		_selected_state_id == &""
+		or messenger_manager.has_active_mission(_selected_state_id)
+		or not resource_manager.has_resource(&"gold", MessengerManager.GOLD_COST)
+	)
+
+
 func _clear_details() -> void:
 	state_name_label.text = ""
 	ruler_label.text = ""
@@ -297,6 +356,8 @@ func _clear_details() -> void:
 	cooldown_label.text = ""
 	action_status_label.text = ""
 	spy_status_label.text = ""
+	messenger_status_label.text = ""
 	gift_button.disabled = true
 	insult_button.disabled = true
 	send_spy_button.disabled = true
+	send_messenger_button.disabled = true

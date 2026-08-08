@@ -13,9 +13,10 @@ func _initialize() -> void:
 	_test_world_events()
 	_test_state_intelligence()
 	_test_state_observation()
+	_test_messenger_mission()
 
 	if _failures.is_empty():
-		print("KINGDOOM tests passed: 9")
+		print("KINGDOOM tests passed: 10")
 		quit(0)
 		return
 
@@ -290,6 +291,59 @@ func _test_state_observation() -> void:
 		not String(espionage_view["military_text"]).ends_with("73"),
 		"Even spy data must not expose a bare exact value"
 	)
+
+
+func _test_messenger_mission() -> void:
+	var test_root := Node.new()
+	test_root.name = "MessengerTest"
+	var session := GameSessionManager.new()
+	session.name = "GameSessionManager"
+	var time := TimeManager.new()
+	time.name = "TimeManager"
+	var resources := ResourceManager.new()
+	resources.name = "ResourceManager"
+	var world := WorldManager.new()
+	world.name = "WorldManager"
+	var messenger := MessengerManager.new()
+	messenger.name = "MessengerManager"
+	test_root.add_child(session)
+	test_root.add_child(time)
+	test_root.add_child(resources)
+	test_root.add_child(world)
+	test_root.add_child(messenger)
+	root.add_child(test_root)
+	world.time_manager = time
+	world.game_session_manager = session
+	messenger.time_manager = time
+	messenger.world_manager = world
+	messenger.resource_manager = resources
+	time.day_changed.connect(messenger._on_day_changed)
+	session.initialize_new_game("Тест", 777, [], [])
+	resources.initialize_new_game()
+	world.initialize_new_game()
+	var state_id := WorldGenerator.AI_STATE_IDS[0]
+	var initial_gold := resources.gold
+
+	_expect(messenger.start_mission(state_id), "Messenger mission must start")
+	_expect(
+		resources.gold == initial_gold - MessengerManager.GOLD_COST,
+		"Messenger mission must charge its visible gold cost"
+	)
+	_expect(messenger.has_active_mission(state_id), "Messenger must remain active during travel")
+	time.next_day()
+	_expect(messenger.has_active_mission(state_id), "Messenger must not return too early")
+	time.next_day()
+	_expect(not messenger.has_active_mission(state_id), "Messenger must return after two days")
+	var knowledge := world.get_intelligence(state_id)
+	_expect(
+		int(knowledge.get("effective_level", 0)) == StateIntelligence.LEVEL_DIPLOMATIC,
+		"Messenger report must grant diplomatic intelligence"
+	)
+	_expect(
+		not messenger.get_latest_report(state_id).is_empty(),
+		"Completed messenger mission must create a report"
+	)
+	test_root.free()
 
 
 func _expect(condition: bool, message: String) -> void:
