@@ -3,6 +3,7 @@ extends Node2D
 const GAME_NAME := "Kingdoom"
 const GAME_VERSION := "0.0.1"
 const GRID_MARGIN := 16.0
+const TOP_TOOLBAR_HEIGHT := 68.0
 const MAIN_MENU_SCENE := "res://Scenes/Main/MainMenu.tscn"
 const PENDING_NEW_GAME_PATH := "user://pending_new_game.json"
 const PENDING_LOAD_PATH := "user://pending_load_game.flag"
@@ -45,6 +46,7 @@ const LAST_ERROR_PATH := "user://last_menu_error.txt"
 @onready var daily_report_panel: DailyReportPanel = $DailyReportPanel as DailyReportPanel
 @onready var pause_menu: PauseMenu = $PauseMenu as PauseMenu
 @onready var loading_overlay: CanvasLayer = $LoadingOverlay as CanvasLayer
+@onready var tutorial_panel: TutorialPanel = $TutorialPanel as TutorialPanel
 
 var _session_ready := false
 var _startup_load_error := ""
@@ -170,7 +172,7 @@ func _initialize_session() -> void:
 				else "Не удалось загрузить сохранение"
 			)
 			return
-		_finish_initialization()
+		_finish_initialization(false)
 		return
 
 	if FileAccess.file_exists(PENDING_NEW_GAME_PATH):
@@ -192,17 +194,19 @@ func _initialize_session() -> void:
 		event_manager.initialize_new_game()
 		world_manager.initialize_new_game()
 		story_chain_manager.initialize_new_game()
-		_finish_initialization()
+		_finish_initialization(bool(pending_data["show_tutorial"]))
 		return
 
 	_return_to_menu_with_error("Не указан режим запуска игры")
 
 
-func _finish_initialization() -> void:
+func _finish_initialization(show_tutorial: bool = false) -> void:
 	_session_ready = true
 	loading_overlay.visible = false
 	get_tree().paused = false
 	_update_event_lock()
+	if show_tutorial:
+		tutorial_panel.open_offer()
 
 
 func _read_pending_new_game() -> Dictionary:
@@ -234,6 +238,7 @@ func _read_pending_new_game() -> Dictionary:
 		"world_seed": int(data["world_seed"]),
 		"flag_pixels": PixelArtEditor.duplicate_pixels(data["flag_pixels"]),
 		"emblem_pixels": PixelArtEditor.duplicate_pixels(data["emblem_pixels"]),
+		"show_tutorial": bool(data.get("show_tutorial", true)),
 	}
 
 
@@ -432,10 +437,13 @@ func _update_game_area() -> void:
 	var viewport_size := get_viewport().get_visible_rect().size
 	var hud_height := bottom_hud.get_hud_height()
 	var dashboard_width := situation_dashboard.layout_for_viewport(hud_height)
-	kingdom_grid.position = Vector2(GRID_MARGIN, GRID_MARGIN)
+	kingdom_grid.position = Vector2(GRID_MARGIN, GRID_MARGIN + TOP_TOOLBAR_HEIGHT)
 	kingdom_grid.size = Vector2(
 		maxf(viewport_size.x - dashboard_width - GRID_MARGIN * 3.0, 1.0),
-		maxf(viewport_size.y - hud_height - GRID_MARGIN * 2.0, 1.0)
+		maxf(
+			viewport_size.y - hud_height - GRID_MARGIN * 2.0 - TOP_TOOLBAR_HEIGHT,
+			1.0
+		)
 	)
 	_update_window_layouts(hud_height)
 

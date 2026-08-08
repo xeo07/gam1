@@ -165,6 +165,7 @@ func _start_pending_new_game() -> void:
 		"world_seed": _pending_world_seed,
 		"flag_pixels": PixelArtEditor.duplicate_pixels(_pending_flag_pixels),
 		"emblem_pixels": PixelArtEditor.duplicate_pixels(_pending_emblem_pixels),
+		"show_tutorial": true,
 	}
 	pending_file.store_string(JSON.stringify(pending_data, "\t"))
 	pending_file.flush()

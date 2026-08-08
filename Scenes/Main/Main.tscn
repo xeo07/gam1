@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://45u4jy3awi5k"]
+[gd_scene load_steps=49 format=3 uid="uid://45u4jy3awi5k"]
 
 [ext_resource type="Script" uid="uid://cfwg6exp8s3wf" path="res://Scenes/Managers/GameManager.gd" id="1_qtv3y"]
 [ext_resource type="PackedScene" uid="uid://bgsm7q4k2v5ra" path="res://Scenes/Managers/GameSessionManager.tscn" id="2_session"]
@@ -47,6 +47,7 @@
 [ext_resource type="PackedScene" uid="uid://dsv8m3ra2k5ha" path="res://Scenes/UI/SaveLoadPanel.tscn" id="11_save_load_panel"]
 [ext_resource type="PackedScene" uid="uid://bh6m3q8v2k5ra" path="res://Scenes/UI/DailyReportPanel.tscn" id="9_daily_report_panel"]
 [ext_resource type="PackedScene" uid="uid://bpsm7q4k2v5ra" path="res://Scenes/UI/PauseMenu.tscn" id="12_pause_menu"]
+[ext_resource type="PackedScene" path="res://Scenes/UI/TutorialPanel.tscn" id="13_tutorial_panel"]
 
 [node name="Game" type="Node2D" unique_id=1430445199]
 script = ExtResource("1_qtv3y")
@@ -167,3 +168,5 @@ text = "Загрузка..."
 [node name="DailyReportPanel" parent="." instance=ExtResource("9_daily_report_panel")]
 
 [node name="PauseMenu" parent="." instance=ExtResource("12_pause_menu")]
+
+[node name="TutorialPanel" parent="." instance=ExtResource("13_tutorial_panel")]

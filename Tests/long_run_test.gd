@@ -35,6 +35,15 @@ func _run() -> void:
 	var save_manager := game.get_node("SaveManager") as SaveManager
 	var build_panel := game.get_node("BuildPanel") as BuildPanel
 	var kingdom_grid := game.get_node("KingdomGrid") as KingdomGrid
+	var tutorial_panel := game.get_node("TutorialPanel") as TutorialPanel
+	_expect(
+		kingdom_grid.position.y >= 80.0,
+		"Kingdom grid still overlaps the top menu button"
+	)
+	tutorial_panel.open_offer()
+	_expect(tutorial_panel.visible and paused, "Tutorial offer did not pause the new game")
+	tutorial_panel.skip()
+	_expect(not tutorial_panel.visible and not paused, "Tutorial could not be skipped")
 	build_panel.open_panel()
 	game.call("_on_lumber_camp_selected")
 	_expect(not build_panel.visible, "Building selection did not uncover the kingdom grid")
@@ -100,7 +109,7 @@ func _write_pending_session() -> bool:
 	var file := FileAccess.open(PENDING_NEW_GAME_PATH, FileAccess.WRITE)
 	if file == null:
 		return false
-	file.store_string(JSON.stringify({"kingdom_name": "Королевство 60 дней", "world_seed": 606060, "flag_pixels": _pixels(16, 10, 6), "emblem_pixels": _pixels(12, 12, 10)}))
+	file.store_string(JSON.stringify({"kingdom_name": "Королевство 60 дней", "world_seed": 606060, "flag_pixels": _pixels(16, 10, 6), "emblem_pixels": _pixels(12, 12, 10), "show_tutorial": false}))
 	file.flush()
 	return file.get_error() == OK
 
