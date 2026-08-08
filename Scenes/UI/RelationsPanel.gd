@@ -64,7 +64,7 @@ func close_panel() -> void:
 
 
 func refresh_states() -> void:
-	var states := world_manager.get_all_states()
+	var states := world_manager.get_all_observed_states()
 	states_list.clear()
 	_state_ids.clear()
 
@@ -166,25 +166,24 @@ func _on_day_changed(_day: int, _month: int, _year: int) -> void:
 
 
 func _show_state(state_id: StringName) -> void:
-	var state := world_manager.get_state_by_id(state_id)
+	var state := world_manager.get_observed_state_by_id(state_id)
 	if state.is_empty():
 		_selected_state_id = &""
 		_clear_details()
 		return
 
-	var relation := int(state.get("relation", 0))
-	var status: StringName = state.get("status", &"neutral")
 	state_name_label.text = "Государство: %s" % String(state.get("name", ""))
-	ruler_label.text = "Правитель: %s" % String(state.get("ruler_name", ""))
-	relation_label.text = "Отношения: %d — %s" % [
-		relation,
-		diplomacy_manager.get_relation_label(relation),
+	ruler_label.text = "Правитель: %s" % String(state.get("ruler_text", "неизвестно"))
+	relation_label.text = "Отношения: %s" % String(state.get("relation_text", "неизвестно"))
+	status_label.text = "Статус: %s" % String(state.get("status_text", "неизвестно"))
+	population_label.text = "Население: %s" % String(state.get("population_text", "неизвестно"))
+	military_label.text = "Военная сила: %s" % String(state.get("military_text", "неизвестно"))
+	wealth_label.text = "Богатство: %s" % String(state.get("wealth_text", "неизвестно"))
+	stability_label.text = "Стабильность: %s\nИсточник: %s, %s" % [
+		String(state.get("stability_text", "неизвестно")),
+		String(state.get("source_text", "неизвестно")),
+		String(state.get("freshness_text", "")),
 	]
-	status_label.text = "Статус: %s" % _get_status_display_name(status)
-	population_label.text = "Население: %d" % int(state.get("population", 0))
-	military_label.text = "Военная сила: %d" % int(state.get("military_strength", 0))
-	wealth_label.text = "Богатство: %d" % int(state.get("wealth", 0))
-	stability_label.text = "Стабильность: %d" % int(state.get("stability", 0))
 	_update_action_controls()
 	_update_spy_controls()
 
@@ -216,11 +215,7 @@ func _on_spy_report_ready(report: Dictionary) -> void:
 
 
 func _format_state_list_item(state: Dictionary) -> String:
-	var state_id: StringName = state.get("id", &"")
-	return "%s — %s отношения" % [
-		String(state.get("name", "")),
-		diplomacy_manager.get_state_relation_label(state_id),
-	]
+	return "%s — %s" % [String(state.get("name", "")), String(state.get("relation_text", "неизвестно"))]
 
 
 func _get_status_display_name(status: StringName) -> String:

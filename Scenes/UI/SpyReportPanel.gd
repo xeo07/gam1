@@ -19,6 +19,7 @@ const STATUS_DISPLAY_NAMES: Dictionary = {
 @onready var status_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatusLabel
 @onready var close_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CloseButton
 @onready var spy_manager: SpyManager = $"../SpyManager" as SpyManager
+@onready var world_manager: WorldManager = $"../WorldManager" as WorldManager
 
 
 func _ready() -> void:
@@ -27,22 +28,22 @@ func _ready() -> void:
 
 
 func open_report(report: Dictionary) -> void:
-	date_label.text = "Дата отчёта: День %d, Месяц %d, Год %d" % [
+	var observed := world_manager.get_observed_state_by_id(report.get("state_id", &""))
+	date_label.text = "Дата отчёта: День %d, Месяц %d, Год %d\n%s, %s" % [
 		int(report.get("report_day", 0)),
 		int(report.get("report_month", 0)),
 		int(report.get("report_year", 0)),
+		String(observed.get("source_text", "отчёт шпиона")),
+		String(observed.get("freshness_text", "")),
 	]
-	state_name_label.text = "Государство: %s" % String(report.get("state_name", ""))
-	ruler_label.text = "Правитель: %s" % String(report.get("ruler_name", ""))
-	population_label.text = "Население: %d" % int(report.get("population", 0))
-	military_label.text = "Военная сила: %d" % int(report.get("military_strength", 0))
-	wealth_label.text = "Богатство: %d" % int(report.get("wealth", 0))
-	stability_label.text = "Стабильность: %d" % int(report.get("stability", 0))
-	relation_label.text = "Отношения: %d" % int(report.get("relation", 0))
-	var status: StringName = report.get("status", &"neutral")
-	status_label.text = "Статус: %s" % String(
-		STATUS_DISPLAY_NAMES.get(status, String(status))
-	)
+	state_name_label.text = "Государство: %s" % String(observed.get("name", ""))
+	ruler_label.text = "Правитель: %s" % String(observed.get("ruler_text", "неизвестно"))
+	population_label.text = "Население: %s" % String(observed.get("population_text", "неизвестно"))
+	military_label.text = "Военная сила: %s" % String(observed.get("military_text", "неизвестно"))
+	wealth_label.text = "Богатство: %s" % String(observed.get("wealth_text", "неизвестно"))
+	stability_label.text = "Стабильность: %s" % String(observed.get("stability_text", "неизвестно"))
+	relation_label.text = "Отношения: %s" % String(observed.get("relation_text", "неизвестно"))
+	status_label.text = "Статус: %s" % String(observed.get("status_text", "неизвестно"))
 	visible = true
 
 

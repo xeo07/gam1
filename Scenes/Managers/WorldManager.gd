@@ -63,6 +63,25 @@ func get_state_by_id(state_id: StringName) -> Dictionary:
 	return _states[state_index].duplicate(true)
 
 
+func get_observed_state_by_id(state_id: StringName) -> Dictionary:
+	var state := get_state_by_id(state_id)
+	if state.is_empty() or not _intelligence.has(state_id):
+		return {}
+	return StateObservation.create_view(
+		state, _intelligence[state_id], time_manager.get_absolute_day()
+	)
+
+
+func get_all_observed_states() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for state in _states:
+		var state_id := StringName(state.get("id", &""))
+		result.append(StateObservation.create_view(
+			state, _intelligence.get(state_id, {}), time_manager.get_absolute_day()
+		))
+	return result
+
+
 func process_world_day() -> Array[Dictionary]:
 	if not _initialized or not game_session_manager.is_initialized():
 		return []

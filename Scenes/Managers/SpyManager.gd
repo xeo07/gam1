@@ -250,6 +250,9 @@ func _complete_mission(state_id: StringName) -> void:
 	}
 
 	_latest_reports[state_id] = report.duplicate(true)
+	world_manager.improve_intelligence(
+		state_id, StateIntelligence.LEVEL_ESPIONAGE, &"spy"
+	)
 	spy_report_ready.emit(report.duplicate(true))
 	print("Spy report ready:")
 	print("State: %s" % state_id)

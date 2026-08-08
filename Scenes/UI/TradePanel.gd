@@ -53,7 +53,7 @@ func close_panel() -> void:
 
 
 func _populate_states() -> void:
-	var states := world_manager.get_all_states()
+	var states := world_manager.get_all_observed_states()
 	state_option_button.clear()
 	_state_ids.clear()
 
@@ -90,19 +90,17 @@ func _refresh_selected_state() -> void:
 		_clear_state_details()
 		return
 
-	var state := world_manager.get_state_by_id(_selected_state_id)
+	var state := world_manager.get_observed_state_by_id(_selected_state_id)
 	if state.is_empty():
 		_populate_states()
 		return
 
-	var relation := int(state.get("relation", 0))
-	relation_label.text = "Отношения: %d — %s" % [
-		relation,
-		diplomacy_manager.get_relation_label(relation),
+	relation_label.text = "Отношения: %s" % String(state.get("relation_text", "неизвестно"))
+	state_wealth_label.text = "Богатство: %s\nСведения: %s, %s" % [
+		String(state.get("wealth_text", "неизвестно")),
+		String(state.get("source_text", "неизвестно")),
+		String(state.get("freshness_text", "")),
 	]
-	state_wealth_label.text = "Богатство государства: %d/100" % int(
-		state.get("wealth", 0)
-	)
 	var block_reason := trade_manager.get_trade_block_reason(_selected_state_id)
 	block_reason_label.text = (
 		"Торговля доступна" if block_reason.is_empty() else block_reason

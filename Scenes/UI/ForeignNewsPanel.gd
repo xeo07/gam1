@@ -5,6 +5,7 @@ class_name ForeignNewsPanel
 @onready var news_list: VBoxContainer = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/NewsList
 @onready var close_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CloseButton
 @onready var news_manager: NewsManager = $"../NewsManager" as NewsManager
+@onready var world_manager: WorldManager = $"../WorldManager" as WorldManager
 
 
 func _ready() -> void:
@@ -50,18 +51,22 @@ func _add_state_news(state: Dictionary) -> void:
 	var name_label := Label.new()
 	var details_label := Label.new()
 
-	name_label.text = String(state.get("state_name", ""))
+	var observed := world_manager.get_observed_state_by_id(state.get("state_id", &""))
+	name_label.text = String(observed.get("name", state.get("state_name", "")))
 	details_label.text = (
-		"Население: %d\n"
-		+ "Военная сила: %d\n"
-		+ "Богатство: %d\n"
-		+ "Стабильность: %d\n\n"
+		"Население: %s\n"
+		+ "Военная сила: %s\n"
+		+ "Богатство: %s\n"
+		+ "Стабильность: %s\n"
+		+ "Источник: %s, %s\n\n"
 		+ "%s"
 	) % [
-		int(state.get("population", 0)),
-		int(state.get("military_strength", 0)),
-		int(state.get("wealth", 0)),
-		int(state.get("stability", 0)),
+		String(observed.get("population_text", "неизвестно")),
+		String(observed.get("military_text", "неизвестно")),
+		String(observed.get("wealth_text", "неизвестно")),
+		String(observed.get("stability_text", "неизвестно")),
+		String(observed.get("source_text", "неизвестно")),
+		String(observed.get("freshness_text", "")),
 		String(state.get("summary", "")),
 	]
 	details_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

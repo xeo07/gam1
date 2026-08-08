@@ -12,9 +12,10 @@ func _initialize() -> void:
 	_test_state_personalities()
 	_test_world_events()
 	_test_state_intelligence()
+	_test_state_observation()
 
 	if _failures.is_empty():
-		print("KINGDOOM tests passed: 8")
+		print("KINGDOOM tests passed: 9")
 		quit(0)
 		return
 
@@ -256,6 +257,39 @@ func _test_state_intelligence() -> void:
 		StateIntelligence.to_save_data(spy_report)
 	)
 	_expect(bool(parsed.get("valid", false)), "Intelligence must survive save-data round-trip")
+
+
+func _test_state_observation() -> void:
+	var state := StateData.create(
+		&"observed", "Северная лига", "Королева Ида", 120, 73, 61, 82, 17
+	)
+	var rumor := StateIntelligence.create(
+		&"observed", StateIntelligence.LEVEL_RUMORS, 5, &"world_start"
+	)
+	var rumor_view := StateObservation.create_view(state, rumor, 5)
+	_expect(rumor_view["population_text"] == "большое", "Rumors must use qualitative population")
+	_expect(not String(rumor_view["military_text"]).contains("73"), "Rumors must hide exact military strength")
+	_expect(rumor_view["ruler_text"] == "неизвестно", "Rumors must hide the ruler")
+
+	var diplomatic := StateIntelligence.create(
+		&"observed", StateIntelligence.LEVEL_DIPLOMATIC, 6, &"messenger"
+	)
+	var diplomatic_view := StateObservation.create_view(state, diplomatic, 6)
+	_expect(String(diplomatic_view["population_text"]).contains("–"), "Diplomatic data must use a range")
+	_expect(diplomatic_view["ruler_text"] == "Королева Ида", "Diplomatic data may reveal the ruler")
+
+	var espionage := StateIntelligence.create(
+		&"observed", StateIntelligence.LEVEL_ESPIONAGE, 7, &"spy"
+	)
+	var espionage_view := StateObservation.create_view(state, espionage, 7)
+	_expect(
+		String(espionage_view["military_text"]) != String(diplomatic_view["military_text"]),
+		"Spy range must be narrower than diplomatic range"
+	)
+	_expect(
+		not String(espionage_view["military_text"]).ends_with("73"),
+		"Even spy data must not expose a bare exact value"
+	)
 
 
 func _expect(condition: bool, message: String) -> void:

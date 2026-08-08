@@ -68,7 +68,7 @@ func refresh_panel() -> void:
 
 
 func _populate_states() -> void:
-	var states := world_manager.get_all_states()
+	var states := world_manager.get_all_observed_states()
 	state_option_button.clear()
 	_state_ids.clear()
 	for state in states:
@@ -155,20 +155,19 @@ func _on_start_campaign_pressed() -> void:
 
 
 func _update_state_details() -> void:
-	var state := world_manager.get_state_by_id(_selected_state_id)
+	var state := world_manager.get_observed_state_by_id(_selected_state_id)
 	if state.is_empty():
 		state_status_label.text = ""
 		relation_label.text = ""
 		enemy_strength_label.text = ""
 		return
-	var status: StringName = state.get("status", &"neutral")
-	state_status_label.text = "Статус: %s" % String(
-		STATUS_DISPLAY_NAMES.get(status, String(status))
-	)
-	relation_label.text = "Отношения: %d" % int(state.get("relation", 0))
-	enemy_strength_label.text = "Военная сила противника: %d" % int(
-		state.get("military_strength", 0)
-	)
+	state_status_label.text = "Статус: %s\nСведения: %s, %s" % [
+		String(state.get("status_text", "неизвестно")),
+		String(state.get("source_text", "неизвестно")),
+		String(state.get("freshness_text", "")),
+	]
+	relation_label.text = "Отношения: %s" % String(state.get("relation_text", "неизвестно"))
+	enemy_strength_label.text = "Военная сила противника: %s" % String(state.get("military_text", "неизвестно"))
 
 
 func _update_campaign_status() -> void:
@@ -176,7 +175,7 @@ func _update_campaign_status() -> void:
 		campaign_status_label.text = "Активного похода нет"
 		return
 	var campaign := war_manager.get_active_campaign()
-	var state := world_manager.get_state_by_id(campaign.get("state_id", &""))
+	var state := world_manager.get_observed_state_by_id(campaign.get("state_id", &""))
 	campaign_status_label.text = "Поход против %s: осталось %d дн." % [
 		String(state.get("name", "")),
 		war_manager.get_campaign_days_remaining(),
