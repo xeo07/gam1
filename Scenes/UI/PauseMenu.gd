@@ -3,13 +3,14 @@ class_name PauseMenu
 
 const MAIN_MENU_SCENE := "res://Scenes/Main/MainMenu.tscn"
 
-@onready var resume_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ResumeButton
-@onready var save_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SaveButton
-@onready var load_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/LoadButton
-@onready var settings_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SettingsButton
-@onready var main_menu_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MainMenuButton
-@onready var exit_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ExitButton
-@onready var status_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatusLabel
+@onready var content: VBoxContainer = $Overlay/CenterContainer/MedievalFrame/Content
+@onready var resume_button: Button = content.get_node("ResumeButton") as Button
+@onready var save_button: Button = content.get_node("SaveButton") as Button
+@onready var load_button: Button = content.get_node("LoadButton") as Button
+@onready var settings_button: Button = content.get_node("SettingsButton") as Button
+@onready var main_menu_button: Button = content.get_node("MainMenuButton") as Button
+@onready var exit_button: Button = content.get_node("ExitButton") as Button
+@onready var status_label: Label = content.get_node("StatusLabel") as Label
 @onready var settings_dialog: SettingsDialog = $SettingsDialog as SettingsDialog
 @onready var main_menu_confirmation: ConfirmationDialog = $MainMenuConfirmation
 @onready var exit_confirmation: ConfirmationDialog = $ExitConfirmation

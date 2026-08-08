@@ -1,7 +1,8 @@
-[gd_scene format=3 uid="uid://bpsm7q4k2v5ra"]
+[gd_scene load_steps=4 format=3 uid="uid://bpsm7q4k2v5ra"]
 
 [ext_resource type="Script" uid="uid://dpsm7q4k2v5ra" path="res://Scenes/UI/PauseMenu.gd" id="1_pause"]
 [ext_resource type="PackedScene" uid="uid://bsdg7q4k2v5ra" path="res://Scenes/UI/SettingsDialog.tscn" id="2_settings"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Medieval/wood_game_panel.png" id="3_wood"]
 
 [node name="PauseMenu" type="CanvasLayer"]
 process_mode = 2
@@ -17,7 +18,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 0
-color = Color(0.018, 0.016, 0.014, 0.9)
+color = Color(0.018, 0.014, 0.01, 0.82)
 
 [node name="CenterContainer" type="CenterContainer" parent="Overlay"]
 layout_mode = 1
@@ -27,53 +28,77 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="Overlay/CenterContainer"]
-custom_minimum_size = Vector2(430, 0)
+[node name="MedievalFrame" type="Control" parent="Overlay/CenterContainer"]
+custom_minimum_size = Vector2(620, 620)
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="Overlay/CenterContainer/PanelContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 24
+[node name="WoodPanel" type="TextureRect" parent="Overlay/CenterContainer/MedievalFrame"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_wood")
+expand_mode = 1
+stretch_mode = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer"]
-layout_mode = 2
-theme_override_constants/separation = 10
+[node name="Content" type="VBoxContainer" parent="Overlay/CenterContainer/MedievalFrame"]
+layout_mode = 0
+offset_left = 104.0
+offset_top = 112.0
+offset_right = 516.0
+offset_bottom = 584.0
+theme_override_constants/separation = 8
 
-[node name="TitleLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="TitleLabel" type="Label" parent="Overlay/CenterContainer/MedievalFrame/Content"]
+custom_minimum_size = Vector2(0, 82)
 layout_mode = 2
 theme_type_variation = &"TitleLabel"
-text = "Пауза"
+theme_override_colors/font_color = Color(0.96, 0.82, 0.47, 1)
+theme_override_colors/font_shadow_color = Color(0.08, 0.04, 0.02, 0.95)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 34
+text = "КОРОЛЕВСКИЙ СОВЕТ"
 horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="ResumeButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="ResumeButton" type="Button" parent="Overlay/CenterContainer/MedievalFrame/Content"]
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
-text = "Продолжить"
+text = "▶  Продолжить"
 
-[node name="SaveButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="SaveButton" type="Button" parent="Overlay/CenterContainer/MedievalFrame/Content"]
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
-text = "Сохранить игру"
+text = "◆  Сохранить игру"
 
-[node name="LoadButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="LoadButton" type="Button" parent="Overlay/CenterContainer/MedievalFrame/Content"]
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
-text = "Загрузить игру"
+text = "◇  Загрузить игру"
 
-[node name="SettingsButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="SettingsButton" type="Button" parent="Overlay/CenterContainer/MedievalFrame/Content"]
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
-text = "Настройки"
+text = "⚙  Настройки"
 
-[node name="MainMenuButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="MainMenuButton" type="Button" parent="Overlay/CenterContainer/MedievalFrame/Content"]
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
-text = "В главное меню"
+text = "⌂  В главное меню"
 
-[node name="ExitButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="ExitButton" type="Button" parent="Overlay/CenterContainer/MedievalFrame/Content"]
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
-text = "Выйти из игры"
+text = "×  Выйти из игры"
 
-[node name="StatusLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="StatusLabel" type="Label" parent="Overlay/CenterContainer/MedievalFrame/Content"]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.23, 0.12, 0.055, 1)
 horizontal_alignment = 1
 autowrap_mode = 2
 

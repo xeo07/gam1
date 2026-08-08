@@ -283,11 +283,8 @@ func _on_menu_button_pressed() -> void:
 	if event_manager.has_active_event():
 		_show_active_event()
 		return
-	if side_menu.is_menu_open():
-		close_system_menu()
-		return
 	prepare_for_system_menu()
-	side_menu.open_menu()
+	pause_menu.open_menu()
 
 
 func _on_next_day_pressed() -> void:
