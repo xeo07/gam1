@@ -180,10 +180,14 @@ func _on_contract_ended(contract: Dictionary, reason: String) -> void:
 
 
 func _on_territory_acquired(territory: Dictionary, message: String) -> void:
+	var participants: Array[StringName] = []
+	var origin_state_id := StringName(territory.get("origin_state_id", &""))
+	if origin_state_id != &"":
+		participants.append(origin_state_id)
 	add_entry(EventJournalEntry.create(
 		_next_id("territory"), time_manager.get_absolute_day(), &"territory",
 		"Королевство расширилось", message,
-		[StringName(territory.get("origin_state_id", &""))] if territory.get("origin_state_id", &"") != &"" else [],
+		participants,
 		&"confirmed", {"territory": String(territory.get("id", &"")), "source": String(territory.get("source", &""))}, 3
 	))
 

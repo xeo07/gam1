@@ -78,5 +78,8 @@ run_godot_check \
 run_godot_check \
 	"Running automated tests..." \
 	--headless --path "${PROJECT_DIR}" --script res://Tests/test_runner.gd
+run_godot_check \
+	"Running 60-day integrated simulation..." \
+	--headless --quiet --path "${PROJECT_DIR}" --script res://Tests/long_run_test.gd
 
 echo "KINGDOOM project check passed."
