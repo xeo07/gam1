@@ -8,11 +8,12 @@ signal world_day_processed(
 	updates: Array[Dictionary]
 )
 
-const EXPECTED_STATE_IDS: Array[StringName] = [
+const LEGACY_STATE_IDS: Array[StringName] = [
 	&"northrealm",
 	&"suncoast",
 	&"ironclan",
 ]
+const EXPECTED_STATE_IDS: Array[StringName] = WorldGenerator.AI_STATE_IDS
 const VALID_STATUSES: Array[StringName] = StateData.VALID_STATUSES
 
 @onready var time_manager: TimeManager = $"../TimeManager" as TimeManager
@@ -21,18 +22,6 @@ const VALID_STATUSES: Array[StringName] = StateData.VALID_STATUSES
 var _latest_world_updates: Array[Dictionary] = []
 var _last_processed_absolute_day: int
 var _initialized := false
-
-var INITIAL_STATES: Array[Dictionary] = [
-	StateData.create(
-		&"northrealm", "Северное королевство", "Король Эдгар", 120, 65, 40, 80, 10
-	),
-	StateData.create(
-		&"suncoast", "Солнечный берег", "Королева Мирра", 90, 35, 85, 70, 25
-	),
-	StateData.create(
-		&"ironclan", "Железный клан", "Вождь Гром", 75, 90, 30, 55, -20
-	),
-]
 
 var _states: Array[Dictionary] = []
 
@@ -45,9 +34,7 @@ func _ready() -> void:
 func initialize_new_game() -> void:
 	if _initialized or not game_session_manager.is_initialized():
 		return
-	_states.clear()
-	for state in INITIAL_STATES:
-		_states.append(state.duplicate(true))
+	_states = WorldGenerator.generate_states(game_session_manager.get_world_seed())
 	_latest_world_updates.clear()
 	_last_processed_absolute_day = time_manager.get_absolute_day()
 	_initialized = true
@@ -167,7 +154,10 @@ func load_save_data(data: Dictionary) -> bool:
 		return false
 	if not _is_integer_value(data["last_processed_absolute_day"]):
 		return false
-	if data["states"].size() != EXPECTED_STATE_IDS.size():
+	if (
+		data["states"].size() != WorldGenerator.AI_STATE_IDS.size()
+		and data["states"].size() != LEGACY_STATE_IDS.size()
+	):
 		return false
 
 	var loaded_states: Array[Dictionary] = []
@@ -183,7 +173,12 @@ func load_save_data(data: Dictionary) -> bool:
 		state_ids[state_id] = true
 		loaded_states.append(state)
 
-	for expected_state_id in EXPECTED_STATE_IDS:
+	var expected_state_ids := (
+		WorldGenerator.AI_STATE_IDS
+		if loaded_states.size() == WorldGenerator.AI_STATE_IDS.size()
+		else LEGACY_STATE_IDS
+	)
+	for expected_state_id in expected_state_ids:
 		if not state_ids.has(expected_state_id):
 			return false
 

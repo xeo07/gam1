@@ -8,9 +8,10 @@ func _initialize() -> void:
 	_test_seed_reproducibility()
 	_test_state_data_round_trip()
 	_test_state_name_generation()
+	_test_world_generation()
 
 	if _failures.is_empty():
-		print("KINGDOOM tests passed: 4")
+		print("KINGDOOM tests passed: 5")
 		quit(0)
 		return
 
@@ -141,6 +142,31 @@ func _test_state_name_generation() -> void:
 		StateNameGenerator.compose_name(0, 17) == "Багровое Владение",
 		"Neuter adjective form must match its noun"
 	)
+
+
+func _test_world_generation() -> void:
+	var first_world := WorldGenerator.generate_states(424242)
+	var second_world := WorldGenerator.generate_states(424242)
+	var different_world := WorldGenerator.generate_states(424243)
+
+	_expect(first_world.size() == 7, "A new world must contain seven AI states")
+	_expect(first_world == second_world, "The same seed must reproduce the whole world")
+	_expect(first_world != different_world, "A different seed should create a different world")
+
+	var ids: Dictionary = {}
+	var names: Dictionary = {}
+	for state in first_world:
+		ids[state["id"]] = true
+		names[state["name"]] = true
+		var parsed := StateData.parse_save_data(StateData.to_save_data(state))
+		_expect(
+			bool(parsed.get("valid", false)) and parsed.get("state", {}) == state,
+			"Generated state must survive save-data round-trip"
+		)
+	_expect(ids.size() == 7, "Generated state identifiers must be unique")
+	_expect(names.size() == 7, "Generated state names must be unique")
+	for expected_id in WorldGenerator.AI_STATE_IDS:
+		_expect(ids.has(expected_id), "Generated world must contain %s" % expected_id)
 
 
 func _expect(condition: bool, message: String) -> void:
