@@ -24,6 +24,7 @@ const KNOWN_EVENT_IDS: Array[StringName] = [
 	&"chain_border_refugees",
 	&"chain_grain_blight",
 	&"chain_disputed_succession",
+	&"chain_political_unrest",
 ]
 const CRISIS_EVENT_IDS: Array[StringName] = [
 	&"hunger_crisis",
@@ -60,6 +61,9 @@ const EVENT_CHOICE_IDS: Dictionary = {
 	],
 	&"chain_disputed_succession": [
 		&"support_claimant", &"stay_neutral", &"mediate_succession",
+	],
+	&"chain_political_unrest": [
+		&"buy_loyalty", &"public_inquiry", &"ignore_unrest",
 	],
 }
 
@@ -260,7 +264,7 @@ func create_event(event_id: StringName) -> Dictionary:
 				_choice(&"take_materials", "Потребовать материалы для казны", "Получить материалы, но вызвать недовольство.", {}, {"wood": 4, "stone": 2, "stability": -1}, "Часть материалов изъята для государственных нужд."),
 				_choice(&"reject_initiative", "Отклонить предложение", "Не менять состояние государства.", {}, {}, "Предложение ремесленников осталось без поддержки."),
 			]
-		&"chain_border_refugees", &"chain_grain_blight", &"chain_disputed_succession":
+		&"chain_border_refugees", &"chain_grain_blight", &"chain_disputed_succession", &"chain_political_unrest":
 			var chain_id := StoryChainDefinition.chain_from_event(event_id)
 			var warning := StoryChainDefinition.get_warning(chain_id)
 			title = String(warning.get("title", ""))

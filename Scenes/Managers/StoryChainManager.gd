@@ -31,6 +31,7 @@ var _development_day := 0
 var _consequence_day := 0
 var _next_chain_day := FIRST_CHAIN_DAY
 var _sequence := 0
+var _choice_deadline_day := 0
 
 
 func _ready() -> void:
@@ -74,6 +75,7 @@ func get_save_data() -> Dictionary:
 		"consequence_day": _consequence_day,
 		"next_chain_day": _next_chain_day,
 		"sequence": _sequence,
+		"choice_deadline_day": _choice_deadline_day,
 	}
 
 
@@ -110,6 +112,8 @@ func load_save_data(data: Dictionary) -> bool:
 			return false
 		unique[chain_id] = true
 		loaded_order.append(chain_id)
+	if loaded_order.size() == StoryChainDefinition.CHAIN_IDS.size() - 1 and &"political_unrest" not in loaded_order:
+		loaded_order.append(&"political_unrest")
 	if loaded_order.size() != StoryChainDefinition.CHAIN_IDS.size():
 		return false
 	var loaded_index := int(data["chain_index"])
@@ -137,6 +141,7 @@ func load_save_data(data: Dictionary) -> bool:
 	_consequence_day = int(data["consequence_day"])
 	_next_chain_day = int(data["next_chain_day"])
 	_sequence = int(data["sequence"])
+	_choice_deadline_day = int(data.get("choice_deadline_day", 0))
 	_initialized = bool(data["initialized"])
 	return true
 
@@ -145,6 +150,9 @@ func _on_day_changed(_day: int, _month: int, _year: int) -> void:
 	if not _initialized:
 		return
 	var absolute_day := time_manager.get_absolute_day()
+	if _phase == &"awaiting_choice" and _choice_deadline_day > 0 and absolute_day >= _choice_deadline_day:
+		event_manager.resolve_choice(&"ignore_unrest")
+		return
 	if _phase == &"waiting_development" and absolute_day >= _development_day:
 		_publish_development(absolute_day)
 		return
@@ -170,6 +178,7 @@ func _on_internal_event_resolved(result: Dictionary) -> void:
 	_development_day = absolute_day + DEVELOPMENT_DELAY_DAYS
 	_consequence_day = _development_day + CONSEQUENCE_DELAY_DAYS
 	_phase = &"waiting_development"
+	_choice_deadline_day = 0
 	_add_journal_entry(
 		absolute_day,
 		"Решение принято: %s" % String(result.get("event_title", "")),
@@ -190,6 +199,7 @@ func _start_next_chain(absolute_day: int) -> void:
 		_next_chain_day = absolute_day + 1
 		return
 	_phase = &"awaiting_choice"
+	_choice_deadline_day = absolute_day + 3 if _active_chain == &"political_unrest" else 0
 	var warning := StoryChainDefinition.get_warning(_active_chain)
 	_add_journal_entry(
 		absolute_day,
@@ -240,6 +250,7 @@ func _publish_consequence(absolute_day: int) -> void:
 	_development_day = 0
 	_consequence_day = 0
 	_next_chain_day = absolute_day + NEXT_CHAIN_DELAY_DAYS
+	_choice_deadline_day = 0
 
 
 func _apply_effects(effects: Dictionary) -> Dictionary:
@@ -292,6 +303,7 @@ func _initialize_for_seed(world_seed: int, first_day: int) -> void:
 	_consequence_day = 0
 	_next_chain_day = maxi(1, first_day)
 	_sequence = 0
+	_choice_deadline_day = 0
 	_initialized = true
 
 

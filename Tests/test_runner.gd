@@ -21,9 +21,10 @@ func _initialize() -> void:
 	_test_relation_profiles()
 	_test_contextual_diplomacy()
 	_test_diplomatic_contracts()
+	_test_political_crisis()
 
 	if _failures.is_empty():
-		print("KINGDOOM tests passed: 17")
+		print("KINGDOOM tests passed: 18")
 		quit(0)
 		return
 
@@ -448,7 +449,7 @@ func _test_story_chains() -> void:
 	var first_order := StoryChainDefinition.build_order(24680)
 	var second_order := StoryChainDefinition.build_order(24680)
 	_expect(first_order == second_order, "Fixed seed must reproduce story-chain order")
-	_expect(first_order.size() == 3, "There must be three story chains")
+	_expect(first_order.size() == 4, "Story cycle must include the political crisis")
 	var unique: Dictionary = {}
 	for chain_id in first_order:
 		unique[chain_id] = true
@@ -467,7 +468,7 @@ func _test_story_chains() -> void:
 				!= StoryChainDefinition.get_consequence(chain_id, second_choice),
 			"Player choice must change story consequence"
 		)
-	_expect(unique.size() == 3, "Initial story cycle must contain three distinct chains")
+	_expect(unique.size() == 4, "Initial story cycle must contain four distinct chains")
 
 	var session := GameSessionManager.new()
 	var time := TimeManager.new()
@@ -655,6 +656,70 @@ func _test_diplomatic_contracts() -> void:
 	contracts.free()
 	world.free()
 	resources.free()
+	time.free()
+	session.free()
+
+
+func _test_political_crisis() -> void:
+	var warning := StoryChainDefinition.get_warning(&"political_unrest")
+	var choices: Array = warning.get("choices", [])
+	_expect(choices.size() == 3, "Political crisis must offer three responses")
+	for choice in choices:
+		_expect(String(choice.get("description", "")).to_lower().contains("риск"), "Every crisis response must disclose its risk")
+	_expect(StringName(choices[2]["choice_id"]) == &"ignore_unrest", "Ignoring the crisis must be an explicit decision")
+	var ignored := StoryChainDefinition.get_consequence(&"political_unrest", &"ignore_unrest")
+	_expect(int(ignored["effects"].get("stability", 0)) < 0, "Ignoring a political crisis must have consequences")
+	var crisis_session := GameSessionManager.new()
+	var crisis_time := TimeManager.new()
+	var crisis_resources := ResourceManager.new()
+	var crisis_population := PopulationManager.new()
+	var crisis_stability := StabilityManager.new()
+	var crisis_events := EventManager.new()
+	var crisis_journal := EventJournalManager.new()
+	var crisis_stories := StoryChainManager.new()
+	crisis_session.initialize_new_game("Кризис", 7788, [], [])
+	crisis_resources.initialize_new_game()
+	crisis_stability.time_manager = crisis_time
+	crisis_stability.initialize_new_game()
+	crisis_events.time_manager = crisis_time
+	crisis_events.resource_manager = crisis_resources
+	crisis_events.population_manager = crisis_population
+	crisis_events.stability_manager = crisis_stability
+	crisis_stories.game_session_manager = crisis_session
+	crisis_stories.time_manager = crisis_time
+	crisis_stories.event_manager = crisis_events
+	crisis_stories.resource_manager = crisis_resources
+	crisis_stories.stability_manager = crisis_stability
+	crisis_stories.event_journal_manager = crisis_journal
+	crisis_events.internal_event_resolved.connect(crisis_stories._on_internal_event_resolved)
+	crisis_stories.initialize_new_game()
+	crisis_stories._chain_order.erase(&"political_unrest")
+	crisis_stories._chain_order.push_front(&"political_unrest")
+	crisis_time.day = StoryChainManager.FIRST_CHAIN_DAY
+	crisis_stories._on_day_changed(crisis_time.day, crisis_time.month, crisis_time.year)
+	crisis_time.day += 3
+	crisis_stories._on_day_changed(crisis_time.day, crisis_time.month, crisis_time.year)
+	_expect(crisis_stories.get_selected_choice() == &"ignore_unrest", "Unanswered crisis must automatically become the ignore decision")
+	crisis_stories.free()
+	crisis_journal.free()
+	crisis_events.free()
+	crisis_stability.free()
+	crisis_population.free()
+	crisis_resources.free()
+	crisis_time.free()
+	crisis_session.free()
+	var old_save_order := StoryChainDefinition.build_order(1234)
+	old_save_order.erase(&"political_unrest")
+	var old_save := {"initialized": true, "chain_order": old_save_order.map(func(value): return String(value)), "chain_index": 0, "phase": "idle", "active_chain": "", "selected_choice": "", "target_state_id": "", "development_day": 0, "consequence_day": 0, "next_chain_day": 4, "sequence": 0}
+	var session := GameSessionManager.new()
+	var time := TimeManager.new()
+	var stories := StoryChainManager.new()
+	session.initialize_new_game("Старое сохранение", 1234, [], [])
+	stories.game_session_manager = session
+	stories.time_manager = time
+	_expect(stories.load_save_data(old_save), "Old story save must migrate to include political crises")
+	_expect(&"political_unrest" in stories.get_chain_order(), "Migrated story cycle must add political crisis")
+	stories.free()
 	time.free()
 	session.free()
 
