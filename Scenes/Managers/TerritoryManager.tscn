@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scenes/Managers/TerritoryManager.gd" id="1_territory"]
+
+[node name="TerritoryManager" type="Node"]
+script = ExtResource("1_territory")

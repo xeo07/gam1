@@ -22,9 +22,10 @@ func _initialize() -> void:
 	_test_contextual_diplomacy()
 	_test_diplomatic_contracts()
 	_test_political_crisis()
+	_test_territorial_expansion()
 
 	if _failures.is_empty():
-		print("KINGDOOM tests passed: 18")
+		print("KINGDOOM tests passed: 19")
 		quit(0)
 		return
 
@@ -720,6 +721,48 @@ func _test_political_crisis() -> void:
 	_expect(stories.load_save_data(old_save), "Old story save must migrate to include political crises")
 	_expect(&"political_unrest" in stories.get_chain_order(), "Migrated story cycle must add political crisis")
 	stories.free()
+	time.free()
+	session.free()
+
+
+func _test_territorial_expansion() -> void:
+	var session := GameSessionManager.new()
+	var time := TimeManager.new()
+	var resources := ResourceManager.new()
+	var stability := StabilityManager.new()
+	var world := WorldManager.new()
+	var territories := TerritoryManager.new()
+	session.initialize_new_game("Земли", 44556, [], [])
+	resources.initialize_new_game()
+	stability.time_manager = time
+	stability.initialize_new_game()
+	world.game_session_manager = session
+	world.time_manager = time
+	world.initialize_new_game()
+	territories.time_manager = time
+	territories.resource_manager = resources
+	territories.stability_manager = stability
+	territories.world_manager = world
+	var state_ids := WorldGenerator.AI_STATE_IDS
+	var stability_before := stability.get_stability()
+	territories._on_campaign_completed({"result": &"victory", "state_id": state_ids[0]})
+	territories._on_contract_ended({"status": &"expired", "contract_id": &"trade_treaty", "state_id": state_ids[1]}, "")
+	territories._on_chain_completed(&"political_unrest", &"public_inquiry", {})
+	_expect(territories.get_territories().size() == 3, "Territory must transfer after war, treaty or crisis")
+	_expect(stability.get_stability() < stability_before, "Annexation must carry an internal stability cost")
+	var food_before := resources.food
+	var gold_before := resources.gold
+	time.day = 5
+	territories._on_day_changed(time.day, time.month, time.year)
+	_expect(resources.food < food_before and resources.gold > gold_before, "Territories must consume supply and generate income")
+	var restored := TerritoryManager.new()
+	_expect(restored.load_save_data(territories.get_save_data()), "Territories must survive save-data round-trip")
+	_expect(restored.get_territories().size() == 3, "Loaded kingdom must retain acquired territories")
+	restored.free()
+	territories.free()
+	world.free()
+	stability.free()
+	resources.free()
 	time.free()
 	session.free()
 

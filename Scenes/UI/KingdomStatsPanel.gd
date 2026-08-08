@@ -12,6 +12,7 @@ const CONTENT_PATH := "Overlay/CenterContainer/PanelContainer/MarginContainer/VB
 @onready var population_label: Label = content.get_node("PopulationLabel") as Label
 @onready var army_label: Label = content.get_node("ArmyLabel") as Label
 @onready var buildings_label: Label = content.get_node("BuildingsLabel") as Label
+@onready var territories_label: Label = content.get_node("TerritoriesLabel") as Label
 @onready var production_label: Label = content.get_node("ProductionLabel") as Label
 @onready var expenses_label: Label = content.get_node("ExpensesLabel") as Label
 @onready var shortages_label: Label = content.get_node("ShortagesLabel") as Label
@@ -27,6 +28,7 @@ const CONTENT_PATH := "Overlay/CenterContainer/PanelContainer/MarginContainer/VB
 @onready var population_manager: PopulationManager = $"../PopulationManager" as PopulationManager
 @onready var army_manager: ArmyManager = $"../ArmyManager" as ArmyManager
 @onready var building_manager: BuildingManager = $"../BuildingManager" as BuildingManager
+@onready var territory_manager: TerritoryManager = $"../TerritoryManager" as TerritoryManager
 
 
 func _ready() -> void:
@@ -68,6 +70,8 @@ func _ready() -> void:
 		func(_building: Dictionary) -> void: _refresh_if_open()
 	)
 	building_manager.buildings_loaded.connect(_refresh_if_open)
+	territory_manager.territories_changed.connect(_refresh_if_open)
+	territory_manager.territory_reported.connect(func(_report: Dictionary) -> void: _refresh_if_open())
 
 
 func open_panel() -> void:
@@ -107,6 +111,7 @@ func refresh_panel() -> void:
 	buildings_label.text = (
 		"Зданий: %d" % building_manager.get_all_buildings().size()
 	)
+	territories_label.text = territory_manager.get_summary()
 	_update_economy_summary()
 	_rebuild_reasons()
 

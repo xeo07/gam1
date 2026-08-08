@@ -75,6 +75,11 @@ text = "Армия: 0 бойцов, сила 0"
 layout_mode = 2
 text = "Зданий: 0"
 
+[node name="TerritoriesLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Территории: только коронные земли"
+autowrap_mode = 2
+
 [node name="EconomyTitleLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Последний экономический день"

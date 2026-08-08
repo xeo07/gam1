@@ -12,6 +12,7 @@ const MAX_ENTRIES := 200
 @onready var war_manager: WarManager = $"../WarManager" as WarManager
 @onready var diplomacy_manager: DiplomacyManager = $"../DiplomacyManager" as DiplomacyManager
 @onready var contract_manager: ContractManager = $"../ContractManager" as ContractManager
+@onready var territory_manager: TerritoryManager = $"../TerritoryManager" as TerritoryManager
 
 var _entries: Array[Dictionary] = []
 var _sequence := 0
@@ -26,6 +27,8 @@ func _ready() -> void:
 	diplomacy_manager.diplomatic_action_completed.connect(_on_diplomatic_action)
 	contract_manager.contract_signed.connect(_on_contract_signed)
 	contract_manager.contract_ended.connect(_on_contract_ended)
+	territory_manager.territory_acquired.connect(_on_territory_acquired)
+	territory_manager.territory_reported.connect(_on_territory_reported)
 
 
 func add_entry(entry: Dictionary) -> bool:
@@ -174,6 +177,23 @@ func _on_contract_ended(contract: Dictionary, reason: String) -> void:
 		[StringName(contract.get("state_id", &""))], &"confirmed",
 		{"contract": String(contract.get("contract_id", &"")), "status": String(contract.get("status", &""))}, 3
 	))
+
+
+func _on_territory_acquired(territory: Dictionary, message: String) -> void:
+	add_entry(EventJournalEntry.create(
+		_next_id("territory"), time_manager.get_absolute_day(), &"territory",
+		"Королевство расширилось", message,
+		[StringName(territory.get("origin_state_id", &""))] if territory.get("origin_state_id", &"") != &"" else [],
+		&"confirmed", {"territory": String(territory.get("id", &"")), "source": String(territory.get("source", &""))}, 3
+	))
+
+
+func _on_territory_reported(report: Dictionary) -> void:
+	if not bool(report.get("supplied", true)):
+		add_entry(EventJournalEntry.create(
+			_next_id("territory"), time_manager.get_absolute_day(), &"territory",
+			"Новые земли остались без снабжения", "Казна не получила доход, а нехватка продовольствия усилила беспорядки.", [], &"confirmed", report, 2
+		))
 
 
 func _next_id(prefix: String) -> String:
