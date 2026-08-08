@@ -1,0 +1,418 @@
+[gd_scene format=3 uid="uid://bmmn7q4k2v5ra"]
+
+[ext_resource type="Script" uid="uid://dmmn7q4k2v5ra" path="res://Scenes/Main/MainMenu.gd" id="1_menu"]
+[ext_resource type="Theme" path="res://Themes/KingdoomTheme.tres" id="2_theme"]
+[ext_resource type="PackedScene" uid="uid://bsdg7q4k2v5ra" path="res://Scenes/UI/SettingsDialog.tscn" id="3_settings"]
+[ext_resource type="PackedScene" path="res://Scenes/UI/PixelArtEditor.tscn" id="4_pixel_editor"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+script = ExtResource("1_menu")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.045, 0.038, 0.033, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainPanel" type="PanelContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(430, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/MainPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 28
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/MainPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text = "KINGDOOM"
+horizontal_alignment = 1
+
+[node name="VersionLabel" type="Label" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Версия 0.0.1"
+horizontal_alignment = 1
+
+[node name="ContinueButton" type="Button" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Продолжить"
+
+[node name="NewGameButton" type="Button" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Новая игра"
+
+[node name="LoadGameButton" type="Button" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Загрузить игру"
+
+[node name="SettingsButton" type="Button" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Настройки"
+
+[node name="CreditsButton" type="Button" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Авторы"
+
+[node name="ExitButton" type="Button" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Выйти"
+
+[node name="StatusLabel" type="Label" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="NewGameDialog" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Overlay" type="ColorRect" parent="NewGameDialog"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0.02, 0.018, 0.016, 0.88)
+
+[node name="CenterContainer" type="CenterContainer" parent="NewGameDialog/Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="NewGameDialog/Overlay/CenterContainer"]
+custom_minimum_size = Vector2(900, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="NewGameDialog/Overlay/CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="TitleLabel" type="Label" parent="NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text = "Новая игра"
+horizontal_alignment = 1
+
+[node name="BasicSettingsGrid" type="GridContainer" parent="NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+columns = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 5
+
+[node name="KingdomNameLabel" type="Label" parent="NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/BasicSettingsGrid"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+text = "Название государства"
+
+[node name="KingdomNameLineEdit" type="LineEdit" parent="NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/BasicSettingsGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Моё королевство"
+max_length = 24
+
+[node name="SeedLabel" type="Label" parent="NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/BasicSettingsGrid"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+text = "Seed мира"
+
+[node name="SeedContainer" type="HBoxContainer" parent="NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/BasicSettingsGrid"]
+layout_mode = 2
+
+[node name="SeedLineEdit" type="LineEdit" parent="NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/BasicSettingsGrid/SeedContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Целое число"
+
+[node name="RandomSeedButton" type="Button" parent="NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/BasicSettingsGrid/SeedContainer"]
+layout_mode = 2
+text = "Случайный seed"
+
+[node name="SymbolTabs" type="TabContainer" parent="NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 450)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="FlagTab" type="MarginContainer" parent="NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SymbolTabs"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="EditorViewport" type="Control" parent="NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SymbolTabs/FlagTab"]
+layout_mode = 2
+clip_contents = true
+
+[node name="ScrollContainer" type="ScrollContainer" parent="NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SymbolTabs/FlagTab/EditorViewport"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 2
+vertical_scroll_mode = 2
+
+[node name="FlagPixelArtEditor" parent="NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SymbolTabs/FlagTab/EditorViewport/ScrollContainer" instance=ExtResource("4_pixel_editor")]
+layout_mode = 2
+
+[node name="EmblemTab" type="MarginContainer" parent="NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SymbolTabs"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="EditorViewport" type="Control" parent="NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SymbolTabs/EmblemTab"]
+layout_mode = 2
+clip_contents = true
+
+[node name="ScrollContainer" type="ScrollContainer" parent="NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SymbolTabs/EmblemTab/EditorViewport"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 2
+vertical_scroll_mode = 2
+
+[node name="EmblemPixelArtEditor" parent="NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SymbolTabs/EmblemTab/EditorViewport/ScrollContainer" instance=ExtResource("4_pixel_editor")]
+layout_mode = 2
+
+[node name="StatusLabel" type="Label" parent="NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="BottomButtons" type="HBoxContainer" parent="NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 2
+theme_override_constants/separation = 8
+
+[node name="StartGameButton" type="Button" parent="NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/BottomButtons"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+text = "Начать игру"
+
+[node name="CancelButton" type="Button" parent="NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/BottomButtons"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "Отмена"
+
+[node name="LoadDialog" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Overlay" type="ColorRect" parent="LoadDialog"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0.02, 0.018, 0.016, 0.88)
+
+[node name="CenterContainer" type="CenterContainer" parent="LoadDialog/Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="LoadDialog/Overlay/CenterContainer"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="LoadDialog/Overlay/CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LoadDialog/Overlay/CenterContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TitleLabel" type="Label" parent="LoadDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text = "Загрузка игры"
+horizontal_alignment = 1
+
+[node name="SaveInfoLabel" type="Label" parent="LoadDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Сохранения нет"
+autowrap_mode = 2
+
+[node name="IdentityPreviewContainer" type="HBoxContainer" parent="LoadDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 16
+
+[node name="FlagPreviewTextureRect" type="TextureRect" parent="LoadDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/IdentityPreviewContainer"]
+custom_minimum_size = Vector2(192, 120)
+layout_mode = 2
+texture_filter = 1
+expand_mode = 1
+stretch_mode = 5
+
+[node name="EmblemPreviewTextureRect" type="TextureRect" parent="LoadDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/IdentityPreviewContainer"]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+texture_filter = 1
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LoadButton" type="Button" parent="LoadDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Загрузить"
+
+[node name="DeleteButton" type="Button" parent="LoadDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Удалить сохранение"
+
+[node name="CancelButton" type="Button" parent="LoadDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Отмена"
+
+[node name="StatusLabel" type="Label" parent="LoadDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="SettingsDialog" parent="." instance=ExtResource("3_settings")]
+
+[node name="CreditsDialog" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Overlay" type="ColorRect" parent="CreditsDialog"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0.02, 0.018, 0.016, 0.88)
+
+[node name="CenterContainer" type="CenterContainer" parent="CreditsDialog/Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CreditsDialog/Overlay/CenterContainer"]
+custom_minimum_size = Vector2(420, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CreditsDialog/Overlay/CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CreditsDialog/Overlay/CenterContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TitleLabel" type="Label" parent="CreditsDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text = "KINGDOOM"
+horizontal_alignment = 1
+
+[node name="DeveloperLabel" type="Label" parent="CreditsDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Разработка: xeo"
+horizontal_alignment = 1
+
+[node name="EngineLabel" type="Label" parent="CreditsDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Движок: Godot Engine"
+horizontal_alignment = 1
+
+[node name="VersionLabel" type="Label" parent="CreditsDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Версия игры: 0.0.1"
+horizontal_alignment = 1
+
+[node name="CloseButton" type="Button" parent="CreditsDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Закрыть"
+
+[node name="OverwriteConfirmation" type="ConfirmationDialog" parent="."]
+title = "Новая игра"
+ok_button_text = "Продолжить"
+cancel_button_text = "Отмена"
+
+[node name="DeleteConfirmation" type="ConfirmationDialog" parent="."]
+title = "Удаление сохранения"
+ok_button_text = "Удалить"
+cancel_button_text = "Отмена"

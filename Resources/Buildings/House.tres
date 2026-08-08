@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="BuildingDefinition" format=3 uid="uid://ct4m8q2x7v5ka"]
+
+[ext_resource type="Script" path="res://Scripts/Core/BuildingDefinition.gd" id="1_building_definition"]
+
+[resource]
+script = ExtResource("1_building_definition")
+id = &"house"
+display_name = "Дом"
+emoji = "🏠"
+size = Vector2i(1, 1)
+wood_cost = 10
+stone_cost = 2
+gold_cost = 0
+population_capacity = 2
+worker_job = &""
+worker_capacity = 0
+daily_food_upkeep = 0
+daily_gold_upkeep = 0

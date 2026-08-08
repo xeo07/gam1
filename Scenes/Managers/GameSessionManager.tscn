@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bgsm7q4k2v5ra"]
+
+[ext_resource type="Script" uid="uid://dgsm7q4k2v5ra" path="res://Scenes/Managers/GameSessionManager.gd" id="1_session"]
+
+[node name="GameSessionManager" type="Node"]
+script = ExtResource("1_session")

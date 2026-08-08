@@ -1,0 +1,90 @@
+[gd_scene format=3 uid="uid://bpsm7q4k2v5ra"]
+
+[ext_resource type="Script" uid="uid://dpsm7q4k2v5ra" path="res://Scenes/UI/PauseMenu.gd" id="1_pause"]
+[ext_resource type="PackedScene" uid="uid://bsdg7q4k2v5ra" path="res://Scenes/UI/SettingsDialog.tscn" id="2_settings"]
+
+[node name="PauseMenu" type="CanvasLayer"]
+process_mode = 2
+visible = false
+layer = 20
+script = ExtResource("1_pause")
+
+[node name="Overlay" type="ColorRect" parent="."]
+process_mode = 2
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0.018, 0.016, 0.014, 0.9)
+
+[node name="CenterContainer" type="CenterContainer" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Overlay/CenterContainer"]
+custom_minimum_size = Vector2(430, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Overlay/CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TitleLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text = "Пауза"
+horizontal_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Продолжить"
+
+[node name="SaveButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Сохранить игру"
+
+[node name="LoadButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Загрузить игру"
+
+[node name="SettingsButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Настройки"
+
+[node name="MainMenuButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "В главное меню"
+
+[node name="ExitButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Выйти из игры"
+
+[node name="StatusLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="SettingsDialog" parent="." instance=ExtResource("2_settings")]
+
+[node name="MainMenuConfirmation" type="ConfirmationDialog" parent="."]
+title = "Главное меню"
+ok_button_text = "Вернуться"
+cancel_button_text = "Отмена"
+
+[node name="ExitConfirmation" type="ConfirmationDialog" parent="."]
+title = "Выход"
+ok_button_text = "Выйти"
+cancel_button_text = "Отмена"

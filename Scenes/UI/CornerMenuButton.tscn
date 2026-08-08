@@ -1,0 +1,20 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scenes/UI/CornerMenuButton.gd" id="1_corner"]
+
+[node name="CornerMenuButton" type="CanvasLayer"]
+layer = 6
+script = ExtResource("1_corner")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+offset_left = 1208.0
+offset_top = 229.0
+offset_right = 1260.0
+offset_bottom = 281.0
+
+[node name="MenuButton" type="Button" parent="MarginContainer"]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+theme_type_variation = &"CornerMenuButton"
+text = "☰"
+tooltip_text = "Открыть меню"

@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dx7m3rav2k5ra"]
+
+[ext_resource type="Script" uid="uid://dmxobb65ihg5j" path="res://Scenes/Managers/DiplomacyManager.gd" id="1_diplomacy_manager"]
+
+[node name="DiplomacyManager" type="Node"]
+script = ExtResource("1_diplomacy_manager")

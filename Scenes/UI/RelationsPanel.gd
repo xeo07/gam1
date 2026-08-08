@@ -1,0 +1,307 @@
+extends CanvasLayer
+class_name RelationsPanel
+
+const STATUS_DISPLAY_NAMES: Dictionary = {
+	&"neutral": "Нейтральный",
+	&"ally": "Союзник",
+	&"enemy": "Враг",
+	&"war": "В состоянии войны",
+}
+
+@onready var states_list: ItemList = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatesList
+@onready var state_name_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/StateNameLabel
+@onready var ruler_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/RulerLabel
+@onready var relation_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/RelationLabel
+@onready var status_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/StatusLabel
+@onready var population_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/PopulationLabel
+@onready var military_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/MilitaryLabel
+@onready var wealth_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/WealthLabel
+@onready var stability_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/StabilityLabel
+@onready var gift_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/GiftButton
+@onready var insult_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/InsultButton
+@onready var cooldown_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/CooldownLabel
+@onready var action_status_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/ActionStatusLabel
+@onready var send_spy_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/SendSpyButton
+@onready var spy_status_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/SpyStatusLabel
+@onready var close_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CloseButton
+@onready var world_manager: WorldManager = $"../WorldManager" as WorldManager
+@onready var diplomacy_manager: DiplomacyManager = $"../DiplomacyManager" as DiplomacyManager
+@onready var spy_manager: SpyManager = $"../SpyManager" as SpyManager
+@onready var resource_manager: ResourceManager = $"../ResourceManager" as ResourceManager
+@onready var time_manager: TimeManager = $"../TimeManager" as TimeManager
+
+var _state_ids: Array[StringName] = []
+var _selected_state_id: StringName = &""
+
+
+func _ready() -> void:
+	states_list.item_selected.connect(_on_state_selected)
+	gift_button.pressed.connect(_on_gift_pressed)
+	insult_button.pressed.connect(_on_insult_pressed)
+	send_spy_button.pressed.connect(_on_send_spy_pressed)
+	close_button.pressed.connect(close_panel)
+	world_manager.states_changed.connect(_on_states_changed)
+	diplomacy_manager.diplomatic_action_completed.connect(_on_diplomatic_action_completed)
+	diplomacy_manager.diplomatic_action_failed.connect(_on_diplomatic_action_failed)
+	spy_manager.spy_mission_started.connect(_on_spy_mission_started)
+	spy_manager.spy_mission_failed.connect(_on_spy_mission_failed)
+	spy_manager.spy_report_ready.connect(_on_spy_report_ready)
+	resource_manager.resources_changed.connect(_on_resources_changed)
+	time_manager.day_changed.connect(_on_day_changed)
+	time_manager.time_loaded.connect(_on_day_changed)
+	_clear_details()
+
+
+func open_panel() -> void:
+	visible = true
+	action_status_label.text = ""
+	spy_status_label.text = ""
+	refresh_states()
+
+
+func close_panel() -> void:
+	visible = false
+
+
+func refresh_states() -> void:
+	var states := world_manager.get_all_states()
+	states_list.clear()
+	_state_ids.clear()
+
+	if states.is_empty():
+		states_list.add_item("Государств нет")
+		states_list.set_item_disabled(0, true)
+		_selected_state_id = &""
+		_clear_details()
+		return
+
+	for state in states:
+		var state_id: StringName = state.get("id", &"")
+		_state_ids.append(state_id)
+		states_list.add_item(_format_state_list_item(state))
+
+	var selected_index := _state_ids.find(_selected_state_id)
+	if selected_index == -1:
+		_selected_state_id = &""
+		_clear_details()
+		return
+
+	states_list.select(selected_index)
+	_show_state(_selected_state_id)
+
+
+func _on_state_selected(index: int) -> void:
+	if index < 0 or index >= _state_ids.size():
+		return
+
+	_selected_state_id = _state_ids[index]
+	action_status_label.text = ""
+	spy_status_label.text = ""
+	_show_state(_selected_state_id)
+
+
+func _on_states_changed() -> void:
+	if visible:
+		refresh_states()
+
+
+func _on_gift_pressed() -> void:
+	if _selected_state_id == &"":
+		return
+	diplomacy_manager.send_gift(_selected_state_id)
+
+
+func _on_insult_pressed() -> void:
+	if _selected_state_id == &"":
+		return
+	diplomacy_manager.send_insult(_selected_state_id)
+
+
+func _on_send_spy_pressed() -> void:
+	if _selected_state_id == &"":
+		return
+	spy_manager.start_spy_mission(_selected_state_id)
+
+
+func _on_diplomatic_action_completed(
+	state_id: StringName,
+	_action_id: StringName,
+	_relation_change: int,
+	message: String
+) -> void:
+	if not visible:
+		return
+
+	refresh_states()
+	if state_id == _selected_state_id:
+		action_status_label.text = message
+		_show_state(state_id)
+
+
+func _on_diplomatic_action_failed(
+	state_id: StringName,
+	_action_id: StringName,
+	reason: String
+) -> void:
+	if visible and state_id == _selected_state_id:
+		action_status_label.text = reason
+		_update_action_controls()
+
+
+func _on_resources_changed(
+	_food: int,
+	_wood: int,
+	_stone: int,
+	_gold: int
+) -> void:
+	if visible:
+		_update_action_controls()
+		_update_spy_controls()
+
+
+func _on_day_changed(_day: int, _month: int, _year: int) -> void:
+	if visible:
+		_update_action_controls()
+		_update_spy_controls()
+
+
+func _show_state(state_id: StringName) -> void:
+	var state := world_manager.get_state_by_id(state_id)
+	if state.is_empty():
+		_selected_state_id = &""
+		_clear_details()
+		return
+
+	var relation := int(state.get("relation", 0))
+	var status: StringName = state.get("status", &"neutral")
+	state_name_label.text = "Государство: %s" % String(state.get("name", ""))
+	ruler_label.text = "Правитель: %s" % String(state.get("ruler_name", ""))
+	relation_label.text = "Отношения: %d — %s" % [
+		relation,
+		diplomacy_manager.get_relation_label(relation),
+	]
+	status_label.text = "Статус: %s" % _get_status_display_name(status)
+	population_label.text = "Население: %d" % int(state.get("population", 0))
+	military_label.text = "Военная сила: %d" % int(state.get("military_strength", 0))
+	wealth_label.text = "Богатство: %d" % int(state.get("wealth", 0))
+	stability_label.text = "Стабильность: %d" % int(state.get("stability", 0))
+	_update_action_controls()
+	_update_spy_controls()
+
+
+func _on_spy_mission_started(
+	state_id: StringName,
+	_completion_day: int
+) -> void:
+	if visible and state_id == _selected_state_id:
+		spy_status_label.text = (
+			"Шпион отправлен. Отчёт будет через %d дня."
+			% SpyManager.SPY_MISSION_DURATION_DAYS
+		)
+		_update_spy_button()
+
+
+func _on_spy_mission_failed(state_id: StringName, reason: String) -> void:
+	if visible and state_id == _selected_state_id:
+		spy_status_label.text = reason
+		_update_spy_button()
+
+
+func _on_spy_report_ready(report: Dictionary) -> void:
+	if not visible:
+		return
+	var state_id: StringName = report.get("state_id", &"")
+	if state_id == _selected_state_id:
+		_update_spy_controls()
+
+
+func _format_state_list_item(state: Dictionary) -> String:
+	var state_id: StringName = state.get("id", &"")
+	return "%s — %s отношения" % [
+		String(state.get("name", "")),
+		diplomacy_manager.get_state_relation_label(state_id),
+	]
+
+
+func _get_status_display_name(status: StringName) -> String:
+	return String(STATUS_DISPLAY_NAMES.get(status, String(status)))
+
+
+func _update_action_controls() -> void:
+	if _selected_state_id == &"":
+		gift_button.disabled = true
+		insult_button.disabled = true
+		cooldown_label.text = ""
+		return
+
+	var cooldown_remaining := diplomacy_manager.get_action_cooldown_remaining(
+		_selected_state_id
+	)
+	if cooldown_remaining > 0:
+		cooldown_label.text = "Посланник вернётся через %d дн." % cooldown_remaining
+	else:
+		cooldown_label.text = "Посланник доступен"
+
+	gift_button.disabled = (
+		cooldown_remaining > 0
+		or not resource_manager.has_resource(
+			&"gold",
+			DiplomacyManager.GIFT_GOLD_COST
+		)
+	)
+	insult_button.disabled = cooldown_remaining > 0
+
+
+func _update_spy_controls() -> void:
+	if _selected_state_id == &"":
+		spy_status_label.text = ""
+		send_spy_button.disabled = true
+		return
+
+	if spy_manager.has_active_mission(_selected_state_id):
+		spy_status_label.text = "Шпион вернётся через %d дн." % (
+			spy_manager.get_mission_days_remaining(_selected_state_id)
+		)
+	else:
+		var latest_report := spy_manager.get_latest_report(_selected_state_id)
+		if latest_report.is_empty():
+			spy_status_label.text = "Шпион доступен"
+		else:
+			spy_status_label.text = (
+				"Последний отчёт получен: День %d, Месяц %d, Год %d"
+				% [
+					latest_report.get("report_day", 0),
+					latest_report.get("report_month", 0),
+					latest_report.get("report_year", 0),
+				]
+			)
+
+	_update_spy_button()
+
+
+func _update_spy_button() -> void:
+	send_spy_button.disabled = (
+		_selected_state_id == &""
+		or spy_manager.has_active_mission(_selected_state_id)
+		or not resource_manager.has_resource(
+			&"gold",
+			SpyManager.SPY_GOLD_COST
+		)
+	)
+
+
+func _clear_details() -> void:
+	state_name_label.text = ""
+	ruler_label.text = ""
+	relation_label.text = ""
+	status_label.text = ""
+	population_label.text = ""
+	military_label.text = ""
+	wealth_label.text = ""
+	stability_label.text = ""
+	cooldown_label.text = ""
+	action_status_label.text = ""
+	spy_status_label.text = ""
+	gift_button.disabled = true
+	insult_button.disabled = true
+	send_spy_button.disabled = true

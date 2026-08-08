@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bmx7q3wak2r5a"]
+
+[ext_resource type="Script" uid="uid://dpvsghyg722ed" path="res://Scenes/Managers/EconomyManager.gd" id="1_economy_manager"]
+
+[node name="EconomyManager" type="Node"]
+script = ExtResource("1_economy_manager")

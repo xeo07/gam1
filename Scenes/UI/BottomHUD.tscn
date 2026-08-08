@@ -1,0 +1,375 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scenes/UI/BottomHUD.gd" id="1_hud"]
+
+[node name="BottomHUD" type="CanvasLayer"]
+layer = 3
+script = ExtResource("1_hud")
+
+[node name="BottomContainer" type="Control" parent="."]
+custom_minimum_size = Vector2(0, 195)
+offset_right = 1280.0
+offset_bottom = 195.0
+clip_contents = true
+
+[node name="PanelContainer" type="PanelContainer" parent="BottomContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"HUDPanel"
+
+[node name="MarginContainer" type="MarginContainer" parent="BottomContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BottomContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="LeftStatsSection" type="PanelContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.22
+theme_type_variation = &"HUDSectionPanel"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/LeftStatsSection"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 3
+
+[node name="PopulationButtonArea" type="PanelContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/LeftStatsSection/VBoxContainer"]
+custom_minimum_size = Vector2(0, 43)
+layout_mode = 2
+theme_type_variation = &"HUDRowPanel"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/LeftStatsSection/VBoxContainer/PopulationButtonArea"]
+layout_mode = 2
+
+[node name="PopulationTitleLabel" type="Label" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/LeftStatsSection/VBoxContainer/PopulationButtonArea/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"HUDTitleLabel"
+text = "Жители"
+vertical_alignment = 1
+
+[node name="PopulationValueLabel" type="Label" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/LeftStatsSection/VBoxContainer/PopulationButtonArea/HBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"HUDValueLabel"
+text = "0/4"
+vertical_alignment = 1
+
+[node name="PopulationSectionButton" type="Button" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/LeftStatsSection/VBoxContainer/PopulationButtonArea"]
+layout_mode = 2
+theme_type_variation = &"HUDSectionButton"
+tooltip_text = "Управление населением"
+
+[node name="ArmyButtonArea" type="PanelContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/LeftStatsSection/VBoxContainer"]
+custom_minimum_size = Vector2(0, 43)
+layout_mode = 2
+theme_type_variation = &"HUDRowPanel"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/LeftStatsSection/VBoxContainer/ArmyButtonArea"]
+layout_mode = 2
+
+[node name="ArmyTitleLabel" type="Label" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/LeftStatsSection/VBoxContainer/ArmyButtonArea/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"HUDTitleLabel"
+text = "Армия"
+vertical_alignment = 1
+
+[node name="ArmyValueLabel" type="Label" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/LeftStatsSection/VBoxContainer/ArmyButtonArea/HBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"HUDValueLabel"
+text = "0"
+vertical_alignment = 1
+
+[node name="ArmySectionButton" type="Button" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/LeftStatsSection/VBoxContainer/ArmyButtonArea"]
+layout_mode = 2
+theme_type_variation = &"HUDSectionButton"
+tooltip_text = "Военное управление"
+
+[node name="StabilityButtonArea" type="PanelContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/LeftStatsSection/VBoxContainer"]
+custom_minimum_size = Vector2(0, 66)
+layout_mode = 2
+theme_type_variation = &"HUDRowPanel"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/LeftStatsSection/VBoxContainer/StabilityButtonArea"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="StabilityHeader" type="HBoxContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/LeftStatsSection/VBoxContainer/StabilityButtonArea/VBoxContainer"]
+layout_mode = 2
+
+[node name="StabilityTitleLabel" type="Label" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/LeftStatsSection/VBoxContainer/StabilityButtonArea/VBoxContainer/StabilityHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"HUDTitleLabel"
+text = "Стабильность"
+
+[node name="StabilityValueLabel" type="Label" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/LeftStatsSection/VBoxContainer/StabilityButtonArea/VBoxContainer/StabilityHeader"]
+layout_mode = 2
+theme_type_variation = &"HUDValueLabel"
+text = "70"
+
+[node name="StabilityBar" type="HBoxContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/LeftStatsSection/VBoxContainer/StabilityButtonArea/VBoxContainer"]
+custom_minimum_size = Vector2(96, 13)
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="StabilitySectionButton" type="Button" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/LeftStatsSection/VBoxContainer/StabilityButtonArea"]
+layout_mode = 2
+theme_type_variation = &"HUDSectionButton"
+tooltip_text = "Состояние государства"
+
+[node name="IdentitySection" type="Control" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.4
+
+[node name="PanelContainer" type="PanelContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"HUDIdentityPanel"
+
+[node name="MarginContainer" type="MarginContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="EmblemContainer" type="CenterContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(122, 122)
+layout_mode = 2
+
+[node name="EmblemTextureRect" type="TextureRect" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/EmblemContainer"]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+texture_filter = 1
+expand_mode = 1
+stretch_mode = 5
+
+[node name="MainIdentityContainer" type="Control" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/MainIdentityContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 2
+
+[node name="KingdomNameLabel" type="Label" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/MainIdentityContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+theme_type_variation = &"HUDKingdomLabel"
+text = "—"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+max_lines_visible = 2
+text_overrun_behavior = 3
+
+[node name="IdentityContentRow" type="HBoxContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/MainIdentityContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 5
+
+[node name="FlagAspectContainer" type="AspectRatioContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/MainIdentityContainer/VBoxContainer/IdentityContentRow"]
+custom_minimum_size = Vector2(230, 144)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+ratio = 1.6
+stretch_mode = 2
+alignment_horizontal = 1
+alignment_vertical = 1
+
+[node name="FlagTextureRect" type="TextureRect" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/MainIdentityContainer/VBoxContainer/IdentityContentRow/FlagAspectContainer"]
+layout_mode = 2
+texture_filter = 1
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ActionButtonsContainer" type="VBoxContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/MainIdentityContainer/VBoxContainer/IdentityContentRow"]
+custom_minimum_size = Vector2(86, 0)
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 5
+
+[node name="NextDayButton" type="Button" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/MainIdentityContainer/VBoxContainer/IdentityContentRow/ActionButtonsContainer"]
+custom_minimum_size = Vector2(86, 38)
+layout_mode = 2
+theme_type_variation = &"HUDActionButton"
+text = "Новый день"
+
+[node name="RelationsButton" type="Button" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/MainIdentityContainer/VBoxContainer/IdentityContentRow/ActionButtonsContainer"]
+custom_minimum_size = Vector2(86, 38)
+layout_mode = 2
+theme_type_variation = &"HUDActionButton"
+text = "Отношения"
+
+[node name="DateSection" type="PanelContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(105, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.16
+theme_type_variation = &"HUDSectionPanel"
+tooltip_text = "Дата государства"
+
+[node name="GridContainer" type="GridContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/DateSection"]
+layout_mode = 2
+columns = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 12
+
+[node name="DayTitleLabel" type="Label" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/DateSection/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = &"HUDTitleLabel"
+text = "День"
+vertical_alignment = 1
+
+[node name="DayValueLabel" type="Label" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/DateSection/GridContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"HUDValueLabel"
+text = "1"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="MonthTitleLabel" type="Label" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/DateSection/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = &"HUDTitleLabel"
+text = "Месяц"
+vertical_alignment = 1
+
+[node name="MonthValueLabel" type="Label" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/DateSection/GridContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"HUDValueLabel"
+text = "1"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="YearTitleLabel" type="Label" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/DateSection/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = &"HUDTitleLabel"
+text = "Год"
+vertical_alignment = 1
+
+[node name="YearValueLabel" type="Label" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/DateSection/GridContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"HUDValueLabel"
+text = "1"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ResourcesSection" type="PanelContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(135, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.22
+theme_type_variation = &"HUDSectionPanel"
+
+[node name="GridContainer" type="GridContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/ResourcesSection"]
+layout_mode = 2
+columns = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 7
+
+[node name="FoodTitleLabel" type="Label" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/ResourcesSection/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = &"HUDTitleLabel"
+text = "Еда"
+vertical_alignment = 1
+
+[node name="FoodValueLabel" type="Label" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/ResourcesSection/GridContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"HUDValueLabel"
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="WoodTitleLabel" type="Label" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/ResourcesSection/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = &"HUDTitleLabel"
+text = "Дерево"
+vertical_alignment = 1
+
+[node name="WoodValueLabel" type="Label" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/ResourcesSection/GridContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"HUDValueLabel"
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="StoneTitleLabel" type="Label" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/ResourcesSection/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = &"HUDTitleLabel"
+text = "Камень"
+vertical_alignment = 1
+
+[node name="StoneValueLabel" type="Label" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/ResourcesSection/GridContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"HUDValueLabel"
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="GoldTitleLabel" type="Label" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/ResourcesSection/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = &"HUDTitleLabel"
+text = "Золото"
+vertical_alignment = 1
+
+[node name="GoldValueLabel" type="Label" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/ResourcesSection/GridContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"HUDValueLabel"
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ResourcesSectionButton" type="Button" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/ResourcesSection"]
+layout_mode = 2
+theme_type_variation = &"HUDSectionButton"
+tooltip_text = "Торговля и особые товары"

@@ -1,0 +1,105 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scenes/UI/InternalEventPanel.gd" id="1_event_panel"]
+
+[node name="InternalEventPanel" type="CanvasLayer"]
+visible = false
+layer = 9
+script = ExtResource("1_event_panel")
+
+[node name="Overlay" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0, 0, 0, 0.7)
+
+[node name="CenterContainer" type="CenterContainer" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Overlay/CenterContainer"]
+custom_minimum_size = Vector2(720, 640)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Overlay/CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TitleLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text = "Внутреннее событие"
+autowrap_mode = 2
+
+[node name="DateLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Дата: День 1, Месяц 1, Год 1"
+
+[node name="BodyScroll" type="ScrollContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="BodyLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/BodyScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+autowrap_mode = 2
+
+[node name="ChoicesTitleLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"SectionTitleLabel"
+text = "Решение правителя"
+
+[node name="ChoicesScroll" type="ScrollContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 220)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ChoicesContainer" type="VBoxContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ChoicesScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="StatusLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="ResultContainer" type="PanelContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ResultContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ResultTitleLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ResultContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"SectionTitleLabel"
+text = "Решение принято"
+
+[node name="ResultTextLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ResultContainer/VBoxContainer"]
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="AppliedEffectsLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ResultContainer/VBoxContainer"]
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="ContinueButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ResultContainer/VBoxContainer"]
+layout_mode = 2
+text = "Продолжить"

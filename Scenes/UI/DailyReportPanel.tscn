@@ -1,0 +1,174 @@
+[gd_scene format=3 uid="uid://bh6m3q8v2k5ra"]
+
+[ext_resource type="Script" uid="uid://dms7q4v9k2r5a" path="res://Scenes/UI/DailyReportPanel.gd" id="1_daily_report_panel"]
+
+[node name="DailyReportPanel" type="CanvasLayer"]
+visible = false
+layer = 10
+script = ExtResource("1_daily_report_panel")
+
+[node name="Overlay" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0, 0, 0, 0.65)
+
+[node name="CenterContainer" type="CenterContainer" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Overlay/CenterContainer"]
+custom_minimum_size = Vector2(500, 680)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Overlay/CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="TitleLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Ежедневный отчёт"
+
+[node name="DateLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Дата: День 1, Месяц 1, Год 1"
+
+[node name="ProductionTitleLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Производство"
+
+[node name="ProductionFoodLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Еда: +0"
+
+[node name="ProductionWoodLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Дерево: +0"
+
+[node name="ProductionStoneLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Камень: +0"
+
+[node name="ProductionGoldLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Золото: +0"
+
+[node name="ExpensesTitleLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Расходы"
+
+[node name="ExpenseFoodLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Еда: -0"
+
+[node name="ExpenseWoodLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Дерево: -0"
+
+[node name="ExpenseStoneLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Камень: -0"
+
+[node name="ExpenseGoldLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Золото: -0"
+
+[node name="NetTitleLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Итог"
+
+[node name="NetFoodLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Еда: 0"
+
+[node name="NetWoodLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Дерево: 0"
+
+[node name="NetStoneLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Камень: 0"
+
+[node name="NetGoldLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Золото: 0"
+
+[node name="ShortageLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Дефицитов нет"
+
+[node name="StateTitleLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Состояние"
+
+[node name="HungerLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Голод: нет"
+
+[node name="GoldDeficitLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Дефицит золота: нет"
+
+[node name="StabilityLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Стабильность: 70 (0)"
+
+[node name="InternalStateLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Состояние: Стабильно"
+
+[node name="AverageLoyaltyLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Средняя верность: 0.0/10"
+
+[node name="StabilityReasonsTitleLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Причины:"
+
+[node name="StabilityReasonsList" type="VBoxContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PopulationLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Население: 0/4"
+
+[node name="BuildingsLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Зданий: 0"
+
+[node name="ArmyTitleLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Армия"
+
+[node name="ArmyCountLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Назначенных бойцов: 0"
+
+[node name="ArmyStrengthLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Сила армии: 0"
+
+[node name="CloseButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Продолжить"

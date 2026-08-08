@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dpc8wmn3v6j2a"]
+
+[ext_resource type="Script" uid="uid://ljwar8u2pyby" path="res://Scenes/Managers/PopulationManager.gd" id="1_population_manager"]
+
+[node name="PopulationManager" type="Node"]
+script = ExtResource("1_population_manager")

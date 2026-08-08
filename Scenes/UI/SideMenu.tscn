@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://bsmn7q4k2v5ra"]
+
+[ext_resource type="Script" path="res://Scenes/UI/SideMenu.gd" id="1_side_menu"]
+
+[node name="SideMenu" type="CanvasLayer"]
+visible = false
+layer = 7
+script = ExtResource("1_side_menu")
+
+[node name="ClickBlocker" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0, 0, 0, 0.08)
+
+[node name="MenuAnchor" type="Control" parent="."]
+offset_left = 906.0
+offset_top = 70.0
+offset_right = 1256.0
+offset_bottom = 430.0
+
+[node name="PanelContainer" type="PanelContainer" parent="MenuAnchor"]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"SystemMenuPanel"
+
+[node name="MarginContainer" type="MarginContainer" parent="MenuAnchor/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuAnchor/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TitleLabel" type="Label" parent="MenuAnchor/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"SystemMenuTitleLabel"
+text = "Системное меню"
+horizontal_alignment = 1
+
+[node name="SaveButton" type="Button" parent="MenuAnchor/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme_type_variation = &"SystemMenuButton"
+text = "Сохранение"
+
+[node name="LoadButton" type="Button" parent="MenuAnchor/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme_type_variation = &"SystemMenuButton"
+text = "Загрузить игру"
+
+[node name="SettingsButton" type="Button" parent="MenuAnchor/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme_type_variation = &"SystemMenuButton"
+text = "Настройки"
+
+[node name="MainMenuButton" type="Button" parent="MenuAnchor/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme_type_variation = &"SystemMenuButton"
+text = "В главное меню"
+
+[node name="ExitButton" type="Button" parent="MenuAnchor/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme_type_variation = &"SystemMenuButton"
+text = "Выйти из игры"
+
+[node name="CloseButton" type="Button" parent="MenuAnchor/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme_type_variation = &"SystemMenuButton"
+text = "Закрыть"

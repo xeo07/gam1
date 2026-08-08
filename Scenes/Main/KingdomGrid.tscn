@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://bm7x3rak5v2ha"]
+
+[ext_resource type="Script" uid="uid://cy8m4q2v7k5ra" path="res://Scenes/Main/KingdomGrid.gd" id="1_kingdom_grid"]
+[ext_resource type="Resource" uid="uid://ct4m8q2x7v5ka" path="res://Resources/Buildings/House.tres" id="2_house"]
+[ext_resource type="Resource" uid="uid://bvw6k3qan2r5h" path="res://Resources/Buildings/LumberCamp.tres" id="3_lumber_camp"]
+[ext_resource type="Resource" path="res://Resources/Buildings/Farm.tres" id="4_farm"]
+[ext_resource type="Resource" path="res://Resources/Buildings/Mine.tres" id="5_mine"]
+[ext_resource type="Resource" path="res://Resources/Buildings/Barracks.tres" id="6_barracks"]
+
+[node name="KingdomGrid" type="Control"]
+offset_left = 20.0
+offset_top = 0.0
+offset_right = 660.0
+offset_bottom = 384.0
+mouse_filter = 0
+clip_contents = true
+script = ExtResource("1_kingdom_grid")
+house_definition = ExtResource("2_house")
+lumber_camp_definition = ExtResource("3_lumber_camp")
+farm_definition = ExtResource("4_farm")
+mine_definition = ExtResource("5_mine")
+barracks_definition = ExtResource("6_barracks")

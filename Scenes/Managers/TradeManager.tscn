@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://ct8m3rav2k5ha"]
+
+[ext_resource type="Script" path="res://Scenes/Managers/TradeManager.gd" id="1_trade_manager"]
+
+[node name="TradeManager" type="Node"]
+script = ExtResource("1_trade_manager")

@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bwmr7q4k2v5ra"]
+
+[ext_resource type="Script" path="res://Scenes/Managers/WarManager.gd" id="1_war_manager"]
+
+[node name="WarManager" type="Node"]
+script = ExtResource("1_war_manager")

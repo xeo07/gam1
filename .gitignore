@@ -1,0 +1,20 @@
+# Godot-generated cache and imported assets
+.godot/
+
+# Local game data
+Saves/
+
+# Logs and crash dumps
+*.log
+crash_handler_*.log
+
+# Exported builds
+build/
+dist/
+
+# Operating-system and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+

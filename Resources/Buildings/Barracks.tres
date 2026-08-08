@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="BuildingDefinition" format=3]
+
+[ext_resource type="Script" path="res://Scripts/Core/BuildingDefinition.gd" id="1_building_definition"]
+
+[resource]
+script = ExtResource("1_building_definition")
+id = &"barracks"
+display_name = "Казарма"
+emoji = "🛡"
+size = Vector2i(1, 1)
+wood_cost = 15
+stone_cost = 8
+gold_cost = 5
+population_capacity = 0
+worker_job = &"soldier"
+worker_capacity = 5
+daily_food_upkeep = 1
+daily_gold_upkeep = 2

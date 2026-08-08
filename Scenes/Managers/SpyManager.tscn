@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://csp7m3rav2k5a"]
+
+[ext_resource type="Script" uid="uid://c4222nrt512r7" path="res://Scenes/Managers/SpyManager.gd" id="1_spy_manager"]
+
+[node name="SpyManager" type="Node"]
+script = ExtResource("1_spy_manager")

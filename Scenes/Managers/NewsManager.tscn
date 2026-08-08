@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cv8m3q7k2r5ha"]
+
+[ext_resource type="Script" uid="uid://kkhopln8nuc2" path="res://Scenes/Managers/NewsManager.gd" id="1_news_manager"]
+
+[node name="NewsManager" type="Node"]
+script = ExtResource("1_news_manager")

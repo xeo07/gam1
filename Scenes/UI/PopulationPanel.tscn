@@ -1,0 +1,138 @@
+[gd_scene format=3 uid="uid://cwv7k3oap2h5x"]
+
+[ext_resource type="Script" uid="uid://dv5w2j9m7c4qa" path="res://Scenes/UI/PopulationPanel.gd" id="1_population_panel"]
+
+[node name="PopulationPanel" type="CanvasLayer"]
+visible = false
+layer = 5
+script = ExtResource("1_population_panel")
+
+[node name="Overlay" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0, 0, 0, 0.42)
+
+[node name="GameAreaMargin" type="MarginContainer" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -195.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="CenterContainer" type="CenterContainer" parent="Overlay/GameAreaMargin"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Overlay/GameAreaMargin/CenterContainer"]
+custom_minimum_size = Vector2(860, 485)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Overlay/GameAreaMargin/CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 14
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Overlay/GameAreaMargin/CenterContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TitleLabel" type="Label" parent="Overlay/GameAreaMargin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text = "Жители"
+
+[node name="MainContent" type="Control" parent="Overlay/GameAreaMargin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MainSplit" type="SplitContainer" parent="Overlay/GameAreaMargin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MainContent"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+split_offset = 310
+
+[node name="CitizensColumn" type="VBoxContainer" parent="Overlay/GameAreaMargin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MainContent/MainSplit"]
+custom_minimum_size = Vector2(220, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CitizensTitleLabel" type="Label" parent="Overlay/GameAreaMargin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MainContent/MainSplit/CitizensColumn"]
+layout_mode = 2
+text = "Список жителей"
+
+[node name="CitizensList" type="ItemList" parent="Overlay/GameAreaMargin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MainContent/MainSplit/CitizensColumn"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DetailsScroll" type="ScrollContainer" parent="Overlay/GameAreaMargin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MainContent/MainSplit"]
+custom_minimum_size = Vector2(300, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="DetailsPanel" type="PanelContainer" parent="Overlay/GameAreaMargin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MainContent/MainSplit/DetailsScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Overlay/GameAreaMargin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MainContent/MainSplit/DetailsScroll/DetailsPanel"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="NameLabel" type="Label" parent="Overlay/GameAreaMargin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MainContent/MainSplit/DetailsScroll/DetailsPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="JobLabel" type="Label" parent="Overlay/GameAreaMargin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MainContent/MainSplit/DetailsScroll/DetailsPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="JobOptionButton" type="OptionButton" parent="Overlay/GameAreaMargin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MainContent/MainSplit/DetailsScroll/DetailsPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="AssignJobButton" type="Button" parent="Overlay/GameAreaMargin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MainContent/MainSplit/DetailsScroll/DetailsPanel/VBoxContainer"]
+layout_mode = 2
+disabled = true
+text = "Назначить профессию"
+
+[node name="StrengthLabel" type="Label" parent="Overlay/GameAreaMargin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MainContent/MainSplit/DetailsScroll/DetailsPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="IntelligenceLabel" type="Label" parent="Overlay/GameAreaMargin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MainContent/MainSplit/DetailsScroll/DetailsPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="SpeedLabel" type="Label" parent="Overlay/GameAreaMargin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MainContent/MainSplit/DetailsScroll/DetailsPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="LoyaltyLabel" type="Label" parent="Overlay/GameAreaMargin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MainContent/MainSplit/DetailsScroll/DetailsPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="CraftsmanshipLabel" type="Label" parent="Overlay/GameAreaMargin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MainContent/MainSplit/DetailsScroll/DetailsPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="StatusLabel" type="Label" parent="Overlay/GameAreaMargin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="Footer" type="HBoxContainer" parent="Overlay/GameAreaMargin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="CloseButton" type="Button" parent="Overlay/GameAreaMargin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Footer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "Закрыть"

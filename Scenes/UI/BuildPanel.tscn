@@ -1,0 +1,85 @@
+[gd_scene format=3 uid="uid://cph8m3v7k2x5a"]
+
+[ext_resource type="Script" uid="uid://dk6v2m9q4x7ra" path="res://Scenes/UI/BuildPanel.gd" id="1_build_panel"]
+
+[node name="BuildPanel" type="CanvasLayer"]
+visible = false
+layer = 5
+script = ExtResource("1_build_panel")
+
+[node name="Overlay" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0, 0, 0, 0.42)
+
+[node name="CenterContainer" type="CenterContainer" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Overlay/CenterContainer"]
+custom_minimum_size = Vector2(420, 360)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Overlay/CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TitleLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text = "Строительство"
+
+[node name="BodyScroll" type="ScrollContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="BodyContent" type="VBoxContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/BodyScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="HouseButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/BodyScroll/BodyContent"]
+layout_mode = 2
+text = "Дом — 10 дерева, 2 камня"
+
+[node name="LumberCampButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/BodyScroll/BodyContent"]
+layout_mode = 2
+text = "Лесорубный лагерь — 15 дерева"
+
+[node name="FarmButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/BodyScroll/BodyContent"]
+layout_mode = 2
+text = "Ферма — 12 дерева"
+
+[node name="MineButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/BodyScroll/BodyContent"]
+layout_mode = 2
+text = "Шахта — 10 дерева, 5 камня"
+
+[node name="BarracksButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/BodyScroll/BodyContent"]
+layout_mode = 2
+text = "Казарма — 15 дерева, 8 камня, 5 золота"
+
+[node name="Footer" type="HBoxContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="CancelButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Footer"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "Отмена"

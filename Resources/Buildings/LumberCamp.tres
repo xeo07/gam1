@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="BuildingDefinition" format=3 uid="uid://bvw6k3qan2r5h"]
+
+[ext_resource type="Script" path="res://Scripts/Core/BuildingDefinition.gd" id="1_building_definition"]
+
+[resource]
+script = ExtResource("1_building_definition")
+id = &"lumber_camp"
+display_name = "Лесорубный лагерь"
+emoji = "🪓"
+size = Vector2i(1, 1)
+wood_cost = 15
+stone_cost = 0
+gold_cost = 0
+population_capacity = 0
+worker_job = &"woodcutter"
+worker_capacity = 3
+daily_food_upkeep = 0
+daily_gold_upkeep = 1
