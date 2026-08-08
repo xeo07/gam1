@@ -7,9 +7,10 @@ func _initialize() -> void:
 	_test_new_session_initialization()
 	_test_seed_reproducibility()
 	_test_state_data_round_trip()
+	_test_state_name_generation()
 
 	if _failures.is_empty():
-		print("KINGDOOM tests passed: 3")
+		print("KINGDOOM tests passed: 4")
 		quit(0)
 		return
 
@@ -97,6 +98,48 @@ func _test_state_data_round_trip() -> void:
 	_expect(
 		not bool(StateData.parse_save_data(invalid).get("valid", false)),
 		"Out-of-range state data must be rejected"
+	)
+
+
+func _test_state_name_generation() -> void:
+	var first_rng := RandomNumberGenerator.new()
+	var second_rng := RandomNumberGenerator.new()
+	first_rng.seed = 97531
+	second_rng.seed = 97531
+	var first_names := StateNameGenerator.generate_unique_names(first_rng, 7)
+	var second_names := StateNameGenerator.generate_unique_names(second_rng, 7)
+
+	_expect(
+		StateNameGenerator.ADJECTIVES.size() >= 20,
+		"State names need at least 20 adjectives"
+	)
+	_expect(
+		StateNameGenerator.NOUNS.size() >= 20,
+		"State names need at least 20 nouns"
+	)
+	_expect(first_names.size() == 7, "Generator must return seven names")
+	_expect(first_names == second_names, "The same seed must generate the same names")
+
+	var unique_names: Dictionary = {}
+	for state_name in first_names:
+		unique_names[state_name] = true
+		_expect(
+			state_name.split(" ", false).size() == 2,
+			"Each state name must contain an adjective and a noun"
+		)
+	_expect(unique_names.size() == 7, "Generated state names must be unique")
+
+	_expect(
+		StateNameGenerator.compose_name(0, 0) == "Багровый Альянс",
+		"Masculine adjective form must match its noun"
+	)
+	_expect(
+		StateNameGenerator.compose_name(0, 9) == "Багровая Держава",
+		"Feminine adjective form must match its noun"
+	)
+	_expect(
+		StateNameGenerator.compose_name(0, 17) == "Багровое Владение",
+		"Neuter adjective form must match its noun"
 	)
 
 
