@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://45u4jy3awi5k"]
+[gd_scene load_steps=44 format=3 uid="uid://45u4jy3awi5k"]
 
 [ext_resource type="Script" uid="uid://cfwg6exp8s3wf" path="res://Scenes/Managers/GameManager.gd" id="1_qtv3y"]
 [ext_resource type="PackedScene" uid="uid://bgsm7q4k2v5ra" path="res://Scenes/Managers/GameSessionManager.tscn" id="2_session"]
@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://ct8m3rav2k5ha" path="res://Scenes/Managers/TradeManager.tscn" id="9_trade_manager"]
 [ext_resource type="PackedScene" uid="uid://csp7m3rav2k5a" path="res://Scenes/Managers/SpyManager.tscn" id="9_spy_manager"]
 [ext_resource type="PackedScene" path="res://Scenes/Managers/MessengerManager.tscn" id="9_messenger_manager"]
+[ext_resource type="PackedScene" path="res://Scenes/Managers/EventJournalManager.tscn" id="9_event_journal"]
 [ext_resource type="PackedScene" uid="uid://cv8m3q7k2r5ha" path="res://Scenes/Managers/NewsManager.tscn" id="7_news_manager"]
 [ext_resource type="PackedScene" uid="uid://cs8m3rav2k5ha" path="res://Scenes/Managers/SaveManager.tscn" id="10_save_manager"]
 [ext_resource type="PackedScene" uid="uid://bm7x3rak5v2ha" path="res://Scenes/Main/KingdomGrid.tscn" id="6_kingdom_grid"]
@@ -77,6 +78,8 @@ script = ExtResource("1_qtv3y")
 [node name="SpyManager" parent="." instance=ExtResource("9_spy_manager")]
 
 [node name="MessengerManager" parent="." instance=ExtResource("9_messenger_manager")]
+
+[node name="EventJournalManager" parent="." instance=ExtResource("9_event_journal")]
 
 [node name="NewsManager" parent="." instance=ExtResource("7_news_manager")]
 

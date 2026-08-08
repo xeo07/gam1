@@ -15,9 +15,10 @@ func _initialize() -> void:
 	_test_state_observation()
 	_test_messenger_mission()
 	_test_spy_outcomes()
+	_test_event_journal_entry()
 
 	if _failures.is_empty():
-		print("KINGDOOM tests passed: 11")
+		print("KINGDOOM tests passed: 12")
 		quit(0)
 		return
 
@@ -368,6 +369,23 @@ func _test_spy_outcomes() -> void:
 			1.0
 		),
 		"Spy outcome probabilities must add up to one"
+	)
+
+
+func _test_event_journal_entry() -> void:
+	var entry := EventJournalEntry.create(
+		"test:12:1", 12, &"foreign_affairs", "Пограничный кризис",
+		"Соседнее государство укрепило границу.", [&"state_04"], &"reported",
+		{"military_strength": 3, "wealth": -2}, 2
+	)
+	var parsed := EventJournalEntry.parse_save_data(EventJournalEntry.to_save_data(entry))
+	_expect(bool(parsed.get("valid", false)), "Journal entry must survive save-data round-trip")
+	_expect(parsed.get("entry", {}) == entry, "Journal round-trip must preserve all fields")
+	var invalid := EventJournalEntry.to_save_data(entry)
+	invalid["reliability"] = "absolute_truth"
+	_expect(
+		not bool(EventJournalEntry.parse_save_data(invalid).get("valid", false)),
+		"Journal must reject unsupported reliability"
 	)
 
 
