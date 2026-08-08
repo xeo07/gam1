@@ -19,7 +19,10 @@ const STATUS_DISPLAY_NAMES: Dictionary = {
 @onready var wealth_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/WealthLabel
 @onready var stability_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/StabilityLabel
 @onready var gift_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/GiftButton
+@onready var threat_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/ThreatButton
+@onready var agreement_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/AgreementButton
 @onready var insult_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/InsultButton
+@onready var action_confirmation: ConfirmationDialog = $ActionConfirmation
 @onready var cooldown_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/CooldownLabel
 @onready var action_status_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/ActionStatusLabel
 @onready var send_spy_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/SendSpyButton
@@ -36,12 +39,16 @@ const STATUS_DISPLAY_NAMES: Dictionary = {
 
 var _state_ids: Array[StringName] = []
 var _selected_state_id: StringName = &""
+var _pending_action_id: StringName = &""
 
 
 func _ready() -> void:
 	states_list.item_selected.connect(_on_state_selected)
-	gift_button.pressed.connect(_on_gift_pressed)
-	insult_button.pressed.connect(_on_insult_pressed)
+	gift_button.pressed.connect(_request_action.bind(&"gift"))
+	threat_button.pressed.connect(_request_action.bind(&"threat"))
+	agreement_button.pressed.connect(_request_action.bind(&"agreement"))
+	insult_button.pressed.connect(_request_action.bind(&"insult"))
+	action_confirmation.confirmed.connect(_on_action_confirmed)
 	send_spy_button.pressed.connect(_on_send_spy_pressed)
 	send_messenger_button.pressed.connect(_on_send_messenger_pressed)
 	close_button.pressed.connect(close_panel)
@@ -113,16 +120,26 @@ func _on_states_changed() -> void:
 		refresh_states()
 
 
-func _on_gift_pressed() -> void:
+func _request_action(action_id: StringName) -> void:
 	if _selected_state_id == &"":
 		return
-	diplomacy_manager.send_gift(_selected_state_id)
-
-
-func _on_insult_pressed() -> void:
-	if _selected_state_id == &"":
+	var preview := diplomacy_manager.get_action_preview(action_id, _selected_state_id)
+	if preview.is_empty():
 		return
-	diplomacy_manager.send_insult(_selected_state_id)
+	_pending_action_id = action_id
+	var lines: Array[String] = [String(preview["context"]), "", "Цена: %d золота" % int(preview["cost"]), "Вероятный итог: %s" % String(preview["forecast"])]
+	var third: Dictionary = preview.get("third_party", {})
+	if not third.is_empty():
+		lines.append("Третья сторона: %s — %s" % [String(third["state_name"]), String(third["forecast"])])
+	action_confirmation.title = String(preview["label"])
+	action_confirmation.dialog_text = "\n".join(PackedStringArray(lines))
+	action_confirmation.popup_centered(Vector2i(500, 260))
+
+
+func _on_action_confirmed() -> void:
+	if _pending_action_id != &"" and _selected_state_id != &"":
+		diplomacy_manager.perform_action(_pending_action_id, _selected_state_id)
+	_pending_action_id = &""
 
 
 func _on_send_spy_pressed() -> void:
@@ -270,6 +287,8 @@ func _get_status_display_name(status: StringName) -> String:
 func _update_action_controls() -> void:
 	if _selected_state_id == &"":
 		gift_button.disabled = true
+		threat_button.disabled = true
+		agreement_button.disabled = true
 		insult_button.disabled = true
 		cooldown_label.text = ""
 		return
@@ -282,14 +301,11 @@ func _update_action_controls() -> void:
 	else:
 		cooldown_label.text = "Посланник доступен"
 
-	gift_button.disabled = (
-		cooldown_remaining > 0
-		or not resource_manager.has_resource(
-			&"gold",
-			DiplomacyManager.GIFT_GOLD_COST
-		)
-	)
-	insult_button.disabled = cooldown_remaining > 0
+	for action_data in [[gift_button, &"gift"], [threat_button, &"threat"], [agreement_button, &"agreement"], [insult_button, &"insult"]]:
+		var button: Button = action_data[0]
+		var preview := diplomacy_manager.get_action_preview(action_data[1], _selected_state_id)
+		button.disabled = cooldown_remaining > 0 or not resource_manager.has_resource(&"gold", int(preview.get("cost", 0)))
+		button.tooltip_text = "%s Цена: %d золота." % [String(preview.get("forecast", "")), int(preview.get("cost", 0))]
 
 
 func _update_spy_controls() -> void:
@@ -372,6 +388,8 @@ func _clear_details() -> void:
 	spy_status_label.text = ""
 	messenger_status_label.text = ""
 	gift_button.disabled = true
+	threat_button.disabled = true
+	agreement_button.disabled = true
 	insult_button.disabled = true
 	send_spy_button.disabled = true
 	send_messenger_button.disabled = true

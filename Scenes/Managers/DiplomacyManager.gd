@@ -19,6 +19,8 @@ const INSULT_RELATION_CHANGE := -15
 const ACTION_COOLDOWN_DAYS := 3
 const GIFT_ACTION_ID := &"gift"
 const INSULT_ACTION_ID := &"insult"
+const THREAT_ACTION_ID := &"threat"
+const AGREEMENT_ACTION_ID := &"agreement"
 
 @onready var world_manager: WorldManager = $"../WorldManager" as WorldManager
 @onready var resource_manager: ResourceManager = $"../ResourceManager" as ResourceManager
@@ -56,53 +58,55 @@ func get_relation_summary(state_id: StringName) -> Dictionary:
 
 
 func send_gift(state_id: StringName) -> bool:
-	if not _validate_state_and_cooldown(state_id, GIFT_ACTION_ID):
-		return false
-	if not resource_manager.has_resource(&"gold", GIFT_GOLD_COST):
-		_fail_action(state_id, GIFT_ACTION_ID, "Недостаточно золота")
-		return false
-
-	resource_manager.remove_resource(&"gold", GIFT_GOLD_COST)
-	var relation_change := world_manager.add_relation_memory(
-		state_id,
-		&"gift",
-		"корона прислала щедрый подарок",
-		14,
-		-4,
-		10,
-		45
-	)
-	_record_action(state_id)
-	_complete_action(
-		state_id,
-		GIFT_ACTION_ID,
-		relation_change,
-		"Подарок принят. Двор стал доверять нам больше."
-	)
-	return true
+	return perform_action(GIFT_ACTION_ID, state_id)
 
 
 func send_insult(state_id: StringName) -> bool:
-	if not _validate_state_and_cooldown(state_id, INSULT_ACTION_ID):
-		return false
+	return perform_action(INSULT_ACTION_ID, state_id)
 
-	var relation_change := world_manager.add_relation_memory(
-		state_id,
-		&"insult",
-		"посол публично оскорбил их двор",
-		-18,
-		8,
-		-10,
-		60
-	)
+
+func get_action_preview(action_id: StringName, state_id: StringName) -> Dictionary:
+	var state := world_manager.get_state_by_id(state_id)
+	if state.is_empty():
+		return {}
+	return DiplomaticActionResolver.build(action_id, state, _get_third_party(state_id))
+
+
+func perform_action(action_id: StringName, state_id: StringName) -> bool:
+	if not _validate_state_and_cooldown(state_id, action_id):
+		return false
+	var preview := get_action_preview(action_id, state_id)
+	if preview.is_empty():
+		_fail_action(state_id, action_id, "Неизвестное действие")
+		return false
+	var cost := int(preview.get("cost", 0))
+	if not resource_manager.has_resource(&"gold", cost):
+		_fail_action(state_id, action_id, "Недостаточно золота")
+		return false
+	resource_manager.remove_resource(&"gold", cost)
+	var relation_change := world_manager.add_relation_memory(state_id, action_id, preview["summary"], preview["trust"], preview["fear"], preview["benefit"], preview["duration"])
+	var message := String(preview["message"])
+	var third: Dictionary = preview.get("third_party", {})
+	if not third.is_empty():
+		world_manager.add_relation_memory(third["state_id"], &"rival_agreement", third["summary"], third["trust"], third["fear"], third["benefit"], third["duration"])
+		message += " %s насторожились." % String(third["state_name"])
 	_record_action(state_id)
-	_complete_action(
-		state_id,
-		INSULT_ACTION_ID,
-		relation_change,
-		"Послание доставлено. Оскорбление запомнят надолго."
-	)
+	_complete_action(state_id, action_id, relation_change, message)
 	return true
+
+
+func _get_third_party(target_id: StringName) -> Dictionary:
+	var candidate: Dictionary = {}
+	var lowest := 101
+	for state in world_manager.get_all_states():
+		var state_id: StringName = state.get("id", &"")
+		if state_id == target_id:
+			continue
+		var relation := world_manager.get_relation(state_id)
+		if relation < lowest:
+			lowest = relation
+			candidate = state
+	return candidate
 
 
 func can_perform_action(state_id: StringName) -> bool:

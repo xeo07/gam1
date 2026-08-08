@@ -19,9 +19,10 @@ func _initialize() -> void:
 	_test_weekly_newspaper()
 	_test_story_chains()
 	_test_relation_profiles()
+	_test_contextual_diplomacy()
 
 	if _failures.is_empty():
-		print("KINGDOOM tests passed: 15")
+		print("KINGDOOM tests passed: 16")
 		quit(0)
 		return
 
@@ -597,6 +598,21 @@ func _test_relation_profiles() -> void:
 	resources.free()
 	time.free()
 	session.free()
+
+
+func _test_contextual_diplomacy() -> void:
+	var merchant := StateData.create(&"merchant_test", "Торговый союз", "Князь", 50, 50, 50, 50, 0, &"neutral", &"merchant")
+	var warlike := StateData.create(&"warlike_test", "Железная марка", "Князь", 50, 50, 50, 50, 0, &"neutral", &"warlike")
+	var rival := StateData.create(&"rival_test", "Северный двор", "Князь", 50, 50, 50, 50, -10)
+	var merchant_gift := DiplomaticActionResolver.build(&"gift", merchant)
+	var warlike_gift := DiplomaticActionResolver.build(&"gift", warlike)
+	_expect(merchant_gift["benefit"] > warlike_gift["benefit"], "Merchant court must value a gift differently")
+	var agreement := DiplomaticActionResolver.build(&"agreement", merchant, rival)
+	_expect(agreement.has("third_party"), "Agreement preview must warn about a third-party reaction")
+	for action_id in [&"gift", &"threat", &"agreement", &"insult"]:
+		var preview := DiplomaticActionResolver.build(action_id, merchant, rival)
+		_expect(not String(preview.get("context", "")).is_empty(), "Every diplomatic action must explain its context")
+		_expect(preview.has("cost") and preview.has("forecast"), "Every diplomatic action must show cost and forecast")
 
 
 func _expect(condition: bool, message: String) -> void:

@@ -93,6 +93,16 @@ layout_mode = 2
 disabled = true
 text = "Отправить подарок — 10 золота"
 
+[node name="ThreatButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer"]
+layout_mode = 2
+disabled = true
+text = "Выдвинуть угрозу — 2 золота"
+
+[node name="AgreementButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer"]
+layout_mode = 2
+disabled = true
+text = "Обменяться посольствами — 5 золота"
+
 [node name="InsultButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer"]
 layout_mode = 2
 disabled = true
@@ -134,3 +144,8 @@ layout_mode = 2
 [node name="CloseButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Закрыть"
+
+[node name="ActionConfirmation" type="ConfirmationDialog" parent="."]
+title = "Подтвердить действие"
+ok_button_text = "Подтвердить"
+cancel_button_text = "Отмена"
