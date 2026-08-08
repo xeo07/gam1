@@ -11,9 +11,10 @@ func _initialize() -> void:
 	_test_world_generation()
 	_test_state_personalities()
 	_test_world_events()
+	_test_state_intelligence()
 
 	if _failures.is_empty():
-		print("KINGDOOM tests passed: 7")
+		print("KINGDOOM tests passed: 8")
 		quit(0)
 		return
 
@@ -224,6 +225,37 @@ func _test_world_events() -> void:
 		WorldEventGenerator.to_save_data(event)
 	)
 	_expect(bool(parsed.get("valid", false)), "World event must survive save-data round-trip")
+
+
+func _test_state_intelligence() -> void:
+	var rumor := StateIntelligence.create(
+		&"known_state", StateIntelligence.LEVEL_RUMORS, 10, &"world_start"
+	)
+	_expect(
+		StateIntelligence.get_effective_level(rumor, 10) == StateIntelligence.LEVEL_RUMORS,
+		"Fresh rumors must preserve their knowledge level"
+	)
+	_expect(
+		StateIntelligence.get_effective_level(rumor, 24) == StateIntelligence.LEVEL_UNKNOWN,
+		"Old rumors must degrade into unknown information"
+	)
+	var spy_report := StateIntelligence.improve(
+		rumor, StateIntelligence.LEVEL_ESPIONAGE, 24, &"spy"
+	)
+	_expect(
+		StateIntelligence.get_effective_level(spy_report, 24)
+			== StateIntelligence.LEVEL_ESPIONAGE,
+		"A new spy report must restore high intelligence"
+	)
+	_expect(
+		StateIntelligence.get_effective_level(spy_report, 52)
+			== StateIntelligence.LEVEL_RUMORS,
+		"Even precise intelligence must become less reliable with age"
+	)
+	var parsed := StateIntelligence.parse_save_data(
+		StateIntelligence.to_save_data(spy_report)
+	)
+	_expect(bool(parsed.get("valid", false)), "Intelligence must survive save-data round-trip")
 
 
 func _expect(condition: bool, message: String) -> void:

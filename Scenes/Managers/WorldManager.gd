@@ -22,6 +22,7 @@ const VALID_STATUSES: Array[StringName] = StateData.VALID_STATUSES
 
 var _latest_world_updates: Array[Dictionary] = []
 var _world_events: Array[Dictionary] = []
+var _intelligence: Dictionary = {}
 var _last_processed_absolute_day: int
 var _initialized := false
 
@@ -40,6 +41,7 @@ func initialize_new_game() -> void:
 	_latest_world_updates.clear()
 	_world_events.clear()
 	_last_processed_absolute_day = time_manager.get_absolute_day()
+	_initialize_intelligence(_last_processed_absolute_day)
 	_initialized = true
 	print("Loaded states: %d" % _states.size())
 	for state in _states:
@@ -157,6 +159,34 @@ func get_world_events() -> Array[Dictionary]:
 	return _duplicate_updates(_world_events)
 
 
+func get_intelligence(state_id: StringName) -> Dictionary:
+	if not _intelligence.has(state_id):
+		return {}
+	var record: Dictionary = _intelligence[state_id]
+	var result := record.duplicate(true)
+	result["age_days"] = StateIntelligence.get_age(record, time_manager.get_absolute_day())
+	result["effective_level"] = StateIntelligence.get_effective_level(
+		record, time_manager.get_absolute_day()
+	)
+	result["freshness"] = StateIntelligence.get_freshness(
+		record, time_manager.get_absolute_day()
+	)
+	return result
+
+
+func improve_intelligence(
+	state_id: StringName,
+	level: int,
+	source: StringName
+) -> bool:
+	if _find_state_index(state_id) == -1 or not _intelligence.has(state_id):
+		return false
+	_intelligence[state_id] = StateIntelligence.improve(
+		_intelligence[state_id], level, time_manager.get_absolute_day(), source
+	)
+	return true
+
+
 func get_save_data() -> Dictionary:
 	var states: Array[Dictionary] = []
 	for state in _states:
@@ -170,12 +200,16 @@ func get_save_data() -> Dictionary:
 	var world_events: Array[Dictionary] = []
 	for event in _world_events:
 		world_events.append(WorldEventGenerator.to_save_data(event))
+	var intelligence: Array[Dictionary] = []
+	for state_id in _intelligence:
+		intelligence.append(StateIntelligence.to_save_data(_intelligence[state_id]))
 
 	return {
 		"states": states,
 		"last_processed_absolute_day": _last_processed_absolute_day,
 		"latest_world_updates": latest_updates,
 		"world_events": world_events,
+		"intelligence": intelligence,
 	}
 
 
@@ -286,6 +320,22 @@ func load_save_data(data: Dictionary) -> bool:
 	if loaded_events.size() > WorldEventGenerator.MAX_EVENT_HISTORY:
 		return false
 
+	var loaded_intelligence: Dictionary = {}
+	var saved_intelligence: Variant = data.get("intelligence", [])
+	if not saved_intelligence is Array:
+		return false
+	for intelligence_value in saved_intelligence:
+		var parsed_intelligence := StateIntelligence.parse_save_data(intelligence_value)
+		if not bool(parsed_intelligence.get("valid", false)):
+			return false
+		var record: Dictionary = parsed_intelligence["record"]
+		var intelligence_state_id: StringName = record["state_id"]
+		if not state_ids.has(intelligence_state_id) or loaded_intelligence.has(intelligence_state_id):
+			return false
+		loaded_intelligence[intelligence_state_id] = record
+	if not loaded_intelligence.is_empty() and loaded_intelligence.size() != loaded_states.size():
+		return false
+
 	var loaded_last_day := int(data["last_processed_absolute_day"])
 	if loaded_last_day < 1:
 		return false
@@ -293,7 +343,10 @@ func load_save_data(data: Dictionary) -> bool:
 	_states = loaded_states
 	_latest_world_updates = loaded_updates
 	_world_events = loaded_events
+	_intelligence = loaded_intelligence
 	_last_processed_absolute_day = loaded_last_day
+	if _intelligence.is_empty():
+		_initialize_intelligence(loaded_last_day, &"legacy_rumor")
 	_initialized = true
 	emit_states_changed()
 	return true
@@ -448,6 +501,18 @@ func _apply_world_event(event: Dictionary, updates: Array[Dictionary]) -> void:
 			update[field] = int(_states[state_index].get(field, 0))
 		update["event"] = event.duplicate(true)
 		break
+
+
+func _initialize_intelligence(
+	absolute_day: int,
+	source: StringName = &"world_start"
+) -> void:
+	_intelligence.clear()
+	for state in _states:
+		var state_id := StringName(state.get("id", &""))
+		_intelligence[state_id] = StateIntelligence.create(
+			state_id, StateIntelligence.LEVEL_RUMORS, absolute_day, source
+		)
 
 
 func _print_state(state: Dictionary) -> void:
