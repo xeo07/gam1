@@ -46,14 +46,37 @@ if [[ "${GODOT_VERSION}" != 4.7.1.* ]]; then
 	exit 1
 fi
 
+run_godot_check() {
+	local label="$1"
+	shift
+	local log_file
+	log_file="$(mktemp "${TMPDIR:-/tmp}/kingdoom-godot-check.XXXXXX")"
+
+	echo "${label}"
+	set +e
+	"${GODOT_EXECUTABLE}" "$@" 2>&1 | tee "${log_file}"
+	local godot_status="${PIPESTATUS[0]}"
+	set -e
+
+	if [[ "${godot_status}" -ne 0 ]]; then
+		echo "ERROR: Godot exited with status ${godot_status}. Log: ${log_file}" >&2
+		exit "${godot_status}"
+	fi
+	if grep -Eq 'SCRIPT ERROR:|(^|[[:space:]])ERROR:' "${log_file}"; then
+		echo "ERROR: Godot reported an error. Log: ${log_file}" >&2
+		exit 1
+	fi
+}
+
 echo "Using Godot ${GODOT_VERSION}"
-echo "Checking scripts and resources..."
-"${GODOT_EXECUTABLE}" --headless --editor --quit --path "${PROJECT_DIR}"
-
-echo "Checking game startup..."
-"${GODOT_EXECUTABLE}" --headless --path "${PROJECT_DIR}" --quit-after 120
-
-echo "Running automated tests..."
-"${GODOT_EXECUTABLE}" --headless --path "${PROJECT_DIR}" --script res://Tests/test_runner.gd
+run_godot_check \
+	"Checking scripts and resources..." \
+	--headless --editor --quit --path "${PROJECT_DIR}"
+run_godot_check \
+	"Checking game startup..." \
+	--headless --path "${PROJECT_DIR}" --quit-after 120
+run_godot_check \
+	"Running automated tests..." \
+	--headless --path "${PROJECT_DIR}" --script res://Tests/test_runner.gd
 
 echo "KINGDOOM project check passed."

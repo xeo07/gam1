@@ -6,9 +6,10 @@ var _failures: Array[String] = []
 func _initialize() -> void:
 	_test_new_session_initialization()
 	_test_seed_reproducibility()
+	_test_state_data_round_trip()
 
 	if _failures.is_empty():
-		print("KINGDOOM tests passed: 2")
+		print("KINGDOOM tests passed: 3")
 		quit(0)
 		return
 
@@ -78,7 +79,27 @@ func _test_seed_reproducibility() -> void:
 	second_session.free()
 
 
+func _test_state_data_round_trip() -> void:
+	var original := StateData.create(
+		&"test_state", "Тестовая марка", "Княгиня Ида", 88, 42, 73, 64, -12
+	)
+	var saved := StateData.to_save_data(original)
+	var parsed := StateData.parse_save_data(saved)
+
+	_expect(bool(parsed.get("valid", false)), "Valid state data must load")
+	_expect(
+		parsed.get("state", {}) == original,
+		"Saved state data must round-trip without changes"
+	)
+
+	var invalid := saved.duplicate(true)
+	invalid["military_strength"] = 101
+	_expect(
+		not bool(StateData.parse_save_data(invalid).get("valid", false)),
+		"Out-of-range state data must be rejected"
+	)
+
+
 func _expect(condition: bool, message: String) -> void:
 	if not condition:
 		_failures.append(message)
-

@@ -13,12 +13,7 @@ const EXPECTED_STATE_IDS: Array[StringName] = [
 	&"suncoast",
 	&"ironclan",
 ]
-const VALID_STATUSES: Array[StringName] = [
-	&"neutral",
-	&"ally",
-	&"enemy",
-	&"war",
-]
+const VALID_STATUSES: Array[StringName] = StateData.VALID_STATUSES
 
 @onready var time_manager: TimeManager = $"../TimeManager" as TimeManager
 @onready var game_session_manager: GameSessionManager = $"../GameSessionManager" as GameSessionManager
@@ -27,40 +22,16 @@ var _latest_world_updates: Array[Dictionary] = []
 var _last_processed_absolute_day: int
 var _initialized := false
 
-const INITIAL_STATES: Array[Dictionary] = [
-	{
-		"id": &"northrealm",
-		"name": "Северное королевство",
-		"ruler_name": "Король Эдгар",
-		"population": 120,
-		"military_strength": 65,
-		"wealth": 40,
-		"stability": 80,
-		"relation": 10,
-		"status": &"neutral",
-	},
-	{
-		"id": &"suncoast",
-		"name": "Солнечный берег",
-		"ruler_name": "Королева Мирра",
-		"population": 90,
-		"military_strength": 35,
-		"wealth": 85,
-		"stability": 70,
-		"relation": 25,
-		"status": &"neutral",
-	},
-	{
-		"id": &"ironclan",
-		"name": "Железный клан",
-		"ruler_name": "Вождь Гром",
-		"population": 75,
-		"military_strength": 90,
-		"wealth": 30,
-		"stability": 55,
-		"relation": -20,
-		"status": &"neutral",
-	},
+var INITIAL_STATES: Array[Dictionary] = [
+	StateData.create(
+		&"northrealm", "Северное королевство", "Король Эдгар", 120, 65, 40, 80, 10
+	),
+	StateData.create(
+		&"suncoast", "Солнечный берег", "Королева Мирра", 90, 35, 85, 70, 25
+	),
+	StateData.create(
+		&"ironclan", "Железный клан", "Вождь Гром", 75, 90, 30, 55, -20
+	),
 ]
 
 var _states: Array[Dictionary] = []
@@ -168,17 +139,7 @@ func get_latest_world_updates() -> Array[Dictionary]:
 func get_save_data() -> Dictionary:
 	var states: Array[Dictionary] = []
 	for state in _states:
-		states.append({
-			"id": String(state.get("id", &"")),
-			"name": String(state.get("name", "")),
-			"ruler_name": String(state.get("ruler_name", "")),
-			"population": int(state.get("population", 10)),
-			"military_strength": int(state.get("military_strength", 0)),
-			"wealth": int(state.get("wealth", 0)),
-			"stability": int(state.get("stability", 0)),
-			"relation": int(state.get("relation", 0)),
-			"status": String(state.get("status", &"neutral")),
-		})
+		states.append(StateData.to_save_data(state))
 
 	var latest_updates: Array[Dictionary] = []
 	for update in _latest_world_updates:
@@ -212,68 +173,15 @@ func load_save_data(data: Dictionary) -> bool:
 	var loaded_states: Array[Dictionary] = []
 	var state_ids: Dictionary = {}
 	for state_value in data["states"]:
-		if not state_value is Dictionary:
+		var parsed_state := StateData.parse_save_data(state_value)
+		if not bool(parsed_state.get("valid", false)):
 			return false
-		var state: Dictionary = state_value
-		if not state.has_all([
-			"id",
-			"name",
-			"ruler_name",
-			"population",
-			"military_strength",
-			"wealth",
-			"stability",
-			"relation",
-			"status",
-		]):
+		var state: Dictionary = parsed_state["state"]
+		var state_id: StringName = state["id"]
+		if state_ids.has(state_id):
 			return false
-		for string_field in ["id", "name", "ruler_name", "status"]:
-			if not state[string_field] is String:
-				return false
-		for numeric_field in [
-			"population",
-			"military_strength",
-			"wealth",
-			"stability",
-			"relation",
-		]:
-			if not _is_integer_value(state[numeric_field]):
-				return false
-
-		var state_id := StringName(state["id"])
-		var population := int(state["population"])
-		var military_strength := int(state["military_strength"])
-		var wealth := int(state["wealth"])
-		var stability := int(state["stability"])
-		var relation := int(state["relation"])
-		var status := StringName(state["status"])
-		if state_id == &"" or state_ids.has(state_id):
-			return false
-		if population < 10:
-			return false
-		if military_strength < 0 or military_strength > 100:
-			return false
-		if wealth < 0 or wealth > 100:
-			return false
-		if stability < 0 or stability > 100:
-			return false
-		if relation < -100 or relation > 100:
-			return false
-		if status not in VALID_STATUSES:
-			return false
-
 		state_ids[state_id] = true
-		loaded_states.append({
-			"id": state_id,
-			"name": String(state["name"]),
-			"ruler_name": String(state["ruler_name"]),
-			"population": population,
-			"military_strength": military_strength,
-			"wealth": wealth,
-			"stability": stability,
-			"relation": relation,
-			"status": status,
-		})
+		loaded_states.append(state)
 
 	for expected_state_id in EXPECTED_STATE_IDS:
 		if not state_ids.has(expected_state_id):
