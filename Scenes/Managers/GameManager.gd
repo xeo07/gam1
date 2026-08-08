@@ -524,9 +524,6 @@ func _prepare_responsive_windows() -> void:
 		kingdom_stats_panel, [&"TitleLabel"], [&"CloseButton"]
 	)
 	UIWindowLayout.make_body_scrollable(
-		relations_panel, [&"TitleLabel"], [&"CloseButton"]
-	)
-	UIWindowLayout.make_body_scrollable(
 		trade_panel, [&"TitleLabel"], [&"StatusLabel", &"CloseButton"]
 	)
 	UIWindowLayout.make_body_scrollable(
@@ -556,7 +553,7 @@ func _update_window_layouts(hud_height: float) -> void:
 	UIWindowLayout.fit_window(war_panel, hud_height, Vector2(760, 680))
 	UIWindowLayout.fit_window(build_panel, hud_height, Vector2(420, 360))
 	UIWindowLayout.fit_window(hiring_panel, hud_height, Vector2(420, 300))
-	UIWindowLayout.fit_window(relations_panel, hud_height, Vector2(760, 680))
+	UIWindowLayout.fit_window(relations_panel, hud_height, Vector2(1040, 680))
 	UIWindowLayout.fit_window(trade_panel, hud_height, Vector2(720, 620))
 	UIWindowLayout.fit_window(special_goods_panel, hud_height, Vector2(560, 360))
 	UIWindowLayout.fit_window(save_load_panel, hud_height, Vector2(480, 360))

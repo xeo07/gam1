@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Scenes/UI/CornerMenuButton.gd" id="1_corner"]
 
 [node name="CornerMenuButton" type="CanvasLayer"]
-layer = 6
+layer = 4
 script = ExtResource("1_corner")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]

@@ -47,9 +47,12 @@ var _state_ids: Array[StringName] = []
 var _selected_state_id: StringName = &""
 var _pending_action_id: StringName = &""
 var _pending_contract_id: StringName = &""
+var _availability_label: Label
+var _state_context_messages: Dictionary = {}
 
 
 func _ready() -> void:
+	_build_geopolitics_layout()
 	states_list.item_selected.connect(_on_state_selected)
 	gift_button.pressed.connect(_request_action.bind(&"gift"))
 	threat_button.pressed.connect(_request_action.bind(&"threat"))
@@ -79,6 +82,37 @@ func _ready() -> void:
 	time_manager.day_changed.connect(_on_day_changed)
 	time_manager.time_loaded.connect(_on_day_changed)
 	_clear_details()
+
+
+func _build_geopolitics_layout() -> void:
+	var main_vbox := states_list.get_parent() as VBoxContainer
+	var details_panel := state_name_label.get_parent().get_parent() as PanelContainer
+	var split := SplitContainer.new()
+	split.vertical = false
+	split.name = "MainSplit"
+	split.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	split.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	main_vbox.add_child(split)
+	main_vbox.move_child(split, 1)
+	states_list.reparent(split, false)
+	states_list.custom_minimum_size = Vector2(260, 180)
+	states_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var details_scroll := ScrollContainer.new()
+	details_scroll.name = "DetailsScroll"
+	details_scroll.custom_minimum_size = Vector2(500, 180)
+	details_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	details_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	details_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	split.add_child(details_scroll)
+	details_panel.reparent(details_scroll, false)
+	details_panel.custom_minimum_size = Vector2(500, 0)
+	details_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_availability_label = Label.new()
+	_availability_label.name = "AvailabilityLabel"
+	_availability_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	var details_vbox := state_name_label.get_parent() as VBoxContainer
+	details_vbox.add_child(_availability_label)
+	details_vbox.move_child(_availability_label, cooldown_label.get_index())
 
 
 func open_panel() -> void:
@@ -124,7 +158,7 @@ func _on_state_selected(index: int) -> void:
 		return
 
 	_selected_state_id = _state_ids[index]
-	action_status_label.text = ""
+	action_status_label.text = String(_state_context_messages.get(_selected_state_id, ""))
 	spy_status_label.text = ""
 	_show_state(_selected_state_id)
 
@@ -177,12 +211,14 @@ func _request_break_contract() -> void:
 func _on_contract_changed(contract: Dictionary, message: String) -> void:
 	if contract.get("state_id", &"") == _selected_state_id:
 		action_status_label.text = message
+		_state_context_messages[_selected_state_id] = message
 		_update_contract_controls()
 
 
 func _on_contract_failed(state_id: StringName, reason: String) -> void:
 	if state_id == _selected_state_id:
 		action_status_label.text = reason
+		_state_context_messages[state_id] = reason
 
 
 func _on_send_spy_pressed() -> void:
@@ -225,6 +261,7 @@ func _on_diplomatic_action_completed(
 	refresh_states()
 	if state_id == _selected_state_id:
 		action_status_label.text = message
+		_state_context_messages[state_id] = message
 		_show_state(state_id)
 
 
@@ -235,6 +272,7 @@ func _on_diplomatic_action_failed(
 ) -> void:
 	if visible and state_id == _selected_state_id:
 		action_status_label.text = reason
+		_state_context_messages[state_id] = reason
 		_update_action_controls()
 
 
@@ -335,6 +373,7 @@ func _update_action_controls() -> void:
 		agreement_button.disabled = true
 		insult_button.disabled = true
 		cooldown_label.text = ""
+		_availability_label.text = ""
 		return
 
 	var cooldown_remaining := diplomacy_manager.get_action_cooldown_remaining(
@@ -342,14 +381,21 @@ func _update_action_controls() -> void:
 	)
 	if cooldown_remaining > 0:
 		cooldown_label.text = "Посланник вернётся через %d дн." % cooldown_remaining
+		_availability_label.text = "Почему действия недоступны: посланник ещё в пути."
 	else:
 		cooldown_label.text = "Посланник доступен"
+		_availability_label.text = ""
 
 	for action_data in [[gift_button, &"gift"], [threat_button, &"threat"], [agreement_button, &"agreement"], [insult_button, &"insult"]]:
 		var button: Button = action_data[0]
 		var preview := diplomacy_manager.get_action_preview(action_data[1], _selected_state_id)
 		button.disabled = cooldown_remaining > 0 or not resource_manager.has_resource(&"gold", int(preview.get("cost", 0)))
-		button.tooltip_text = "%s Цена: %d золота." % [String(preview.get("forecast", "")), int(preview.get("cost", 0))]
+		var cost := int(preview.get("cost", 0))
+		button.tooltip_text = (
+			"Недоступно: нужно %d золота." % cost
+			if not resource_manager.has_resource(&"gold", cost)
+			else ("Недоступно: посланник ещё в пути." if cooldown_remaining > 0 else "%s Цена: %d золота." % [String(preview.get("forecast", "")), cost])
+		)
 
 
 func _update_contract_controls() -> void:
@@ -365,6 +411,7 @@ func _update_contract_controls() -> void:
 		contracts_label.text = "Действует: %s · до дня %d\nУсловие: %s" % [String(active["name"]), int(active["end_day"]), String(active["condition"])]
 		for button in buttons:
 			button.disabled = true
+			button.tooltip_text = "Недоступно: с государством уже действует договор."
 		break_contract_button.disabled = false
 		return
 	contracts_label.text = "Действующих договоров нет"
@@ -373,7 +420,11 @@ func _update_contract_controls() -> void:
 		var preview := contract_manager.get_preview(pair[1], _selected_state_id)
 		var button: Button = pair[0]
 		button.disabled = not resource_manager.has_resource(&"gold", int(preview.get("cost", 0)))
-		button.tooltip_text = String(preview.get("reaction", ""))
+		button.tooltip_text = (
+			"Недоступно: нужно %d золота." % int(preview.get("cost", 0))
+			if button.disabled
+			else String(preview.get("reaction", ""))
+		)
 
 
 func _update_spy_controls() -> void:
@@ -412,6 +463,11 @@ func _update_spy_button() -> void:
 			SpyManager.SPY_GOLD_COST
 		)
 	)
+	send_spy_button.tooltip_text = (
+		"Недоступно: шпион уже выполняет миссию."
+		if _selected_state_id != &"" and spy_manager.has_active_mission(_selected_state_id)
+		else ("Недоступно: нужно %d золота." % SpyManager.SPY_GOLD_COST if not resource_manager.has_resource(&"gold", SpyManager.SPY_GOLD_COST) else "3 дня. Успех 65%, провал 20%, разоблачение 15%.")
+	)
 
 
 func _update_messenger_controls() -> void:
@@ -439,6 +495,11 @@ func _update_messenger_button() -> void:
 		or messenger_manager.has_active_mission(_selected_state_id)
 		or not resource_manager.has_resource(&"gold", MessengerManager.GOLD_COST)
 	)
+	send_messenger_button.tooltip_text = (
+		"Недоступно: гонец уже в пути."
+		if _selected_state_id != &"" and messenger_manager.has_active_mission(_selected_state_id)
+		else ("Недоступно: нужно %d золота." % MessengerManager.GOLD_COST if not resource_manager.has_resource(&"gold", MessengerManager.GOLD_COST) else MessengerManager.BENEFIT_TEXT)
+	)
 
 
 func _clear_details() -> void:
@@ -453,6 +514,8 @@ func _clear_details() -> void:
 	stability_label.text = ""
 	cooldown_label.text = ""
 	action_status_label.text = ""
+	if _availability_label != null:
+		_availability_label.text = ""
 	spy_status_label.text = ""
 	messenger_status_label.text = ""
 	contracts_label.text = ""
