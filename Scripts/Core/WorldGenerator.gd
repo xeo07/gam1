@@ -45,8 +45,12 @@ static func generate_states(world_seed: int) -> Array[Dictionary]:
 	rng.seed = world_seed
 	var names := StateNameGenerator.generate_unique_names(rng, AI_STATE_IDS.size())
 	var states: Array[Dictionary] = []
+	var profile_offset := rng.randi_range(0, StatePersonality.PROFILE_IDS.size() - 1)
 
 	for index in AI_STATE_IDS.size():
+		var personality := StatePersonality.PROFILE_IDS[
+			(index + profile_offset) % StatePersonality.PROFILE_IDS.size()
+		]
 		states.append(StateData.create(
 			AI_STATE_IDS[index],
 			names[index],
@@ -55,7 +59,11 @@ static func generate_states(world_seed: int) -> Array[Dictionary]:
 			rng.randi_range(25, 90),
 			rng.randi_range(25, 90),
 			rng.randi_range(45, 90),
-			rng.randi_range(-25, 25)
+			rng.randi_range(-25, 25),
+			&"neutral",
+			personality,
+			StatePersonality.get_interests(personality),
+			StatePersonality.get_strategic_goal(personality)
 		))
 
 	return states
@@ -65,4 +73,3 @@ static func _generate_ruler_name(rng: RandomNumberGenerator) -> String:
 	var title := RULER_TITLES[rng.randi_range(0, RULER_TITLES.size() - 1)]
 	var ruler_name := RULER_NAMES[rng.randi_range(0, RULER_NAMES.size() - 1)]
 	return "%s %s" % [title, ruler_name]
-

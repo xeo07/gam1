@@ -30,8 +30,17 @@ static func create(
 	wealth: int,
 	stability: int,
 	relation: int = 0,
-	status: StringName = &"neutral"
+	status: StringName = &"neutral",
+	personality: StringName = &"traditionalist",
+	interests: Array[StringName] = [],
+	strategic_goal: StringName = &"continuity"
 ) -> Dictionary:
+	if not StatePersonality.is_valid(personality):
+		personality = &"traditionalist"
+	if interests.is_empty():
+		interests = StatePersonality.get_interests(personality)
+	if strategic_goal == &"":
+		strategic_goal = StatePersonality.get_strategic_goal(personality)
 	return {
 		"id": state_id,
 		"name": display_name,
@@ -42,6 +51,9 @@ static func create(
 		"stability": clampi(stability, 0, 100),
 		"relation": clampi(relation, -100, 100),
 		"status": status if status in VALID_STATUSES else &"neutral",
+		"personality": personality,
+		"interests": interests.duplicate(),
+		"strategic_goal": strategic_goal,
 	}
 
 
@@ -56,6 +68,9 @@ static func to_save_data(state: Dictionary) -> Dictionary:
 		"stability": int(state.get("stability", 0)),
 		"relation": int(state.get("relation", 0)),
 		"status": String(state.get("status", &"neutral")),
+		"personality": String(state.get("personality", &"traditionalist")),
+		"interests": _string_names_to_strings(state.get("interests", [])),
+		"strategic_goal": String(state.get("strategic_goal", &"continuity")),
 	}
 
 
@@ -85,6 +100,16 @@ static func parse_save_data(value: Variant) -> Dictionary:
 	var stability := int(data["stability"])
 	var relation := int(data["relation"])
 	var status := StringName(data["status"])
+	var personality := StringName(data.get("personality", "traditionalist"))
+	var strategic_goal := StringName(data.get("strategic_goal", "continuity"))
+	var interests: Array[StringName] = []
+	var saved_interests: Variant = data.get("interests", [])
+	if not saved_interests is Array:
+		return {"valid": false}
+	for interest in saved_interests:
+		if not interest is String:
+			return {"valid": false}
+		interests.append(StringName(interest))
 	if state_id == &"":
 		return {"valid": false}
 	if population < 10:
@@ -99,6 +124,8 @@ static func parse_save_data(value: Variant) -> Dictionary:
 		return {"valid": false}
 	if status not in VALID_STATUSES:
 		return {"valid": false}
+	if not StatePersonality.is_valid(personality):
+		return {"valid": false}
 
 	return {
 		"valid": true,
@@ -111,7 +138,10 @@ static func parse_save_data(value: Variant) -> Dictionary:
 			wealth,
 			stability,
 			relation,
-			status
+			status,
+			personality,
+			interests,
+			strategic_goal
 		),
 	}
 
@@ -119,3 +149,11 @@ static func parse_save_data(value: Variant) -> Dictionary:
 static func _is_integer_value(value: Variant) -> bool:
 	return value is int or (value is float and value == floor(value))
 
+
+static func _string_names_to_strings(values: Variant) -> Array[String]:
+	var result: Array[String] = []
+	if not values is Array:
+		return result
+	for value in values:
+		result.append(String(value))
+	return result

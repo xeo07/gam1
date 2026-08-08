@@ -9,9 +9,10 @@ func _initialize() -> void:
 	_test_state_data_round_trip()
 	_test_state_name_generation()
 	_test_world_generation()
+	_test_state_personalities()
 
 	if _failures.is_empty():
-		print("KINGDOOM tests passed: 5")
+		print("KINGDOOM tests passed: 6")
 		quit(0)
 		return
 
@@ -167,6 +168,33 @@ func _test_world_generation() -> void:
 	_expect(names.size() == 7, "Generated state names must be unique")
 	for expected_id in WorldGenerator.AI_STATE_IDS:
 		_expect(ids.has(expected_id), "Generated world must contain %s" % expected_id)
+
+
+func _test_state_personalities() -> void:
+	var world := WorldGenerator.generate_states(8888)
+	var personalities: Dictionary = {}
+	for state in world:
+		var personality: StringName = state["personality"]
+		personalities[personality] = true
+		_expect(StatePersonality.is_valid(personality), "State personality must be valid")
+		_expect(not state["interests"].is_empty(), "State interests must not be empty")
+		_expect(state["strategic_goal"] != &"", "State strategic goal must not be empty")
+	_expect(personalities.size() == 7, "The initial states must have distinct personalities")
+
+	var merchant_bias := StatePersonality.get_daily_bias(&"merchant")
+	var warlike_bias := StatePersonality.get_daily_bias(&"warlike")
+	_expect(
+		int(merchant_bias["wealth"]) > int(warlike_bias["wealth"]),
+		"Merchant states must prioritize wealth more than warlike states"
+	)
+	_expect(
+		int(warlike_bias["military"]) > int(merchant_bias["military"]),
+		"Warlike states must prioritize the army more than merchant states"
+	)
+	_expect(
+		int(merchant_bias["relation"]) > int(warlike_bias["relation"]),
+		"Personalities must influence diplomatic posture"
+	)
 
 
 func _expect(condition: bool, message: String) -> void:

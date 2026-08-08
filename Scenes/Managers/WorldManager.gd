@@ -72,25 +72,39 @@ func process_world_day() -> Array[Dictionary]:
 		var previous_military := int(state["military_strength"])
 		var previous_wealth := int(state["wealth"])
 		var previous_stability := int(state["stability"])
+		var previous_relation := int(state["relation"])
+		var personality := StringName(state.get("personality", &"traditionalist"))
+		var bias := StatePersonality.get_daily_bias(personality)
 
 		state["population"] = maxi(
 			10,
-			previous_population + game_session_manager.get_rng().randi_range(-2, 3)
+			previous_population
+				+ game_session_manager.get_rng().randi_range(-2, 3)
+				+ int(bias.get("population", 0))
 		)
 		state["military_strength"] = clampi(
-			previous_military + game_session_manager.get_rng().randi_range(-2, 2),
+			previous_military
+				+ game_session_manager.get_rng().randi_range(-2, 2)
+				+ int(bias.get("military", 0)),
 			0,
 			100
 		)
 		state["wealth"] = clampi(
-			previous_wealth + game_session_manager.get_rng().randi_range(-3, 4),
+			previous_wealth
+				+ game_session_manager.get_rng().randi_range(-3, 4)
+				+ int(bias.get("wealth", 0)),
 			0,
 			100
 		)
 		state["stability"] = clampi(
-			previous_stability + game_session_manager.get_rng().randi_range(-3, 3),
+			previous_stability
+				+ game_session_manager.get_rng().randi_range(-3, 3)
+				+ int(bias.get("stability", 0)),
 			0,
 			100
+		)
+		state["relation"] = clampi(
+			previous_relation + int(bias.get("relation", 0)), -100, 100
 		)
 
 		var state_id: StringName = state.get("id", &"")
@@ -101,10 +115,13 @@ func process_world_day() -> Array[Dictionary]:
 			"military_change": int(state["military_strength"]) - previous_military,
 			"wealth_change": int(state["wealth"]) - previous_wealth,
 			"stability_change": int(state["stability"]) - previous_stability,
+			"relation_change": int(state["relation"]) - previous_relation,
 			"population": int(state["population"]),
 			"military_strength": int(state["military_strength"]),
 			"wealth": int(state["wealth"]),
 			"stability": int(state["stability"]),
+			"relation": int(state["relation"]),
+			"strategic_goal": state.get("strategic_goal", &"continuity"),
 		}
 		updates.append(changes)
 		state_updated.emit(state_id, changes.duplicate(true))
