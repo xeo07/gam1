@@ -5,6 +5,7 @@ const MARGIN := 16.0
 const MIN_DASHBOARD_WIDTH := 380.0
 const MAX_DASHBOARD_WIDTH := 520.0
 const TOP_BAR_HEIGHT := 60.0
+const CENTER_GAP := 48.0
 
 
 static func calculate(viewport: Vector2, hud_height: float) -> Dictionary:
@@ -14,5 +15,5 @@ static func calculate(viewport: Vector2, hud_height: float) -> Dictionary:
 	return {
 		"dashboard_width": dashboard_width,
 		"dashboard_rect": Rect2(viewport.x - dashboard_width - MARGIN, content_top, dashboard_width, content_height),
-		"grid_rect": Rect2(MARGIN, content_top, maxf(1.0, viewport.x - dashboard_width - MARGIN * 3.0), content_height),
+		"grid_rect": Rect2(MARGIN, content_top, maxf(1.0, viewport.x - dashboard_width - MARGIN * 2.0 - CENTER_GAP), content_height),
 	}

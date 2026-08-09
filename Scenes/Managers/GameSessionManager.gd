@@ -108,11 +108,25 @@ static func generate_default_flag(rng: RandomNumberGenerator) -> Array:
 	var secondary := rng.randi_range(4, PixelArtEditor.PALETTE.size() - 1)
 	if secondary == primary:
 		secondary = 4 + ((secondary - 3) % (PixelArtEditor.PALETTE.size() - 4))
+	var accent := rng.randi_range(1, PixelArtEditor.PALETTE.size() - 1)
+	while accent == primary or accent == secondary:
+		accent = 1 + (accent % (PixelArtEditor.PALETTE.size() - 1))
+	var pattern := rng.randi_range(0, 7)
 	var pixels: Array = []
 	for y in FLAG_SIZE.y:
 		var row: Array = []
-		for _x in FLAG_SIZE.x:
-			row.append(primary if y < FLAG_SIZE.y / 2 else secondary)
+		for x in FLAG_SIZE.x:
+			var color := primary
+			match pattern:
+				0: color = primary if y < FLAG_SIZE.y / 2 else secondary
+				1: color = primary if x < FLAG_SIZE.x / 2 else secondary
+				2: color = accent if absi(x - FLAG_SIZE.x / 2) <= 1 or absi(y - FLAG_SIZE.y / 2) <= 1 else (primary if x < FLAG_SIZE.x / 2 else secondary)
+				3: color = accent if absi(x - y * FLAG_SIZE.x / FLAG_SIZE.y) <= 1 else (primary if x < y * FLAG_SIZE.x / FLAG_SIZE.y else secondary)
+				4: color = accent if x < FLAG_SIZE.x / 3 and y < FLAG_SIZE.y / 2 else (primary if y < FLAG_SIZE.y / 2 else secondary)
+				5: color = primary if x < FLAG_SIZE.x / 3 else (secondary if x < FLAG_SIZE.x * 2 / 3 else accent)
+				6: color = accent if x <= 1 or x >= FLAG_SIZE.x - 2 or y <= 1 or y >= FLAG_SIZE.y - 2 else (primary if y < FLAG_SIZE.y / 2 else secondary)
+				7: color = accent if absi(x - FLAG_SIZE.x / 2) <= y / 2 else (primary if x < FLAG_SIZE.x / 2 else secondary)
+			row.append(color)
 		pixels.append(row)
 	return pixels
 
@@ -122,18 +136,39 @@ static func generate_default_emblem(rng: RandomNumberGenerator) -> Array:
 	var symbol := rng.randi_range(1, PixelArtEditor.PALETTE.size() - 1)
 	if symbol == background:
 		symbol = 1 if background != 1 else 10
+	var detail := rng.randi_range(1, PixelArtEditor.PALETTE.size() - 1)
+	while detail == background or detail == symbol:
+		detail = 1 + (detail % (PixelArtEditor.PALETTE.size() - 1))
+	var pattern := rng.randi_range(0, 7)
 	var pixels: Array = []
 	for y in EMBLEM_SIZE.y:
 		var row: Array = []
 		for x in EMBLEM_SIZE.x:
-			var mirrored_x := mini(x, EMBLEM_SIZE.x - 1 - x)
-			var is_symbol := (
-				mirrored_x == 4
-				or mirrored_x == 5
-				or y == 5
-				or (y >= 2 and y <= 9 and mirrored_x == y / 2)
-			)
-			row.append(symbol if is_symbol else background)
+			var mx := mini(x, EMBLEM_SIZE.x - 1 - x)
+			var color := background
+			match pattern:
+				0:
+					if mx in [4, 5] or y in [5, 6]: color = symbol
+				1:
+					if absi(x - 5) + absi(y - 5) <= 4: color = symbol
+					if absi(x - 5) + absi(y - 5) <= 1: color = detail
+				2:
+					if y >= 2 and y <= 9 and mx >= maxi(1, y / 3) and mx <= 5: color = symbol
+					if y in [3, 4] and mx in [4, 5]: color = detail
+				3:
+					if y in [3, 4] and mx in [1, 3, 5] or y in [5, 6] and mx >= 1 or y >= 7 and y <= 9 and mx in [2, 5]: color = symbol
+				4:
+					if y >= 6 and mx in [4, 5] or y in [3, 4, 5] and mx >= 2 or y == 2 and mx in [3, 5]: color = symbol
+				5:
+					if y >= 3 and y <= 9 and (mx in [2, 5] or y in [3, 6, 9]): color = symbol
+					if y in [4, 5] and mx in [3, 4]: color = detail
+				6:
+					var distance := absi(x - 5) + absi(y - 5)
+					if distance <= 2: color = detail
+					elif distance in [4, 5] and (x == 5 or y == 5 or x + y in [6, 16] or x - y in [-6, 6]): color = symbol
+				7:
+					if y in [4, 5] and mx >= 2 or y in [3, 6] and mx in [1, 2, 4, 5] or y >= 7 and mx in [4, 5]: color = symbol
+			row.append(color)
 		pixels.append(row)
 	return pixels
 

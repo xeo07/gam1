@@ -130,7 +130,7 @@ theme_type_variation = &"HUDSectionButton"
 tooltip_text = "Состояние государства"
 
 [node name="IdentitySection" type="Control" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(390, 0)
+custom_minimum_size = Vector2(440, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.33
@@ -156,18 +156,18 @@ layout_mode = 2
 theme_override_constants/separation = 8
 
 [node name="EmblemContainer" type="CenterContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(72, 72)
+custom_minimum_size = Vector2(104, 104)
 layout_mode = 2
 
 [node name="EmblemTextureRect" type="TextureRect" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/EmblemContainer"]
-custom_minimum_size = Vector2(68, 68)
+custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 texture_filter = 1
 expand_mode = 1
 stretch_mode = 5
 
 [node name="MainIdentityContainer" type="Control" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(295, 0)
+custom_minimum_size = Vector2(320, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -197,7 +197,7 @@ size_flags_vertical = 3
 theme_override_constants/separation = 5
 
 [node name="FlagAspectContainer" type="AspectRatioContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/MainIdentityContainer/VBoxContainer/IdentityContentRow"]
-custom_minimum_size = Vector2(110, 68)
+custom_minimum_size = Vector2(190, 86)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3

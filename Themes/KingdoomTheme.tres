@@ -118,11 +118,60 @@ content_margin_top = 4.0
 content_margin_right = 4.0
 content_margin_bottom = 4.0
 bg_color = Color(0.035, 0.03, 0.025, 0.98)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
+border_width_top = 1
 border_color = Color(0.48, 0.38, 0.2, 1)
+
+[sub_resource type="StyleBoxFlat" id="DiplomacyNormal"]
+content_margin_left = 12.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+bg_color = Color(0.24, 0.075, 0.065, 1)
+border_width_left = 2
+border_color = Color(0.62, 0.39, 0.18, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="DiplomacyHover"]
+content_margin_left = 12.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+bg_color = Color(0.33, 0.11, 0.085, 1)
+border_width_left = 3
+border_color = Color(0.78, 0.55, 0.26, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="NewsNormal"]
+content_margin_left = 12.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+bg_color = Color(0.64, 0.53, 0.35, 1)
+border_width_bottom = 2
+border_color = Color(0.31, 0.22, 0.13, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="NewsHover"]
+content_margin_left = 12.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+bg_color = Color(0.73, 0.63, 0.45, 1)
+border_width_bottom = 2
+border_color = Color(0.39, 0.27, 0.15, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxFlat" id="HUDRow"]
 content_margin_left = 2.0
@@ -365,6 +414,10 @@ Button/styles/pressed = SubResource("ButtonPressed")
 CheckBox/colors/font_color = Color(0.91, 0.86, 0.73, 1)
 CornerMenuButton/base_type = &"Button"
 CornerMenuButton/font_sizes/font_size = 25
+DiplomacyActionButton/base_type = &"Button"
+DiplomacyActionButton/styles/normal = SubResource("DiplomacyNormal")
+DiplomacyActionButton/styles/hover = SubResource("DiplomacyHover")
+DiplomacyActionButton/styles/pressed = SubResource("DiplomacyNormal")
 HUDActionButton/base_type = &"Button"
 HUDActionButton/font_sizes/font_size = 14
 HUDActionButton/styles/hover = SubResource("HUDActionHover")
@@ -395,6 +448,13 @@ HUDValueLabel/base_type = &"Label"
 HUDValueLabel/colors/font_color = Color(0.97, 0.83, 0.43, 1)
 HUDValueLabel/font_sizes/font_size = 20
 Label/colors/font_color = Color(0.88, 0.84, 0.74, 1)
+NewsActionButton/base_type = &"Button"
+NewsActionButton/colors/font_color = Color(0.16, 0.11, 0.075, 1)
+NewsActionButton/colors/font_hover_color = Color(0.12, 0.08, 0.05, 1)
+NewsActionButton/colors/font_pressed_color = Color(0.12, 0.08, 0.05, 1)
+NewsActionButton/styles/normal = SubResource("NewsNormal")
+NewsActionButton/styles/hover = SubResource("NewsHover")
+NewsActionButton/styles/pressed = SubResource("NewsNormal")
 LineEdit/colors/font_color = Color(0.92, 0.88, 0.78, 1)
 LineEdit/colors/font_placeholder_color = Color(0.5, 0.47, 0.42, 1)
 LineEdit/styles/normal = SubResource("LineEdit")
