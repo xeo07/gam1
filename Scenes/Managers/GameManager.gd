@@ -2,8 +2,8 @@ extends Node2D
 
 const GAME_NAME := "Kingdoom"
 const GAME_VERSION := "0.0.1"
-const GRID_MARGIN := 16.0
-const TOP_TOOLBAR_HEIGHT := 60.0
+const GRID_MARGIN := 10.0
+const TOP_TOOLBAR_HEIGHT := 64.0
 const MAIN_MENU_SCENE := "res://Scenes/Main/MainMenu.tscn"
 const PENDING_NEW_GAME_PATH := "user://pending_new_game.json"
 const PENDING_LOAD_PATH := "user://pending_load_game.flag"
@@ -22,7 +22,8 @@ const LAST_ERROR_PATH := "user://last_menu_error.txt"
 @onready var news_manager: NewsManager = $NewsManager as NewsManager
 @onready var bottom_hud: BottomHUD = $BottomHUD as BottomHUD
 @onready var situation_dashboard: SituationDashboard = $SituationDashboard as SituationDashboard
-@onready var corner_menu_button: CornerMenuButton = $CornerMenuButton as CornerMenuButton
+@onready var corner_menu_button: TopBar = $CornerMenuButton as TopBar
+@onready var navigation_panel: NavigationPanel = $NavigationPanel as NavigationPanel
 @onready var population_quick_menu: PopulationQuickMenu = $PopulationQuickMenu as PopulationQuickMenu
 @onready var army_quick_menu: ArmyQuickMenu = $ArmyQuickMenu as ArmyQuickMenu
 @onready var resource_quick_menu: ResourceQuickMenu = $ResourceQuickMenu as ResourceQuickMenu
@@ -64,6 +65,9 @@ func _ready() -> void:
 	save_manager.load_failed.connect(_on_load_failed)
 	save_manager.game_loaded.connect(_on_game_loaded)
 	corner_menu_button.menu_button_pressed.connect(_on_menu_button_pressed)
+	corner_menu_button.next_day_pressed.connect(_on_next_day_pressed)
+	corner_menu_button.bar_height_changed.connect(_on_top_bar_height_changed)
+	navigation_panel.section_selected.connect(_on_navigation_selected)
 	bottom_hud.hud_height_changed.connect(_on_hud_height_changed)
 	bottom_hud.population_section_pressed.connect(_on_population_section_pressed)
 	bottom_hud.army_section_pressed.connect(_on_army_section_pressed)
@@ -71,6 +75,8 @@ func _ready() -> void:
 	bottom_hud.resources_section_pressed.connect(_on_resources_section_pressed)
 	bottom_hud.next_day_pressed.connect(_on_next_day_pressed)
 	bottom_hud.relations_pressed.connect(_on_relations_pressed)
+	bottom_hud.hiring_pressed.connect(_on_hiring_pressed)
+	bottom_hud.messenger_pressed.connect(_on_relations_pressed)
 	situation_dashboard.decision_pressed.connect(_show_active_event)
 	situation_dashboard.diplomacy_pressed.connect(_on_relations_pressed)
 	situation_dashboard.news_pressed.connect(_on_dashboard_news_pressed)
@@ -284,7 +290,7 @@ func _on_menu_button_pressed() -> void:
 		_show_active_event()
 		return
 	prepare_for_system_menu()
-	pause_menu.open_menu()
+	side_menu.toggle_menu()
 
 
 func _on_next_day_pressed() -> void:
@@ -405,9 +411,7 @@ func _show_active_event() -> void:
 
 
 func _update_event_lock() -> void:
-	corner_menu_button.set_interaction_enabled(
-		not event_manager.has_active_event() and not internal_event_panel.visible
-	)
+	corner_menu_button.menu_button.disabled = event_manager.has_active_event() or internal_event_panel.visible
 
 
 func _on_report_visibility_changed(panel: CanvasLayer) -> void:
@@ -425,24 +429,46 @@ func _on_window_visibility_changed(window: CanvasLayer) -> void:
 
 
 func _on_hud_height_changed(_height: float) -> void:
-	corner_menu_button.set_bottom_hud_height(_height)
 	side_menu.set_bottom_hud_height(_height)
+	_update_game_area()
+
+
+func _on_top_bar_height_changed(_height: float) -> void:
 	_update_game_area()
 
 
 func _update_game_area() -> void:
 	var viewport_size := get_viewport().get_visible_rect().size
 	var hud_height := bottom_hud.get_hud_height()
-	var dashboard_width := situation_dashboard.layout_for_viewport(hud_height)
-	kingdom_grid.position = Vector2(GRID_MARGIN, GRID_MARGIN + TOP_TOOLBAR_HEIGHT)
-	kingdom_grid.size = Vector2(
-		maxf(viewport_size.x - dashboard_width - GRID_MARGIN * 3.0, 1.0),
-		maxf(
-			viewport_size.y - hud_height - GRID_MARGIN * 2.0 - TOP_TOOLBAR_HEIGHT,
-			1.0
-		)
-	)
+	var layout := UILayoutMetrics.calculate(viewport_size, hud_height)
+	var grid_rect: Rect2 = layout["grid_rect"]
+	var nav_rect: Rect2 = layout["nav_rect"]
+	situation_dashboard.layout_for_viewport(hud_height)
+	navigation_panel.layout(nav_rect)
+	kingdom_grid.position = grid_rect.position
+	kingdom_grid.size = grid_rect.size
 	_update_window_layouts(hud_height)
+
+
+func _on_navigation_selected(section: StringName) -> void:
+	match section:
+		&"overview":
+			close_regular_panels()
+		&"build":
+			_on_build_pressed()
+		&"population":
+			_on_population_pressed()
+		&"army":
+			_on_army_pressed()
+		&"diplomacy", &"espionage", &"world":
+			_on_relations_pressed()
+		&"trade":
+			_on_trade_pressed()
+		&"events":
+			if event_manager.has_active_event():
+				_show_active_event()
+			else:
+				_on_dashboard_news_pressed()
 
 
 func _on_dashboard_news_pressed() -> void:

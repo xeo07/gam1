@@ -69,24 +69,24 @@ content_margin_left = 8.0
 content_margin_top = 4.0
 content_margin_right = 8.0
 content_margin_bottom = 4.0
-bg_color = Color(0.27, 0.2, 0.1, 1)
+bg_color = Color(0.31, 0.07, 0.08, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.92, 0.7, 0.29, 1)
+border_color = Color(0.48, 0.1, 0.12, 1)
 
 [sub_resource type="StyleBoxFlat" id="HUDActionNormal"]
 content_margin_left = 8.0
 content_margin_top = 4.0
 content_margin_right = 8.0
 content_margin_bottom = 4.0
-bg_color = Color(0.17, 0.135, 0.075, 1)
+bg_color = Color(0.22, 0.055, 0.065, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.67, 0.5, 0.22, 1)
+border_color = Color(0.36, 0.08, 0.1, 1)
 
 [sub_resource type="StyleBoxFlat" id="HUDActionPressed"]
 content_margin_left = 8.0
@@ -98,7 +98,7 @@ border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(1, 0.78, 0.32, 1)
+border_color = Color(0.52, 0.11, 0.14, 1)
 
 [sub_resource type="StyleBoxFlat" id="HUDIdentity"]
 content_margin_left = 1.0
@@ -110,7 +110,7 @@ border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.76, 0.57, 0.24, 1)
+border_color = Color(0.29, 0.07, 0.085, 1)
 
 [sub_resource type="StyleBoxFlat" id="HUDPanel"]
 content_margin_left = 4.0
@@ -118,11 +118,8 @@ content_margin_top = 4.0
 content_margin_right = 4.0
 content_margin_bottom = 4.0
 bg_color = Color(0.035, 0.03, 0.025, 0.98)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.48, 0.38, 0.2, 1)
+border_width_top = 2
+border_color = Color(0.35, 0.075, 0.09, 1)
 
 [sub_resource type="StyleBoxFlat" id="HUDRow"]
 content_margin_left = 2.0
@@ -132,12 +129,9 @@ content_margin_bottom = 2.0
 bg_color = Color(0, 0, 0, 0)
 
 [sub_resource type="StyleBoxFlat" id="HUDSectionButtonHover"]
-bg_color = Color(0.3, 0.23, 0.11, 0.22)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.82, 0.63, 0.28, 0.9)
+bg_color = Color(0.30, 0.07, 0.08, 0.28)
+border_width_left = 2
+border_color = Color(0.43, 0.09, 0.11, 0.9)
 
 [sub_resource type="StyleBoxFlat" id="HUDSectionButtonNormal"]
 bg_color = Color(0, 0, 0, 0)
@@ -148,7 +142,7 @@ border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.95, 0.72, 0.28, 1)
+border_color = Color(0.48, 0.1, 0.12, 1)
 
 [sub_resource type="StyleBoxFlat" id="HUDSection"]
 content_margin_left = 6.0
@@ -157,7 +151,7 @@ content_margin_right = 6.0
 content_margin_bottom = 6.0
 bg_color = Color(0.045, 0.038, 0.03, 0.94)
 border_width_right = 1
-border_color = Color(0.66, 0.51, 0.24, 1)
+border_color = Color(0.28, 0.07, 0.08, 1)
 
 [sub_resource type="StyleBoxFlat" id="LineEdit"]
 content_margin_left = 10.0
@@ -352,12 +346,101 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.72, 0.54, 0.24, 1)
 
+[sub_resource type="StyleBoxFlat" id="TopBarPanel"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.035, 0.03, 0.028, 1)
+border_width_bottom = 2
+border_color = Color(0.31, 0.075, 0.09, 1)
+
+[sub_resource type="StyleBoxFlat" id="NavigationPanel"]
+bg_color = Color(0.055, 0.046, 0.041, 0.99)
+border_width_right = 1
+border_color = Color(0.27, 0.22, 0.16, 1)
+
+[sub_resource type="StyleBoxFlat" id="NavNormal"]
+content_margin_left = 12.0
+content_margin_top = 7.0
+content_margin_right = 8.0
+content_margin_bottom = 7.0
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="NavHover"]
+content_margin_left = 12.0
+content_margin_top = 7.0
+content_margin_right = 8.0
+content_margin_bottom = 7.0
+bg_color = Color(0.105, 0.085, 0.075, 1)
+
+[sub_resource type="StyleBoxFlat" id="NavPressed"]
+content_margin_left = 9.0
+content_margin_top = 7.0
+content_margin_right = 8.0
+content_margin_bottom = 7.0
+bg_color = Color(0.13, 0.075, 0.072, 1)
+border_width_left = 3
+border_color = Color(0.45, 0.08, 0.105, 1)
+
+[sub_resource type="StyleBoxFlat" id="PrimaryNormal"]
+content_margin_left = 14.0
+content_margin_top = 9.0
+content_margin_right = 14.0
+content_margin_bottom = 9.0
+bg_color = Color(0.30, 0.055, 0.075, 1)
+border_width_bottom = 2
+border_color = Color(0.49, 0.10, 0.13, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_left = 2
+corner_radius_bottom_right = 2
+
+[sub_resource type="StyleBoxFlat" id="PrimaryHover"]
+content_margin_left = 14.0
+content_margin_top = 9.0
+content_margin_right = 14.0
+content_margin_bottom = 9.0
+bg_color = Color(0.38, 0.07, 0.095, 1)
+border_width_bottom = 2
+border_color = Color(0.62, 0.15, 0.18, 1)
+
+[sub_resource type="StyleBoxFlat" id="PrimaryPressed"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+bg_color = Color(0.22, 0.04, 0.055, 1)
+border_width_top = 2
+border_color = Color(0.18, 0.025, 0.04, 1)
+
+[sub_resource type="StyleBoxFlat" id="HeraldFrame"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(0.69, 0.57, 0.40, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.16, 0.105, 0.075, 1)
+
+[sub_resource type="StyleBoxFlat" id="HeraldCard"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.78, 0.68, 0.51, 1)
+border_width_bottom = 1
+border_color = Color(0.38, 0.15, 0.14, 0.65)
+
 [resource]
 default_font_size = 16
-Button/colors/font_color = Color(0.91, 0.86, 0.73, 1)
+Button/colors/font_color = Color(0.89, 0.84, 0.72, 1)
 Button/colors/font_disabled_color = Color(0.45, 0.43, 0.39, 1)
-Button/colors/font_hover_color = Color(1, 0.9, 0.58, 1)
-Button/colors/font_pressed_color = Color(1, 0.82, 0.38, 1)
+Button/colors/font_hover_color = Color(0.98, 0.93, 0.82, 1)
+Button/colors/font_pressed_color = Color(0.88, 0.78, 0.64, 1)
 Button/styles/disabled = SubResource("ButtonDisabled")
 Button/styles/hover = SubResource("ButtonHover")
 Button/styles/normal = SubResource("ButtonNormal")
@@ -365,6 +448,37 @@ Button/styles/pressed = SubResource("ButtonPressed")
 CheckBox/colors/font_color = Color(0.91, 0.86, 0.73, 1)
 CornerMenuButton/base_type = &"Button"
 CornerMenuButton/font_sizes/font_size = 25
+MutedLabel/base_type = &"Label"
+MutedLabel/colors/font_color = Color(0.59, 0.54, 0.45, 1)
+MutedLabel/font_sizes/font_size = 13
+NavigationButton/base_type = &"Button"
+NavigationButton/colors/font_color = Color(0.76, 0.70, 0.59, 1)
+NavigationButton/colors/font_hover_color = Color(0.93, 0.87, 0.75, 1)
+NavigationButton/colors/font_pressed_color = Color(0.93, 0.87, 0.75, 1)
+NavigationButton/font_sizes/font_size = 14
+NavigationButton/styles/hover = SubResource("NavHover")
+NavigationButton/styles/normal = SubResource("NavNormal")
+NavigationButton/styles/pressed = SubResource("NavPressed")
+NavigationButton/styles/hover_pressed = SubResource("NavPressed")
+NavigationTitle/base_type = &"Label"
+NavigationTitle/colors/font_color = Color(0.69, 0.58, 0.42, 1)
+NavigationTitle/font_sizes/font_size = 13
+NavigationPanel/base_type = &"PanelContainer"
+NavigationPanel/styles/panel = SubResource("NavigationPanel")
+PrimaryActionButton/base_type = &"Button"
+PrimaryActionButton/colors/font_color = Color(0.94, 0.88, 0.76, 1)
+PrimaryActionButton/font_sizes/font_size = 13
+PrimaryActionButton/styles/hover = SubResource("PrimaryHover")
+PrimaryActionButton/styles/normal = SubResource("PrimaryNormal")
+PrimaryActionButton/styles/pressed = SubResource("PrimaryPressed")
+ResourceLabel/base_type = &"Label"
+ResourceLabel/colors/font_color = Color(0.80, 0.74, 0.62, 1)
+ResourceLabel/font_sizes/font_size = 13
+TopBarPanel/base_type = &"PanelContainer"
+TopBarPanel/styles/panel = SubResource("TopBarPanel")
+TopKingdomLabel/base_type = &"Label"
+TopKingdomLabel/colors/font_color = Color(0.92, 0.85, 0.71, 1)
+TopKingdomLabel/font_sizes/font_size = 17
 HUDActionButton/base_type = &"Button"
 HUDActionButton/font_sizes/font_size = 14
 HUDActionButton/styles/hover = SubResource("HUDActionHover")
@@ -373,7 +487,7 @@ HUDActionButton/styles/pressed = SubResource("HUDActionPressed")
 HUDIdentityPanel/base_type = &"PanelContainer"
 HUDIdentityPanel/styles/panel = SubResource("HUDIdentity")
 HUDKingdomLabel/base_type = &"Label"
-HUDKingdomLabel/colors/font_color = Color(0.96, 0.79, 0.36, 1)
+HUDKingdomLabel/colors/font_color = Color(0.73, 0.61, 0.47, 1)
 HUDKingdomLabel/font_sizes/font_size = 20
 HUDPanel/base_type = &"PanelContainer"
 HUDPanel/styles/panel = SubResource("HUDPanel")
@@ -392,8 +506,18 @@ HUDTitleLabel/base_type = &"Label"
 HUDTitleLabel/colors/font_color = Color(0.72, 0.66, 0.52, 1)
 HUDTitleLabel/font_sizes/font_size = 13
 HUDValueLabel/base_type = &"Label"
-HUDValueLabel/colors/font_color = Color(0.97, 0.83, 0.43, 1)
+HUDValueLabel/colors/font_color = Color(0.91, 0.85, 0.73, 1)
 HUDValueLabel/font_sizes/font_size = 20
+HeraldFrame/base_type = &"PanelContainer"
+HeraldFrame/styles/panel = SubResource("HeraldFrame")
+HeraldCard/base_type = &"PanelContainer"
+HeraldCard/styles/panel = SubResource("HeraldCard")
+HeraldTitle/base_type = &"Label"
+HeraldTitle/colors/font_color = Color(0.22, 0.055, 0.065, 1)
+HeraldTitle/font_sizes/font_size = 23
+HeraldSectionTitle/base_type = &"Label"
+HeraldSectionTitle/colors/font_color = Color(0.25, 0.07, 0.075, 1)
+HeraldSectionTitle/font_sizes/font_size = 14
 Label/colors/font_color = Color(0.88, 0.84, 0.74, 1)
 LineEdit/colors/font_color = Color(0.92, 0.88, 0.78, 1)
 LineEdit/colors/font_placeholder_color = Color(0.5, 0.47, 0.42, 1)
@@ -439,8 +563,8 @@ SystemMenuButton/styles/pressed = SubResource("SystemButtonPressed")
 SystemMenuPanel/base_type = &"PanelContainer"
 SystemMenuPanel/styles/panel = SubResource("SystemMenuPanel")
 SystemMenuTitleLabel/base_type = &"Label"
-SystemMenuTitleLabel/colors/font_color = Color(0.94, 0.74, 0.33, 1)
+SystemMenuTitleLabel/colors/font_color = Color(0.78, 0.66, 0.5, 1)
 SystemMenuTitleLabel/font_sizes/font_size = 22
 TitleLabel/base_type = &"Label"
-TitleLabel/colors/font_color = Color(0.88, 0.69, 0.32, 1)
+TitleLabel/colors/font_color = Color(0.78, 0.66, 0.5, 1)
 TitleLabel/font_sizes/font_size = 28

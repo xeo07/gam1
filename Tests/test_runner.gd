@@ -773,10 +773,12 @@ func _test_main_interface_layout() -> void:
 		var layout := UILayoutMetrics.calculate(viewport, BottomHUD.DEFAULT_HUD_HEIGHT)
 		var grid: Rect2 = layout["grid_rect"]
 		var dashboard: Rect2 = layout["dashboard_rect"]
+		var navigation: Rect2 = layout["nav_rect"]
+		_expect(navigation.end.x <= grid.position.x, "Navigation and kingdom field must not overlap")
 		_expect(grid.end.x <= dashboard.position.x, "Kingdom field and situation dashboard must not overlap")
 		_expect(dashboard.end.x <= viewport.x and dashboard.end.y <= viewport.y - BottomHUD.DEFAULT_HUD_HEIGHT + 1.0, "Situation dashboard must remain visible above HUD")
 		_expect(grid.size.x >= 500.0, "Kingdom field must remain usable at supported window sizes")
-		_expect(dashboard.size.x >= 380.0, "Situation panel must remain readable at supported window sizes")
+		_expect(dashboard.size.x >= 285.0, "Herald panel must remain readable at supported window sizes")
 
 
 func _expect(condition: bool, message: String) -> void:

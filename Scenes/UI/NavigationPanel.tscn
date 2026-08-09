@@ -1,0 +1,108 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scenes/UI/NavigationPanel.gd" id="1_nav"]
+
+[node name="NavigationPanel" type="CanvasLayer"]
+layer = 3
+script = ExtResource("1_nav")
+
+[node name="Panel" type="PanelContainer" parent="."]
+offset_right = 180.0
+offset_bottom = 500.0
+theme_type_variation = &"NavigationPanel"
+
+[node name="Margin" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 12
+
+[node name="VBox" type="VBoxContainer" parent="Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="Panel/Margin/VBox"]
+layout_mode = 2
+theme_type_variation = &"NavigationTitle"
+text = "КОРОЛЕВСКИЙ СОВЕТ"
+
+[node name="Rule" type="HSeparator" parent="Panel/Margin/VBox"]
+layout_mode = 2
+
+[node name="Buttons" type="VBoxContainer" parent="Panel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 3
+
+[node name="Overview" type="Button" parent="Panel/Margin/VBox/Buttons"]
+custom_minimum_size = Vector2(0, 43)
+layout_mode = 2
+toggle_mode = true
+theme_type_variation = &"NavigationButton"
+text = "◆  Обзор"
+alignment = 0
+
+[node name="Build" type="Button" parent="Panel/Margin/VBox/Buttons"]
+custom_minimum_size = Vector2(0, 43)
+layout_mode = 2
+toggle_mode = true
+theme_type_variation = &"NavigationButton"
+text = "▦  Строительство"
+alignment = 0
+
+[node name="Population" type="Button" parent="Panel/Margin/VBox/Buttons"]
+custom_minimum_size = Vector2(0, 43)
+layout_mode = 2
+toggle_mode = true
+theme_type_variation = &"NavigationButton"
+text = "♙  Население"
+alignment = 0
+
+[node name="Army" type="Button" parent="Panel/Margin/VBox/Buttons"]
+custom_minimum_size = Vector2(0, 43)
+layout_mode = 2
+toggle_mode = true
+theme_type_variation = &"NavigationButton"
+text = "†  Армия"
+alignment = 0
+
+[node name="Diplomacy" type="Button" parent="Panel/Margin/VBox/Buttons"]
+custom_minimum_size = Vector2(0, 43)
+layout_mode = 2
+toggle_mode = true
+theme_type_variation = &"NavigationButton"
+text = "◇  Дипломатия"
+alignment = 0
+
+[node name="Trade" type="Button" parent="Panel/Margin/VBox/Buttons"]
+custom_minimum_size = Vector2(0, 43)
+layout_mode = 2
+toggle_mode = true
+theme_type_variation = &"NavigationButton"
+text = "¤  Торговля"
+alignment = 0
+
+[node name="Espionage" type="Button" parent="Panel/Margin/VBox/Buttons"]
+custom_minimum_size = Vector2(0, 43)
+layout_mode = 2
+toggle_mode = true
+theme_type_variation = &"NavigationButton"
+text = "◉  Шпионаж"
+alignment = 0
+
+[node name="Events" type="Button" parent="Panel/Margin/VBox/Buttons"]
+custom_minimum_size = Vector2(0, 43)
+layout_mode = 2
+toggle_mode = true
+theme_type_variation = &"NavigationButton"
+text = "≡  События"
+alignment = 0
+
+[node name="World" type="Button" parent="Panel/Margin/VBox/Buttons"]
+custom_minimum_size = Vector2(0, 43)
+layout_mode = 2
+toggle_mode = true
+theme_type_variation = &"NavigationButton"
+text = "⌖  Карта мира"
+alignment = 0

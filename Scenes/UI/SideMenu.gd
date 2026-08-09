@@ -1,9 +1,9 @@
 extends CanvasLayer
 class_name SideMenu
 
-const PREFERRED_MENU_WIDTH := 350.0
-const RIGHT_MARGIN := 24.0
-const EDGE_MARGIN := 20.0
+const PREFERRED_MENU_WIDTH := 280.0
+const EDGE_MARGIN := 10.0
+const TOP_MARGIN := 70.0
 
 signal save_pressed
 signal load_pressed
@@ -73,18 +73,11 @@ func _update_layout() -> void:
 	var viewport_size := get_viewport().get_visible_rect().size
 	var available_height := maxf(viewport_size.y - _bottom_hud_height, 1.0)
 	_apply_compact_layout(available_height < 400.0)
-	var menu_width := minf(PREFERRED_MENU_WIDTH, maxf(viewport_size.x - RIGHT_MARGIN * 2.0, 1.0))
+	var menu_width := minf(PREFERRED_MENU_WIDTH, maxf(viewport_size.x - EDGE_MARGIN * 2.0, 1.0))
 	var menu_height := menu_panel.get_combined_minimum_size().y
 	menu_anchor.size = Vector2(menu_width, menu_height)
 	menu_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	menu_anchor.position = Vector2(
-		maxf(viewport_size.x - menu_anchor.size.x - RIGHT_MARGIN, 0.0),
-		clampf(
-			(available_height - menu_anchor.size.y) * 0.5,
-			EDGE_MARGIN,
-			maxf(available_height - menu_anchor.size.y - EDGE_MARGIN, EDGE_MARGIN)
-		)
-	)
+	menu_anchor.position = Vector2(EDGE_MARGIN, minf(TOP_MARGIN, maxf(available_height - menu_anchor.size.y, EDGE_MARGIN)))
 
 
 func _apply_compact_layout(compact: bool) -> void:

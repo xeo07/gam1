@@ -8,6 +8,8 @@ signal stability_section_pressed
 signal resources_section_pressed
 signal next_day_pressed
 signal relations_pressed
+signal hiring_pressed
+signal messenger_pressed
 
 const SEGMENT_COUNT := 10
 const DEFAULT_HUD_HEIGHT := 140.0
@@ -16,6 +18,7 @@ const DEFAULT_HUD_HEIGHT := 140.0
 @onready var hbox_container: HBoxContainer = $BottomContainer/PanelContainer/MarginContainer/HBoxContainer
 @onready var left_stats: VBoxContainer = hbox_container.get_node("LeftStatsSection/VBoxContainer") as VBoxContainer
 @onready var population_value_label: Label = left_stats.get_node("PopulationButtonArea/HBoxContainer/PopulationValueLabel") as Label
+@onready var free_places_label: Label = left_stats.get_node("PopulationButtonArea/HBoxContainer/FreePlacesLabel") as Label
 @onready var army_value_label: Label = left_stats.get_node("ArmyButtonArea/HBoxContainer/ArmyValueLabel") as Label
 @onready var stability_value_label: Label = left_stats.get_node("StabilityButtonArea/VBoxContainer/StabilityHeader/StabilityValueLabel") as Label
 @onready var stability_bar: HBoxContainer = left_stats.get_node("StabilityButtonArea/VBoxContainer/StabilityBar") as HBoxContainer
@@ -68,10 +71,10 @@ func _ready() -> void:
 		func() -> void: resources_section_pressed.emit()
 	)
 	next_day_button.pressed.connect(
-		func() -> void: next_day_pressed.emit()
+		func() -> void: hiring_pressed.emit()
 	)
 	relations_button.pressed.connect(
-		func() -> void: relations_pressed.emit()
+		func() -> void: messenger_pressed.emit()
 	)
 	game_session_manager.kingdom_name_changed.connect(_on_kingdom_name_changed)
 	game_session_manager.session_initialized.connect(_refresh_identity)
@@ -106,7 +109,8 @@ func get_hud_height() -> float:
 
 
 func _on_kingdom_name_changed(name: String) -> void:
-	kingdom_name_label.text = name if not name.is_empty() else "—"
+	var _unused := name
+	kingdom_name_label.text = "ВЕРНОСТЬ  %d" % roundi(population_manager.get_average_loyalty())
 
 
 func _refresh_identity() -> void:
@@ -129,10 +133,13 @@ func _on_resources_changed(food: int, wood: int, stone: int, gold: int) -> void:
 
 func _on_population_changed(total_population: int) -> void:
 	population_value_label.text = "%d/%d" % [total_population, population_manager.get_population_capacity()]
+	free_places_label.text = "свободно: %d" % maxi(0, population_manager.get_population_capacity() - total_population)
+	kingdom_name_label.text = "ВЕРНОСТЬ  %d" % roundi(population_manager.get_average_loyalty())
 
 
 func _on_population_capacity_changed(current: int, maximum: int) -> void:
 	population_value_label.text = "%d/%d" % [current, maximum]
+	free_places_label.text = "свободно: %d" % maxi(0, maximum - current)
 
 
 func _on_army_changed() -> void:
