@@ -5,8 +5,8 @@ signal pixels_changed
 signal random_requested
 
 const TRANSPARENT_INDEX := -1
-const FLAG_CELL_SIZE := 20.0
-const EMBLEM_CELL_SIZE := 20.0
+const FLAG_CELL_SIZE := 16.0
+const EMBLEM_CELL_SIZE := 14.0
 const PALETTE: Array[Color] = [
 	Color(0.03, 0.03, 0.035, 1.0),
 	Color(0.94, 0.92, 0.84, 1.0),

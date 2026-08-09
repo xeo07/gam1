@@ -10,9 +10,10 @@ config_version=5
 
 [application]
 
-config/name="kingdoom"
+config/name="KINGDOOM iPhone"
+config/version="0.0.1-iphone"
 run/main_scene="uid://bmmn7q4k2v5ra"
-config/features=PackedStringArray("4.7", "Forward Plus")
+config/features=PackedStringArray("4.7", "GL Compatibility")
 
 [display]
 
@@ -20,6 +21,7 @@ window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+window/handheld/orientation=4
 
 [file_customization]
 
@@ -46,6 +48,12 @@ ui_cancel={
 
 3d/physics_engine="Jolt Physics"
 
+[input_devices]
+
+pointing/emulate_mouse_from_touch=true
+
 [rendering]
 
-rendering_device/driver.windows="d3d12"
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+rendering_device/driver.windows="opengl3"

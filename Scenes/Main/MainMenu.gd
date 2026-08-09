@@ -24,6 +24,7 @@ const LAST_ERROR_PATH := "user://last_menu_error.txt"
 @onready var identity_tabs: TabContainer = new_game_content.get_node("SymbolTabs") as TabContainer
 @onready var flag_editor: PixelArtEditor = new_game_content.get_node("SymbolTabs/FlagTab/EditorViewport/ScrollContainer/FlagPixelArtEditor") as PixelArtEditor
 @onready var emblem_editor: PixelArtEditor = new_game_content.get_node("SymbolTabs/EmblemTab/EditorViewport/ScrollContainer/EmblemPixelArtEditor") as PixelArtEditor
+@onready var random_symbol_button: Button = new_game_content.get_node("BottomButtons/RandomSymbolButton") as Button
 @onready var start_game_button: Button = new_game_content.get_node("BottomButtons/StartGameButton") as Button
 @onready var new_game_cancel_button: Button = new_game_content.get_node("BottomButtons/CancelButton") as Button
 @onready var new_game_status_label: Label = $NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatusLabel
@@ -65,6 +66,8 @@ func _ready() -> void:
 	seed_line_edit.text_changed.connect(_on_seed_text_changed)
 	flag_editor.random_requested.connect(_on_random_flag_requested)
 	emblem_editor.random_requested.connect(_on_random_emblem_requested)
+	random_symbol_button.pressed.connect(_on_random_symbol_pressed)
+	identity_tabs.tab_changed.connect(_on_symbol_tab_changed)
 	start_game_button.pressed.connect(_on_start_game_pressed)
 	new_game_cancel_button.pressed.connect(_close_new_game_dialog)
 	load_button.pressed.connect(_request_load)
@@ -118,6 +121,17 @@ func _on_random_flag_requested() -> void:
 
 func _on_random_emblem_requested() -> void:
 	_generate_emblem()
+
+
+func _on_random_symbol_pressed() -> void:
+	if identity_tabs.current_tab == 0:
+		_generate_flag()
+	else:
+		_generate_emblem()
+
+
+func _on_symbol_tab_changed(tab: int) -> void:
+	random_symbol_button.text = "Случайный флаг" if tab == 0 else "Случайный герб"
 
 
 func _on_start_game_pressed() -> void:
@@ -369,8 +383,24 @@ func _update_new_game_dialog_layout() -> void:
 	if not is_inside_tree():
 		return
 	var viewport_size := get_viewport().get_visible_rect().size
-	new_game_panel.custom_minimum_size.x = clampf(viewport_size.x - 64.0, 640.0, 760.0)
-	identity_tabs.custom_minimum_size.y = clampf(viewport_size.y - 280.0, 300.0, 360.0)
+	new_game_panel.custom_minimum_size.x = clampf(viewport_size.x - 24.0, 560.0, 760.0)
+	var compact_mobile := DisplayServer.window_get_size().y < 500
+	if compact_mobile:
+		identity_tabs.custom_minimum_size.y = clampf(
+			viewport_size.y - 165.0, 190.0, 225.0
+		)
+		flag_editor.custom_minimum_size.y = 200.0
+		emblem_editor.custom_minimum_size.y = 200.0
+		new_game_content.add_theme_constant_override("separation", 2)
+		random_seed_button.text = "Случайный"
+	else:
+		identity_tabs.custom_minimum_size.y = clampf(
+			viewport_size.y - 280.0, 300.0, 360.0
+		)
+		flag_editor.custom_minimum_size.y = 205.0
+		emblem_editor.custom_minimum_size.y = 205.0
+		new_game_content.add_theme_constant_override("separation", 4)
+		random_seed_button.text = "Случайный seed"
 
 
 func _remove_file(path: String) -> bool:
