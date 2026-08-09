@@ -102,7 +102,9 @@ func _ready() -> void:
 
 
 func get_hud_height() -> float:
-	return DEFAULT_HUD_HEIGHT
+	if _last_height > 0.0:
+		return _last_height
+	return maxf(DEFAULT_HUD_HEIGHT, bottom_container.get_combined_minimum_size().y)
 
 
 func _on_kingdom_name_changed(name: String) -> void:
@@ -191,9 +193,13 @@ func _update_height() -> void:
 	if not is_inside_tree():
 		return
 	var viewport_size := get_viewport().get_visible_rect().size
-	bottom_container.position = Vector2(0.0, maxf(viewport_size.y - DEFAULT_HUD_HEIGHT, 0.0))
-	bottom_container.size = Vector2(viewport_size.x, minf(DEFAULT_HUD_HEIGHT, viewport_size.y))
-	if is_equal_approx(DEFAULT_HUD_HEIGHT, _last_height):
+	var actual_height := minf(
+		maxf(DEFAULT_HUD_HEIGHT, bottom_container.get_combined_minimum_size().y),
+		viewport_size.y
+	)
+	bottom_container.position = Vector2(0.0, maxf(viewport_size.y - actual_height, 0.0))
+	bottom_container.size = Vector2(viewport_size.x, actual_height)
+	if is_equal_approx(actual_height, _last_height):
 		return
-	_last_height = DEFAULT_HUD_HEIGHT
-	hud_height_changed.emit(DEFAULT_HUD_HEIGHT)
+	_last_height = actual_height
+	hud_height_changed.emit(actual_height)
