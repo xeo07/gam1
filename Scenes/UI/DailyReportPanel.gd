@@ -1,34 +1,35 @@
 extends CanvasLayer
 class_name DailyReportPanel
 
-const CONTENT_PATH := "Overlay/CenterContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"
+const ROOT_PATH := "Overlay/CenterContainer/PanelContainer/MarginContainer/RootVBox"
 
-@onready var content: VBoxContainer = get_node(CONTENT_PATH) as VBoxContainer
-@onready var date_label: Label = content.get_node("DateLabel") as Label
-@onready var production_food_label: Label = content.get_node("ProductionFoodLabel") as Label
-@onready var production_wood_label: Label = content.get_node("ProductionWoodLabel") as Label
-@onready var production_stone_label: Label = content.get_node("ProductionStoneLabel") as Label
-@onready var production_gold_label: Label = content.get_node("ProductionGoldLabel") as Label
-@onready var expense_food_label: Label = content.get_node("ExpenseFoodLabel") as Label
-@onready var expense_wood_label: Label = content.get_node("ExpenseWoodLabel") as Label
-@onready var expense_stone_label: Label = content.get_node("ExpenseStoneLabel") as Label
-@onready var expense_gold_label: Label = content.get_node("ExpenseGoldLabel") as Label
-@onready var net_food_label: Label = content.get_node("NetFoodLabel") as Label
-@onready var net_wood_label: Label = content.get_node("NetWoodLabel") as Label
-@onready var net_stone_label: Label = content.get_node("NetStoneLabel") as Label
-@onready var net_gold_label: Label = content.get_node("NetGoldLabel") as Label
-@onready var shortage_label: Label = content.get_node("ShortageLabel") as Label
-@onready var hunger_label: Label = content.get_node("HungerLabel") as Label
-@onready var gold_deficit_label: Label = content.get_node("GoldDeficitLabel") as Label
-@onready var stability_label: Label = content.get_node("StabilityLabel") as Label
-@onready var internal_state_label: Label = content.get_node("InternalStateLabel") as Label
-@onready var average_loyalty_label: Label = content.get_node("AverageLoyaltyLabel") as Label
-@onready var stability_reasons_list: VBoxContainer = content.get_node("StabilityReasonsList") as VBoxContainer
-@onready var population_label: Label = content.get_node("PopulationLabel") as Label
-@onready var buildings_label: Label = content.get_node("BuildingsLabel") as Label
-@onready var army_count_label: Label = content.get_node("ArmyCountLabel") as Label
-@onready var army_strength_label: Label = content.get_node("ArmyStrengthLabel") as Label
-@onready var close_button: Button = content.get_node("CloseButton") as Button
+@onready var root_vbox: VBoxContainer = get_node(ROOT_PATH) as VBoxContainer
+@onready var content: VBoxContainer = root_vbox.get_node("ScrollContainer/Content") as VBoxContainer
+@onready var date_label: Label = root_vbox.get_node("HeaderVBox/DateLabel") as Label
+@onready var production_food_label: Label = content.find_child("ProductionFoodLabel", true, false) as Label
+@onready var production_wood_label: Label = content.find_child("ProductionWoodLabel", true, false) as Label
+@onready var production_stone_label: Label = content.find_child("ProductionStoneLabel", true, false) as Label
+@onready var production_gold_label: Label = content.find_child("ProductionGoldLabel", true, false) as Label
+@onready var expense_food_label: Label = content.find_child("ExpenseFoodLabel", true, false) as Label
+@onready var expense_wood_label: Label = content.find_child("ExpenseWoodLabel", true, false) as Label
+@onready var expense_stone_label: Label = content.find_child("ExpenseStoneLabel", true, false) as Label
+@onready var expense_gold_label: Label = content.find_child("ExpenseGoldLabel", true, false) as Label
+@onready var net_food_label: Label = content.find_child("NetFoodLabel", true, false) as Label
+@onready var net_wood_label: Label = content.find_child("NetWoodLabel", true, false) as Label
+@onready var net_stone_label: Label = content.find_child("NetStoneLabel", true, false) as Label
+@onready var net_gold_label: Label = content.find_child("NetGoldLabel", true, false) as Label
+@onready var shortage_label: Label = content.find_child("ShortageLabel", true, false) as Label
+@onready var hunger_label: Label = content.find_child("HungerLabel", true, false) as Label
+@onready var gold_deficit_label: Label = content.find_child("GoldDeficitLabel", true, false) as Label
+@onready var stability_label: Label = content.find_child("StabilityLabel", true, false) as Label
+@onready var internal_state_label: Label = content.find_child("InternalStateLabel", true, false) as Label
+@onready var average_loyalty_label: Label = content.find_child("AverageLoyaltyLabel", true, false) as Label
+@onready var stability_reasons_list: VBoxContainer = content.find_child("StabilityReasonsList", true, false) as VBoxContainer
+@onready var population_label: Label = content.find_child("PopulationLabel", true, false) as Label
+@onready var buildings_label: Label = content.find_child("BuildingsLabel", true, false) as Label
+@onready var army_count_label: Label = content.find_child("ArmyCountLabel", true, false) as Label
+@onready var army_strength_label: Label = content.find_child("ArmyStrengthLabel", true, false) as Label
+@onready var close_button: Button = root_vbox.get_node("CloseButton") as Button
 @onready var news_manager: NewsManager = $"../NewsManager" as NewsManager
 
 
@@ -51,7 +52,7 @@ func open_report(report: Dictionary) -> void:
 	var expenses: Dictionary = economy.get("expenses", {})
 	var net: Dictionary = economy.get("net", {})
 	var shortages: Dictionary = economy.get("shortages", {})
-	date_label.text = "Дата: День %d, Месяц %d, Год %d" % [
+	date_label.text = "День %d  ·  Месяц %d  ·  Год %d" % [
 		int(report.get("day", 0)),
 		int(report.get("month", 0)),
 		int(report.get("year", 0)),
@@ -122,10 +123,16 @@ func _set_resource_labels(
 	gold_target: Label,
 	prefix: String
 ) -> void:
-	food_target.text = "Еда: %s%d" % [prefix, int(values.get("food", 0))]
-	wood_target.text = "Дерево: %s%d" % [prefix, int(values.get("wood", 0))]
-	stone_target.text = "Камень: %s%d" % [prefix, int(values.get("stone", 0))]
-	gold_target.text = "Золото: %s%d" % [prefix, int(values.get("gold", 0))]
+	food_target.text = "Еда: %s" % _format_amount(int(values.get("food", 0)), prefix)
+	wood_target.text = "Дерево: %s" % _format_amount(int(values.get("wood", 0)), prefix)
+	stone_target.text = "Камень: %s" % _format_amount(int(values.get("stone", 0)), prefix)
+	gold_target.text = "Золото: %s" % _format_amount(int(values.get("gold", 0)), prefix)
+
+
+func _format_amount(value: int, prefix: String) -> String:
+	if value == 0:
+		return "0"
+	return "%s%d" % [prefix, value]
 
 
 func _format_signed(value: int) -> String:
@@ -169,6 +176,7 @@ func _rebuild_stability_reasons(reasons_value: Variant) -> void:
 		var label := Label.new()
 		label.text = "• %s" % String(reason)
 		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		label.add_theme_font_size_override("font_size", 13)
 		stability_reasons_list.add_child(label)
 
 

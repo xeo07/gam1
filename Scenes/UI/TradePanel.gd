@@ -12,13 +12,15 @@ const SPECIAL_RESULT_NAMES: Dictionary = {
 	&"iron_weapons": "комплектов железного оружия",
 }
 
-@onready var state_option_button: OptionButton = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StateOptionButton
-@onready var relation_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/RelationLabel
-@onready var state_wealth_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StateWealthLabel
-@onready var block_reason_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/BlockReasonLabel
-@onready var offers_list: VBoxContainer = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/OffersScrollContainer/OffersList
-@onready var status_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatusLabel
-@onready var close_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CloseButton
+@onready var root_vbox: VBoxContainer = $Overlay/CenterContainer/PanelContainer/MarginContainer/RootVBox
+@onready var partner_vbox: VBoxContainer = root_vbox.get_node("PartnerCard/PartnerMargin/PartnerVBox") as VBoxContainer
+@onready var state_option_button: OptionButton = partner_vbox.get_node("StateOptionButton") as OptionButton
+@onready var relation_label: Label = partner_vbox.get_node("PartnerFacts/RelationLabel") as Label
+@onready var state_wealth_label: Label = partner_vbox.get_node("PartnerFacts/StateWealthLabel") as Label
+@onready var block_reason_label: Label = partner_vbox.get_node("BlockReasonLabel") as Label
+@onready var offers_list: VBoxContainer = root_vbox.get_node("OffersScrollContainer/OffersList") as VBoxContainer
+@onready var status_label: Label = root_vbox.get_node("StatusLabel") as Label
+@onready var close_button: Button = root_vbox.get_node("CloseButton") as Button
 @onready var trade_manager: TradeManager = $"../TradeManager" as TradeManager
 @onready var world_manager: WorldManager = $"../WorldManager" as WorldManager
 @onready var diplomacy_manager: DiplomacyManager = $"../DiplomacyManager" as DiplomacyManager
@@ -96,7 +98,7 @@ func _refresh_selected_state() -> void:
 		return
 
 	relation_label.text = "Отношения: %s" % String(state.get("relation_text", "неизвестно"))
-	state_wealth_label.text = "Богатство: %s\nСведения: %s, %s" % [
+	state_wealth_label.text = "Богатство: %s · Сведения: %s, %s" % [
 		String(state.get("wealth_text", "неизвестно")),
 		String(state.get("source_text", "неизвестно")),
 		String(state.get("freshness_text", "")),
@@ -117,11 +119,31 @@ func _rebuild_offers() -> void:
 func _add_offer_control(offer: Dictionary) -> void:
 	var offer_id: StringName = offer.get("offer_id", &"")
 	var offer_panel := PanelContainer.new()
-	var content := VBoxContainer.new()
+	var margin := MarginContainer.new()
+	var content := HBoxContainer.new()
+	var details := VBoxContainer.new()
 	var offer_name_label := Label.new()
 	var requirement_label := Label.new()
 	var limit_label := Label.new()
 	var execute_button := Button.new()
+
+	offer_panel.custom_minimum_size = Vector2(0, 82)
+	offer_panel.theme_type_variation = &"HUDIdentityPanel"
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 9)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 9)
+	content.add_theme_constant_override("separation", 12)
+	details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	details.add_theme_constant_override("separation", 3)
+	offer_name_label.add_theme_color_override(
+		"font_color", Color(0.94, 0.76, 0.36)
+	)
+	offer_name_label.add_theme_font_size_override("font_size", 16)
+	requirement_label.add_theme_font_size_override("font_size", 13)
+	limit_label.add_theme_font_size_override("font_size", 13)
+	execute_button.custom_minimum_size = Vector2(120, 44)
+	execute_button.add_theme_font_size_override("font_size", 15)
 
 	offer_name_label.text = String(offer.get("display_name", ""))
 	var minimum_relation := int(offer.get("minimum_relation", -100))
@@ -142,10 +164,12 @@ func _add_offer_control(offer: Dictionary) -> void:
 	execute_button.pressed.connect(_on_execute_offer.bind(offer_id))
 
 	offers_list.add_child(offer_panel)
-	offer_panel.add_child(content)
-	content.add_child(offer_name_label)
-	content.add_child(requirement_label)
-	content.add_child(limit_label)
+	offer_panel.add_child(margin)
+	margin.add_child(content)
+	content.add_child(details)
+	details.add_child(offer_name_label)
+	details.add_child(requirement_label)
+	details.add_child(limit_label)
 	content.add_child(execute_button)
 
 

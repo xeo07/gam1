@@ -14,7 +14,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 0
-color = Color(0, 0, 0, 0.65)
+color = Color(0, 0, 0, 0.72)
 
 [node name="CenterContainer" type="CenterContainer" parent="Overlay"]
 layout_mode = 1
@@ -25,51 +25,97 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="Overlay/CenterContainer"]
-custom_minimum_size = Vector2(560, 0)
+custom_minimum_size = Vector2(680, 540)
 layout_mode = 2
+theme_type_variation = &"SystemMenuPanel"
 
 [node name="MarginContainer" type="MarginContainer" parent="Overlay/CenterContainer/PanelContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 14
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer"]
+[node name="RootVBox" type="VBoxContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="TitleLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Торговля"
-
-[node name="StateOptionButton" type="OptionButton" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="RelationLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="StateWealthLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="BlockReasonLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-autowrap_mode = 2
-
-[node name="OffersScrollContainer" type="ScrollContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 330)
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="OffersList" type="VBoxContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/OffersScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
 theme_override_constants/separation = 10
 
-[node name="StatusLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="TitleLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/RootVBox"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.941176, 0.756863, 0.360784, 1)
+theme_override_font_sizes/font_size = 22
+text = "ТОРГОВЛЯ"
+horizontal_alignment = 1
+
+[node name="PartnerCard" type="PanelContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/RootVBox"]
+layout_mode = 2
+theme_type_variation = &"HUDIdentityPanel"
+
+[node name="PartnerMargin" type="MarginContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/RootVBox/PartnerCard"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 8
+
+[node name="PartnerVBox" type="VBoxContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/RootVBox/PartnerCard/PartnerMargin"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="StateOptionButton" type="OptionButton" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/RootVBox/PartnerCard/PartnerMargin/PartnerVBox"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+
+[node name="PartnerFacts" type="HBoxContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/RootVBox/PartnerCard/PartnerMargin/PartnerVBox"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="RelationLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/RootVBox/PartnerCard/PartnerMargin/PartnerVBox/PartnerFacts"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+
+[node name="StateWealthLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/RootVBox/PartnerCard/PartnerMargin/PartnerVBox/PartnerFacts"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
 autowrap_mode = 2
 
-[node name="CloseButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="BlockReasonLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/RootVBox/PartnerCard/PartnerMargin/PartnerVBox"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.941176, 0.756863, 0.360784, 1)
+theme_override_font_sizes/font_size = 13
+autowrap_mode = 2
+
+[node name="OffersTitleLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/RootVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.941176, 0.756863, 0.360784, 1)
+theme_override_font_sizes/font_size = 15
+text = "ДОСТУПНЫЕ СДЕЛКИ"
+
+[node name="OffersScrollContainer" type="ScrollContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/RootVBox"]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 1
+
+[node name="OffersList" type="VBoxContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/RootVBox/OffersScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="StatusLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/RootVBox"]
+custom_minimum_size = Vector2(0, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.941176, 0.756863, 0.360784, 1)
+theme_override_font_sizes/font_size = 14
+autowrap_mode = 2
+horizontal_alignment = 1
+
+[node name="CloseButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/RootVBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
 text = "Закрыть"

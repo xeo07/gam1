@@ -530,9 +530,6 @@ func _prepare_responsive_windows() -> void:
 		kingdom_stats_panel, [&"TitleLabel"], [&"CloseButton"]
 	)
 	UIWindowLayout.make_body_scrollable(
-		trade_panel, [&"TitleLabel"], [&"StatusLabel", &"CloseButton"]
-	)
-	UIWindowLayout.make_body_scrollable(
 		special_goods_panel, [&"TitleLabel"], [&"CloseButton"]
 	)
 	UIWindowLayout.make_body_scrollable(
@@ -544,7 +541,6 @@ func _prepare_responsive_windows() -> void:
 	UIWindowLayout.make_body_scrollable(
 		war_report_panel, [&"TitleLabel"], [&"CloseButton"]
 	)
-	UIWindowLayout.make_body_scrollable(daily_report_panel, [], [])
 	var foreign_news_scroll := foreign_news_panel.get_node(
 		"Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer"
 	) as ScrollContainer
