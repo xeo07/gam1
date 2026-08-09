@@ -1,30 +1,16 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3]
 
 [ext_resource type="Script" path="res://Scenes/UI/BottomHUD.gd" id="1_hud"]
-[ext_resource type="Texture2D" path="res://Assets/UI/Medieval/wood_dark.png" id="2_wood"]
 
 [node name="BottomHUD" type="CanvasLayer"]
 layer = 3
 script = ExtResource("1_hud")
 
 [node name="BottomContainer" type="Control" parent="."]
-custom_minimum_size = Vector2(0, 195)
+custom_minimum_size = Vector2(0, 140)
 offset_right = 1280.0
-offset_bottom = 195.0
+offset_bottom = 140.0
 clip_contents = true
-
-[node name="WoodBackground" type="TextureRect" parent="BottomContainer"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-modulate = Color(0.54, 0.42, 0.3, 1)
-texture = ExtResource("2_wood")
-expand_mode = 1
-stretch_mode = 6
 
 [node name="PanelContainer" type="PanelContainer" parent="BottomContainer"]
 layout_mode = 1
@@ -37,29 +23,29 @@ theme_type_variation = &"HUDPanel"
 
 [node name="MarginContainer" type="MarginContainer" parent="BottomContainer/PanelContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 4
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 4
-theme_override_constants/margin_bottom = 4
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
 
 [node name="HBoxContainer" type="HBoxContainer" parent="BottomContainer/PanelContainer/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 0
 
 [node name="LeftStatsSection" type="PanelContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(150, 0)
+custom_minimum_size = Vector2(205, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.22
+size_flags_stretch_ratio = 0.23
 theme_type_variation = &"HUDSectionPanel"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/LeftStatsSection"]
 layout_mode = 2
 alignment = 1
-theme_override_constants/separation = 3
+theme_override_constants/separation = 1
 
 [node name="PopulationButtonArea" type="PanelContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/LeftStatsSection/VBoxContainer"]
-custom_minimum_size = Vector2(0, 43)
+custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 theme_type_variation = &"HUDRowPanel"
 
@@ -85,7 +71,7 @@ theme_type_variation = &"HUDSectionButton"
 tooltip_text = "Управление населением"
 
 [node name="ArmyButtonArea" type="PanelContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/LeftStatsSection/VBoxContainer"]
-custom_minimum_size = Vector2(0, 43)
+custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 theme_type_variation = &"HUDRowPanel"
 
@@ -111,7 +97,7 @@ theme_type_variation = &"HUDSectionButton"
 tooltip_text = "Военное управление"
 
 [node name="StabilityButtonArea" type="PanelContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/LeftStatsSection/VBoxContainer"]
-custom_minimum_size = Vector2(0, 66)
+custom_minimum_size = Vector2(0, 54)
 layout_mode = 2
 theme_type_variation = &"HUDRowPanel"
 
@@ -144,10 +130,10 @@ theme_type_variation = &"HUDSectionButton"
 tooltip_text = "Состояние государства"
 
 [node name="IdentitySection" type="Control" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(480, 0)
+custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.4
+size_flags_stretch_ratio = 0.33
 
 [node name="PanelContainer" type="PanelContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection"]
 layout_mode = 1
@@ -170,11 +156,11 @@ layout_mode = 2
 theme_override_constants/separation = 8
 
 [node name="EmblemContainer" type="CenterContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(122, 122)
+custom_minimum_size = Vector2(92, 92)
 layout_mode = 2
 
 [node name="EmblemTextureRect" type="TextureRect" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/EmblemContainer"]
-custom_minimum_size = Vector2(120, 120)
+custom_minimum_size = Vector2(88, 88)
 layout_mode = 2
 texture_filter = 1
 expand_mode = 1
@@ -199,7 +185,7 @@ custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 theme_type_variation = &"HUDKingdomLabel"
 text = "—"
-horizontal_alignment = 1
+horizontal_alignment = 0
 vertical_alignment = 1
 autowrap_mode = 2
 max_lines_visible = 2
@@ -211,7 +197,8 @@ size_flags_vertical = 3
 theme_override_constants/separation = 5
 
 [node name="FlagAspectContainer" type="AspectRatioContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/MainIdentityContainer/VBoxContainer/IdentityContentRow"]
-custom_minimum_size = Vector2(230, 144)
+visible = false
+custom_minimum_size = Vector2(1, 1)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -227,28 +214,28 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="ActionButtonsContainer" type="VBoxContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/MainIdentityContainer/VBoxContainer/IdentityContentRow"]
-custom_minimum_size = Vector2(86, 0)
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 alignment = 1
 theme_override_constants/separation = 5
 
 [node name="NextDayButton" type="Button" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/MainIdentityContainer/VBoxContainer/IdentityContentRow/ActionButtonsContainer"]
-custom_minimum_size = Vector2(86, 38)
+custom_minimum_size = Vector2(150, 46)
 layout_mode = 2
 theme_type_variation = &"HUDActionButton"
 text = "Новый день"
 
 [node name="RelationsButton" type="Button" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/MainIdentityContainer/VBoxContainer/IdentityContentRow/ActionButtonsContainer"]
-custom_minimum_size = Vector2(86, 38)
+custom_minimum_size = Vector2(150, 32)
 layout_mode = 2
 theme_type_variation = &"HUDActionButton"
 text = "Отношения"
 
 [node name="DateSection" type="PanelContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(105, 0)
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.16
+size_flags_stretch_ratio = 0.17
 theme_type_variation = &"HUDSectionPanel"
 tooltip_text = "Дата государства"
 
@@ -256,7 +243,7 @@ tooltip_text = "Дата государства"
 layout_mode = 2
 columns = 2
 theme_override_constants/h_separation = 8
-theme_override_constants/v_separation = 12
+theme_override_constants/v_separation = 4
 
 [node name="DayTitleLabel" type="Label" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/DateSection/GridContainer"]
 layout_mode = 2
@@ -307,17 +294,17 @@ horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="ResourcesSection" type="PanelContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(135, 0)
+custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.22
+size_flags_stretch_ratio = 0.27
 theme_type_variation = &"HUDSectionPanel"
 
 [node name="GridContainer" type="GridContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/ResourcesSection"]
 layout_mode = 2
 columns = 2
 theme_override_constants/h_separation = 8
-theme_override_constants/v_separation = 7
+theme_override_constants/v_separation = 3
 
 [node name="FoodTitleLabel" type="Label" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/ResourcesSection/GridContainer"]
 layout_mode = 2

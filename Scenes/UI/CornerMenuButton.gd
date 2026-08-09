@@ -3,11 +3,8 @@ class_name CornerMenuButton
 
 signal menu_button_pressed
 
-const RIGHT_MARGIN := 20.0
-const BUTTON_SIZE := Vector2(52.0, 52.0)
-
-@onready var menu_container: MarginContainer = $MarginContainer
-@onready var menu_button: Button = $MarginContainer/MenuButton
+@onready var top_bar: PanelContainer = $TopBar
+@onready var menu_button: Button = $TopBar/MarginContainer/HBoxContainer/MenuButton
 
 var _bottom_hud_height := 195.0
 
@@ -39,12 +36,5 @@ func _queue_position_update() -> void:
 func _update_position() -> void:
 	if not is_inside_tree():
 		return
-	var actual_button_size := Vector2(
-		maxf(BUTTON_SIZE.x, menu_button.get_combined_minimum_size().x),
-		maxf(BUTTON_SIZE.y, menu_button.get_combined_minimum_size().y)
-	)
-	menu_container.position = Vector2(
-		RIGHT_MARGIN,
-		20.0
-	)
-	menu_container.size = actual_button_size
+	top_bar.position = Vector2.ZERO
+	top_bar.size = Vector2(get_viewport().get_visible_rect().size.x, 60.0)

@@ -3,10 +3,9 @@ class_name KingdomGrid
 
 const GRID_COLUMNS := 10
 const GRID_ROWS := 6
-const MAXIMUM_CELL_SIZE := 64.0
+const MAXIMUM_CELL_SIZE := 96.0
 const MINIMUM_CELL_SIZE := 12.0
 const GRID_SIZE := Vector2i(GRID_COLUMNS, GRID_ROWS)
-const MAP_TEXTURE := preload("res://Assets/UI/Medieval/parchment_wide.png")
 
 @export var house_definition: BuildingDefinition
 @export var lumber_camp_definition: BuildingDefinition
@@ -55,20 +54,48 @@ func clear_selection() -> void:
 
 
 func _draw() -> void:
-	draw_texture_rect(
-		MAP_TEXTURE,
-		Rect2(Vector2.ZERO, size),
-		false,
-		Color(0.42, 0.52, 0.34, 0.95)
-	)
+	draw_rect(Rect2(Vector2.ZERO, size), Color(0.18, 0.24, 0.14), true)
+	_draw_terrain()
 	for row in GRID_ROWS:
 		for column in GRID_COLUMNS:
 			var cell_rect := Rect2(
 				Vector2(column * _cell_size, row * _cell_size),
 				Vector2(_cell_size, _cell_size)
 			)
-			draw_rect(cell_rect, Color(0.08, 0.16, 0.09, 0.42), true)
-			draw_rect(cell_rect, Color(0.29, 0.24, 0.13, 0.82), false, 1.5)
+			draw_rect(cell_rect, Color(0.12, 0.17, 0.09, 0.22), true)
+			draw_rect(cell_rect, Color(0.72, 0.70, 0.56, 0.52), false, 1.0)
+
+
+func _draw_terrain() -> void:
+	var map_size := Vector2(_cell_size * GRID_COLUMNS, _cell_size * GRID_ROWS)
+	var river := PackedVector2Array([
+		Vector2(0.0, map_size.y * 0.43),
+		Vector2(map_size.x * 0.12, map_size.y * 0.48),
+		Vector2(map_size.x * 0.2, map_size.y * 0.67),
+		Vector2(map_size.x * 0.31, map_size.y),
+	])
+	draw_polyline(river, Color(0.12, 0.28, 0.32, 0.95), _cell_size * 0.42, true)
+	draw_polyline(river, Color(0.28, 0.43, 0.42, 0.75), _cell_size * 0.27, true)
+	var road := PackedVector2Array([
+		Vector2(map_size.x * 0.08, map_size.y * 0.7),
+		Vector2(map_size.x * 0.33, map_size.y * 0.48),
+		Vector2(map_size.x * 0.56, map_size.y * 0.52),
+		Vector2(map_size.x * 0.83, map_size.y * 0.24),
+		Vector2(map_size.x, map_size.y * 0.2),
+	])
+	draw_polyline(road, Color(0.38, 0.31, 0.19, 0.72), _cell_size * 0.2, true)
+	for tree_position in [
+		Vector2(0.08, 0.12), Vector2(0.14, 0.18), Vector2(0.88, 0.12),
+		Vector2(0.92, 0.55), Vector2(0.78, 0.7), Vector2(0.56, 0.18),
+	]:
+		_draw_tree(Vector2(tree_position) * map_size)
+
+
+func _draw_tree(tree_position: Vector2) -> void:
+	var radius := _cell_size * 0.09
+	draw_circle(tree_position + Vector2(0.0, radius * 0.9), radius * 0.35, Color(0.22, 0.14, 0.07, 1))
+	draw_circle(tree_position, radius, Color(0.08, 0.19, 0.1, 0.95))
+	draw_circle(tree_position + Vector2(-radius * 0.55, radius * 0.35), radius * 0.72, Color(0.12, 0.27, 0.12, 0.95))
 
 
 func _gui_input(event: InputEvent) -> void:

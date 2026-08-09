@@ -38,7 +38,7 @@ func _run() -> void:
 	var tutorial_panel := game.get_node("TutorialPanel") as TutorialPanel
 	var pause_menu := game.get_node("PauseMenu") as PauseMenu
 	_expect(
-		kingdom_grid.position.y >= 80.0,
+		kingdom_grid.position.y >= UILayoutMetrics.TOP_BAR_HEIGHT + UILayoutMetrics.MARGIN,
 		"Kingdom grid still overlaps the top menu button"
 	)
 	tutorial_panel.open_offer()

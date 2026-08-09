@@ -3,7 +3,7 @@ extends Node2D
 const GAME_NAME := "Kingdoom"
 const GAME_VERSION := "0.0.1"
 const GRID_MARGIN := 16.0
-const TOP_TOOLBAR_HEIGHT := 68.0
+const TOP_TOOLBAR_HEIGHT := 60.0
 const MAIN_MENU_SCENE := "res://Scenes/Main/MainMenu.tscn"
 const PENDING_NEW_GAME_PATH := "user://pending_new_game.json"
 const PENDING_LOAD_PATH := "user://pending_load_game.flag"

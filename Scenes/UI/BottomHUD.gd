@@ -10,7 +10,7 @@ signal next_day_pressed
 signal relations_pressed
 
 const SEGMENT_COUNT := 10
-const DEFAULT_HUD_HEIGHT := 195.0
+const DEFAULT_HUD_HEIGHT := 140.0
 
 @onready var bottom_container: Control = $BottomContainer
 @onready var hbox_container: HBoxContainer = $BottomContainer/PanelContainer/MarginContainer/HBoxContainer
