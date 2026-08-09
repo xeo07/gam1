@@ -145,9 +145,8 @@ func refresh_states() -> void:
 
 	var selected_index := _state_ids.find(_selected_state_id)
 	if selected_index == -1:
-		_selected_state_id = &""
-		_clear_details()
-		return
+		selected_index = 0
+		_selected_state_id = _state_ids[0]
 
 	states_list.select(selected_index)
 	_show_state(_selected_state_id)

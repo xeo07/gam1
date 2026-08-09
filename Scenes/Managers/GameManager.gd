@@ -64,6 +64,7 @@ func _ready() -> void:
 	save_manager.load_failed.connect(_on_load_failed)
 	save_manager.game_loaded.connect(_on_game_loaded)
 	corner_menu_button.menu_button_pressed.connect(_on_menu_button_pressed)
+	corner_menu_button.next_day_pressed.connect(_on_next_day_pressed)
 	bottom_hud.hud_height_changed.connect(_on_hud_height_changed)
 	bottom_hud.population_section_pressed.connect(_on_population_section_pressed)
 	bottom_hud.army_section_pressed.connect(_on_army_section_pressed)

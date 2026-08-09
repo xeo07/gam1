@@ -2,15 +2,18 @@ extends CanvasLayer
 class_name CornerMenuButton
 
 signal menu_button_pressed
+signal next_day_pressed
 
 @onready var top_bar: PanelContainer = $TopBar
 @onready var menu_button: Button = $TopBar/MarginContainer/HBoxContainer/MenuButton
+@onready var next_day_button: Button = $TopBar/MarginContainer/HBoxContainer/NextDayButton
 
 var _bottom_hud_height := 195.0
 
 
 func _ready() -> void:
 	menu_button.pressed.connect(func() -> void: menu_button_pressed.emit())
+	next_day_button.pressed.connect(func() -> void: next_day_pressed.emit())
 	get_viewport().size_changed.connect(_queue_position_update)
 	_queue_position_update()
 
@@ -22,8 +25,14 @@ func set_bottom_hud_height(height: float) -> void:
 
 func set_interaction_enabled(enabled: bool) -> void:
 	menu_button.disabled = not enabled
+	next_day_button.disabled = not enabled
 	menu_button.tooltip_text = (
 		"Открыть меню"
+		if enabled
+		else "Сначала примите решение по текущему событию"
+	)
+	next_day_button.tooltip_text = (
+		"Перейти к следующему дню"
 		if enabled
 		else "Сначала примите решение по текущему событию"
 	)

@@ -213,18 +213,21 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="ActionButtonsContainer" type="VBoxContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/MainIdentityContainer/VBoxContainer/IdentityContentRow"]
+visible = false
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 alignment = 1
 theme_override_constants/separation = 5
 
 [node name="NextDayButton" type="Button" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/MainIdentityContainer/VBoxContainer/IdentityContentRow/ActionButtonsContainer"]
+visible = false
 custom_minimum_size = Vector2(130, 46)
 layout_mode = 2
 theme_type_variation = &"HUDActionButton"
 text = "Новый день"
 
 [node name="RelationsButton" type="Button" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/MainIdentityContainer/VBoxContainer/IdentityContentRow/ActionButtonsContainer"]
+visible = false
 custom_minimum_size = Vector2(130, 32)
 layout_mode = 2
 theme_type_variation = &"HUDActionButton"

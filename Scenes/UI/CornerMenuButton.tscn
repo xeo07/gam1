@@ -38,7 +38,15 @@ vertical_alignment = 1
 
 [node name="KingdomLabel" type="Label" parent="TopBar/MarginContainer/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.88, 0.84, 0.74, 1)
 theme_override_font_sizes/font_size = 19
 text = "КОРОЛЕВСТВО"
 vertical_alignment = 1
+
+[node name="NextDayButton" type="Button" parent="TopBar/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(170, 44)
+layout_mode = 2
+theme_type_variation = &"HUDActionButton"
+text = "Новый день"
+tooltip_text = "Перейти к следующему дню"
