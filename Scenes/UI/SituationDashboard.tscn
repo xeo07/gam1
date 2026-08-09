@@ -66,7 +66,7 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
 [node name="SituationCard" type="PanelContainer" parent="Dashboard/MarginContainer/VBoxContainer/CardScroll/CardsVBox"]
-custom_minimum_size = Vector2(0, 96)
+custom_minimum_size = Vector2(0, 112)
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -84,14 +84,14 @@ theme_override_constants/separation = 8
 [node name="SituationTitle" type="Label" parent="Dashboard/MarginContainer/VBoxContainer/CardScroll/CardsVBox/SituationCard/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"TitleLabel"
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 15
 text = "♛  ТЕКУЩАЯ СИТУАЦИЯ"
 autowrap_mode = 2
 
 [node name="SituationBody" type="Label" parent="Dashboard/MarginContainer/VBoxContainer/CardScroll/CardsVBox/SituationCard/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 15
 text = "Совет собирает сведения."
 autowrap_mode = 2
 
@@ -100,6 +100,7 @@ layout_mode = 2
 text = "Принять решение"
 
 [node name="ConsequencesCard" type="PanelContainer" parent="Dashboard/MarginContainer/VBoxContainer/CardScroll/CardsVBox"]
+custom_minimum_size = Vector2(0, 76)
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="Dashboard/MarginContainer/VBoxContainer/CardScroll/CardsVBox/ConsequencesCard"]
@@ -115,16 +116,17 @@ layout_mode = 2
 [node name="Title" type="Label" parent="Dashboard/MarginContainer/VBoxContainer/CardScroll/CardsVBox/ConsequencesCard/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.82, 0.7, 0.46, 1)
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 15
 text = "⚖  БЛИЖАЙШИЕ ПОСЛЕДСТВИЯ"
 
 [node name="ConsequencesLabel" type="Label" parent="Dashboard/MarginContainer/VBoxContainer/CardScroll/CardsVBox/ConsequencesCard/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 15
 text = "• Срочных последствий не ожидается"
 autowrap_mode = 2
 
 [node name="NewsCard" type="PanelContainer" parent="Dashboard/MarginContainer/VBoxContainer/CardScroll/CardsVBox"]
+custom_minimum_size = Vector2(0, 76)
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="Dashboard/MarginContainer/VBoxContainer/CardScroll/CardsVBox/NewsCard"]
@@ -140,12 +142,12 @@ layout_mode = 2
 [node name="NewsTitle" type="Label" parent="Dashboard/MarginContainer/VBoxContainer/CardScroll/CardsVBox/NewsCard/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.82, 0.7, 0.46, 1)
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 15
 text = "✉  ВЕСТНИК"
 
 [node name="NewsBody" type="Label" parent="Dashboard/MarginContainer/VBoxContainer/CardScroll/CardsVBox/NewsCard/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 15
 text = "Гонцы собирают известия."
 autowrap_mode = 2
 
@@ -156,11 +158,11 @@ theme_override_constants/separation = 8
 [node name="DiplomacyButton" type="Button" parent="Dashboard/MarginContainer/VBoxContainer/Actions"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 15
 text = "◎  Геополитика"
 
 [node name="NewsButton" type="Button" parent="Dashboard/MarginContainer/VBoxContainer/Actions"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 15
 text = "▤  Читать вестник"

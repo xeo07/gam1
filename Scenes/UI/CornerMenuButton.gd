@@ -24,7 +24,7 @@ func set_bottom_hud_height(height: float) -> void:
 
 
 func get_top_bar_height() -> float:
-	return maxf(60.0, top_bar.get_combined_minimum_size().y)
+	return maxf(48.0, top_bar.get_combined_minimum_size().y)
 
 
 func set_interaction_enabled(enabled: bool) -> void:

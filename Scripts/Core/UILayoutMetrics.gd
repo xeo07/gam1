@@ -4,8 +4,8 @@ class_name UILayoutMetrics
 const MARGIN := 16.0
 const MIN_DASHBOARD_WIDTH := 380.0
 const MAX_DASHBOARD_WIDTH := 520.0
-const TOP_BAR_HEIGHT := 60.0
-const CENTER_GAP := 48.0
+const TOP_BAR_HEIGHT := 48.0
+const CENTER_GAP := 32.0
 
 
 static func calculate(viewport: Vector2, hud_height: float, top_bar_height: float = TOP_BAR_HEIGHT) -> Dictionary:

@@ -42,6 +42,12 @@ theme_override_font_sizes/font_size = 12
 text = "Инструмент: Кисть"
 horizontal_alignment = 2
 
+[node name="RandomButton" type="Button" parent="MainContainer/EditorHeader"]
+custom_minimum_size = Vector2(140, 28)
+layout_mode = 2
+theme_type_variation = &"PixelEditorToolButton"
+text = "Случайный рисунок"
+
 [node name="WorkspaceContainer" type="HBoxContainer" parent="MainContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -150,12 +156,6 @@ layout_mode = 2
 texture_filter = 1
 expand_mode = 1
 stretch_mode = 5
-
-[node name="RandomButton" type="Button" parent="MainContainer/PreviewPanel/HBoxContainer"]
-custom_minimum_size = Vector2(140, 0)
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "Случайный рисунок"
 
 [node name="ClearConfirmation" type="ConfirmationDialog" parent="."]
 title = "Очистка рисунка"

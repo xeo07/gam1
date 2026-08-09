@@ -29,6 +29,7 @@ const PALETTE: Array[Color] = [
 @onready var editor_title_label: Label = $MainContainer/EditorHeader/EditorTitleLabel
 @onready var size_label: Label = $MainContainer/EditorHeader/SizeLabel
 @onready var tool_status_label: Label = $MainContainer/EditorHeader/ToolStatusLabel
+@onready var random_button: Button = $MainContainer/EditorHeader/RandomButton
 @onready var drawing_surface: Control = $MainContainer/WorkspaceContainer/CanvasPanel/CenterContainer/DrawingSurface
 @onready var pencil_button: Button = $MainContainer/WorkspaceContainer/ToolsPanel/VBoxContainer/ToolsGrid/PencilButton
 @onready var eraser_button: Button = $MainContainer/WorkspaceContainer/ToolsPanel/VBoxContainer/ToolsGrid/EraserButton
@@ -37,7 +38,6 @@ const PALETTE: Array[Color] = [
 @onready var grid_check_box: CheckBox = $MainContainer/WorkspaceContainer/ToolsPanel/VBoxContainer/GridCheckBox
 @onready var palette_grid: GridContainer = $MainContainer/WorkspaceContainer/ToolsPanel/VBoxContainer/PaletteGrid
 @onready var preview_texture_rect: TextureRect = $MainContainer/PreviewPanel/HBoxContainer/PreviewTextureRect
-@onready var random_button: Button = $MainContainer/PreviewPanel/HBoxContainer/RandomButton
 @onready var clear_confirmation: ConfirmationDialog = $ClearConfirmation
 
 var _grid_width := 16
