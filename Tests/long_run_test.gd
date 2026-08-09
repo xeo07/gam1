@@ -36,7 +36,7 @@ func _run() -> void:
 	var build_panel := game.get_node("BuildPanel") as BuildPanel
 	var kingdom_grid := game.get_node("KingdomGrid") as KingdomGrid
 	var tutorial_panel := game.get_node("TutorialPanel") as TutorialPanel
-	var side_menu := game.get_node("SideMenu") as SideMenu
+	var pause_menu := game.get_node("PauseMenu") as PauseMenu
 	_expect(
 		kingdom_grid.position.y >= UILayoutMetrics.TOP_BAR_HEIGHT + UILayoutMetrics.MARGIN,
 		"Kingdom grid still overlaps the top menu button"
@@ -46,9 +46,9 @@ func _run() -> void:
 	tutorial_panel.skip()
 	_expect(not tutorial_panel.visible and not paused, "Tutorial could not be skipped")
 	game.call("_on_menu_button_pressed")
-	_expect(side_menu.visible and not paused, "Top menu button did not open the compact system menu")
-	side_menu.close_menu()
-	_expect(not side_menu.visible and not paused, "System menu did not close")
+	_expect(pause_menu.visible and paused, "Top menu button did not open the centered pause menu")
+	pause_menu.resume_game()
+	_expect(not pause_menu.visible and not paused, "Pause menu did not resume the game")
 	build_panel.open_panel()
 	game.call("_on_lumber_camp_selected")
 	_expect(not build_panel.visible, "Building selection did not uncover the kingdom grid")

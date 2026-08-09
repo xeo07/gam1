@@ -65,12 +65,6 @@ theme_type_variation = &"HUDValueLabel"
 text = "0/4"
 vertical_alignment = 1
 
-[node name="FreePlacesLabel" type="Label" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/LeftStatsSection/VBoxContainer/PopulationButtonArea/HBoxContainer"]
-layout_mode = 2
-theme_type_variation = &"MutedLabel"
-text = "свободно: 2"
-vertical_alignment = 1
-
 [node name="PopulationSectionButton" type="Button" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/LeftStatsSection/VBoxContainer/PopulationButtonArea"]
 layout_mode = 2
 theme_type_variation = &"HUDSectionButton"
@@ -162,11 +156,11 @@ layout_mode = 2
 theme_override_constants/separation = 8
 
 [node name="EmblemContainer" type="CenterContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(76, 76)
+custom_minimum_size = Vector2(92, 92)
 layout_mode = 2
 
 [node name="EmblemTextureRect" type="TextureRect" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/EmblemContainer"]
-custom_minimum_size = Vector2(72, 72)
+custom_minimum_size = Vector2(88, 88)
 layout_mode = 2
 texture_filter = 1
 expand_mode = 1
@@ -190,7 +184,7 @@ theme_override_constants/separation = 2
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 theme_type_variation = &"HUDKingdomLabel"
-text = "ВЕРНОСТЬ  —"
+text = "—"
 horizontal_alignment = 0
 vertical_alignment = 1
 autowrap_mode = 2
@@ -229,16 +223,15 @@ theme_override_constants/separation = 5
 custom_minimum_size = Vector2(150, 46)
 layout_mode = 2
 theme_type_variation = &"HUDActionButton"
-text = "Нанять жителя"
+text = "Новый день"
 
 [node name="RelationsButton" type="Button" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/MainIdentityContainer/VBoxContainer/IdentityContentRow/ActionButtonsContainer"]
 custom_minimum_size = Vector2(150, 32)
 layout_mode = 2
 theme_type_variation = &"HUDActionButton"
-text = "Отправить гонца"
+text = "Отношения"
 
 [node name="DateSection" type="PanelContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer"]
-visible = false
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -301,7 +294,6 @@ horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="ResourcesSection" type="PanelContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer"]
-visible = false
 custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
 size_flags_horizontal = 3

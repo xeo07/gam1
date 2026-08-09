@@ -3,6 +3,8 @@ class_name KingdomGrid
 
 const GRID_COLUMNS := 10
 const GRID_ROWS := 6
+const MAXIMUM_CELL_SIZE := 96.0
+const MINIMUM_CELL_SIZE := 12.0
 const GRID_SIZE := Vector2i(GRID_COLUMNS, GRID_ROWS)
 
 @export var house_definition: BuildingDefinition
@@ -15,7 +17,7 @@ const GRID_SIZE := Vector2i(GRID_COLUMNS, GRID_ROWS)
 
 var selected_building: BuildingDefinition
 var _building_visuals: Array[Control] = []
-var _cell_size := Vector2(64.0, 64.0)
+var _cell_size := MAXIMUM_CELL_SIZE
 
 
 func _ready() -> void:
@@ -56,32 +58,24 @@ func _draw() -> void:
 	_draw_terrain()
 	for row in GRID_ROWS:
 		for column in GRID_COLUMNS:
-			var cell_rect := Rect2(Vector2(column * _cell_size.x, row * _cell_size.y), _cell_size)
-			var shade := 0.025 * float((column * 3 + row * 5) % 4)
-			draw_rect(cell_rect, Color(0.12 + shade, 0.17 + shade, 0.09 + shade * 0.5, 0.28), true)
-			draw_rect(cell_rect, Color(0.55, 0.51, 0.40, 0.28), false, 1.0)
-	for building in building_manager.get_all_buildings():
-		var definition := _get_definition_by_id(StringName(building.get("building_id", &"")))
-		if definition == null:
-			continue
-		var occupied := Rect2(
-			Vector2(building.get("grid_position", Vector2i.ZERO)) * _cell_size,
-			Vector2(definition.size) * _cell_size
-		)
-		draw_rect(occupied.grow(-3.0), Color(0.24, 0.075, 0.07, 0.32), true)
-		draw_rect(occupied.grow(-3.0), Color(0.55, 0.36, 0.24, 0.75), false, 2.0)
+			var cell_rect := Rect2(
+				Vector2(column * _cell_size, row * _cell_size),
+				Vector2(_cell_size, _cell_size)
+			)
+			draw_rect(cell_rect, Color(0.12, 0.17, 0.09, 0.22), true)
+			draw_rect(cell_rect, Color(0.72, 0.70, 0.56, 0.52), false, 1.0)
 
 
 func _draw_terrain() -> void:
-	var map_size := size
+	var map_size := Vector2(_cell_size * GRID_COLUMNS, _cell_size * GRID_ROWS)
 	var river := PackedVector2Array([
 		Vector2(0.0, map_size.y * 0.43),
 		Vector2(map_size.x * 0.12, map_size.y * 0.48),
 		Vector2(map_size.x * 0.2, map_size.y * 0.67),
 		Vector2(map_size.x * 0.31, map_size.y),
 	])
-	draw_polyline(river, Color(0.12, 0.25, 0.29, 0.95), minf(_cell_size.x, _cell_size.y) * 0.42, true)
-	draw_polyline(river, Color(0.28, 0.40, 0.39, 0.72), minf(_cell_size.x, _cell_size.y) * 0.27, true)
+	draw_polyline(river, Color(0.12, 0.28, 0.32, 0.95), _cell_size * 0.42, true)
+	draw_polyline(river, Color(0.28, 0.43, 0.42, 0.75), _cell_size * 0.27, true)
 	var road := PackedVector2Array([
 		Vector2(map_size.x * 0.08, map_size.y * 0.7),
 		Vector2(map_size.x * 0.33, map_size.y * 0.48),
@@ -89,7 +83,7 @@ func _draw_terrain() -> void:
 		Vector2(map_size.x * 0.83, map_size.y * 0.24),
 		Vector2(map_size.x, map_size.y * 0.2),
 	])
-	draw_polyline(road, Color(0.35, 0.27, 0.17, 0.70), minf(_cell_size.x, _cell_size.y) * 0.2, true)
+	draw_polyline(road, Color(0.38, 0.31, 0.19, 0.72), _cell_size * 0.2, true)
 	for tree_position in [
 		Vector2(0.08, 0.12), Vector2(0.14, 0.18), Vector2(0.88, 0.12),
 		Vector2(0.92, 0.55), Vector2(0.78, 0.7), Vector2(0.56, 0.18),
@@ -98,7 +92,7 @@ func _draw_terrain() -> void:
 
 
 func _draw_tree(tree_position: Vector2) -> void:
-	var radius := minf(_cell_size.x, _cell_size.y) * 0.09
+	var radius := _cell_size * 0.09
 	draw_circle(tree_position + Vector2(0.0, radius * 0.9), radius * 0.35, Color(0.22, 0.14, 0.07, 1))
 	draw_circle(tree_position, radius, Color(0.08, 0.19, 0.1, 0.95))
 	draw_circle(tree_position + Vector2(-radius * 0.55, radius * 0.35), radius * 0.72, Color(0.12, 0.27, 0.12, 0.95))
@@ -116,8 +110,8 @@ func _gui_input(event: InputEvent) -> void:
 		return
 
 	var grid_position := Vector2i(
-		floori(mouse_event.position.x / _cell_size.x),
-		floori(mouse_event.position.y / _cell_size.y)
+		floori(mouse_event.position.x / _cell_size),
+		floori(mouse_event.position.y / _cell_size)
 	)
 	if not _is_inside_grid(grid_position, selected_building.size):
 		return
@@ -159,13 +153,12 @@ func _create_building_visual(building: Dictionary) -> void:
 		texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		visual = texture_rect
 	else:
-		var marker_label := Label.new()
-		marker_label.text = _get_building_marker(definition.id)
-		marker_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		marker_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		marker_label.add_theme_color_override("font_color", Color(0.88, 0.80, 0.64))
-		marker_label.add_theme_font_size_override("font_size", 24)
-		visual = marker_label
+		var emoji_label := Label.new()
+		emoji_label.text = definition.emoji
+		emoji_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		emoji_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		emoji_label.add_theme_font_size_override("font_size", 36)
+		visual = emoji_label
 
 	visual.position = visual_position
 	visual.size = visual_size
@@ -181,9 +174,10 @@ func _on_grid_resized() -> void:
 
 
 func _update_cell_size() -> void:
-	_cell_size = Vector2(
-		maxf(1.0, size.x / float(GRID_COLUMNS)),
-		maxf(1.0, size.y / float(GRID_ROWS))
+	_cell_size = clampf(
+		minf(size.x / float(GRID_COLUMNS), size.y / float(GRID_ROWS)),
+		MINIMUM_CELL_SIZE,
+		MAXIMUM_CELL_SIZE
 	)
 
 
@@ -199,16 +193,6 @@ func _get_definition_by_id(building_id: StringName) -> BuildingDefinition:
 	if barracks_definition != null and barracks_definition.id == building_id:
 		return barracks_definition
 	return null
-
-
-func _get_building_marker(building_id: StringName) -> String:
-	match building_id:
-		&"house": return "ДОМ"
-		&"lumber_camp": return "ЛЕС"
-		&"farm": return "ПОЛЕ"
-		&"mine": return "РУДА"
-		&"barracks": return "СТРАЖА"
-	return "ЗДАНИЕ"
 
 
 func _is_inside_grid(grid_position: Vector2i, building_size: Vector2i) -> bool:

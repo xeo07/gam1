@@ -51,7 +51,7 @@ func _write_pending_session() -> bool:
 	var file := FileAccess.open(PENDING_NEW_GAME_PATH, FileAccess.WRITE)
 	if file == null:
 		return false
-	file.store_string(JSON.stringify({"kingdom_name": "Контрольное королевство", "world_seed": 24680, "flag_pixels": _pixels(16, 10, 6), "emblem_pixels": _pixels(12, 12, 10), "show_tutorial": false}))
+	file.store_string(JSON.stringify({"kingdom_name": "Контрольное королевство", "world_seed": 24680, "flag_pixels": _pixels(16, 10, 6), "emblem_pixels": _pixels(12, 12, 10)}))
 	file.flush()
 	return file.get_error() == OK
 
