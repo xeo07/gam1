@@ -141,11 +141,9 @@ theme_override_constants/separation = 8
 [node name="DiplomacyButton" type="Button" parent="Dashboard/MarginContainer/VBoxContainer/Actions"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_type_variation = &"DiplomacyActionButton"
 text = "◎  Геополитика"
 
 [node name="NewsButton" type="Button" parent="Dashboard/MarginContainer/VBoxContainer/Actions"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_type_variation = &"NewsActionButton"
 text = "▤  Читать вестник"
