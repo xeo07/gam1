@@ -130,7 +130,7 @@ theme_type_variation = &"HUDSectionButton"
 tooltip_text = "Состояние государства"
 
 [node name="IdentitySection" type="Control" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(350, 0)
+custom_minimum_size = Vector2(390, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.33
@@ -156,18 +156,18 @@ layout_mode = 2
 theme_override_constants/separation = 8
 
 [node name="EmblemContainer" type="CenterContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(92, 92)
+custom_minimum_size = Vector2(72, 72)
 layout_mode = 2
 
 [node name="EmblemTextureRect" type="TextureRect" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/EmblemContainer"]
-custom_minimum_size = Vector2(88, 88)
+custom_minimum_size = Vector2(68, 68)
 layout_mode = 2
 texture_filter = 1
 expand_mode = 1
 stretch_mode = 5
 
 [node name="MainIdentityContainer" type="Control" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(295, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -197,8 +197,7 @@ size_flags_vertical = 3
 theme_override_constants/separation = 5
 
 [node name="FlagAspectContainer" type="AspectRatioContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/MainIdentityContainer/VBoxContainer/IdentityContentRow"]
-visible = false
-custom_minimum_size = Vector2(1, 1)
+custom_minimum_size = Vector2(110, 68)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -214,19 +213,19 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="ActionButtonsContainer" type="VBoxContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/MainIdentityContainer/VBoxContainer/IdentityContentRow"]
-custom_minimum_size = Vector2(150, 0)
+custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 alignment = 1
 theme_override_constants/separation = 5
 
 [node name="NextDayButton" type="Button" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/MainIdentityContainer/VBoxContainer/IdentityContentRow/ActionButtonsContainer"]
-custom_minimum_size = Vector2(150, 46)
+custom_minimum_size = Vector2(130, 46)
 layout_mode = 2
 theme_type_variation = &"HUDActionButton"
 text = "Новый день"
 
 [node name="RelationsButton" type="Button" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/MainIdentityContainer/VBoxContainer/IdentityContentRow/ActionButtonsContainer"]
-custom_minimum_size = Vector2(150, 32)
+custom_minimum_size = Vector2(130, 32)
 layout_mode = 2
 theme_type_variation = &"HUDActionButton"
 text = "Отношения"
