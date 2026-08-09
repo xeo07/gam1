@@ -155,17 +155,6 @@ theme_override_constants/margin_bottom = 3
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="EmblemContainer" type="CenterContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(104, 104)
-layout_mode = 2
-
-[node name="EmblemTextureRect" type="TextureRect" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/EmblemContainer"]
-custom_minimum_size = Vector2(96, 96)
-layout_mode = 2
-texture_filter = 1
-expand_mode = 1
-stretch_mode = 5
-
 [node name="MainIdentityContainer" type="Control" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(320, 0)
 layout_mode = 2
@@ -185,7 +174,7 @@ custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 theme_type_variation = &"HUDKingdomLabel"
 text = "—"
-horizontal_alignment = 0
+horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 max_lines_visible = 2
@@ -194,12 +183,23 @@ text_overrun_behavior = 3
 [node name="IdentityContentRow" type="HBoxContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/MainIdentityContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+alignment = 1
 theme_override_constants/separation = 5
+
+[node name="EmblemContainer" type="CenterContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/MainIdentityContainer/VBoxContainer/IdentityContentRow"]
+custom_minimum_size = Vector2(96, 86)
+layout_mode = 2
+
+[node name="EmblemTextureRect" type="TextureRect" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/MainIdentityContainer/VBoxContainer/IdentityContentRow/EmblemContainer"]
+custom_minimum_size = Vector2(86, 86)
+layout_mode = 2
+texture_filter = 1
+expand_mode = 1
+stretch_mode = 5
 
 [node name="FlagAspectContainer" type="AspectRatioContainer" parent="BottomContainer/PanelContainer/MarginContainer/HBoxContainer/IdentitySection/PanelContainer/MarginContainer/HBoxContainer/MainIdentityContainer/VBoxContainer/IdentityContentRow"]
 custom_minimum_size = Vector2(190, 86)
 layout_mode = 2
-size_flags_horizontal = 3
 size_flags_vertical = 3
 ratio = 1.6
 stretch_mode = 2

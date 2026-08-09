@@ -84,14 +84,14 @@ theme_override_constants/separation = 8
 [node name="SituationTitle" type="Label" parent="Dashboard/MarginContainer/VBoxContainer/CardScroll/CardsVBox/SituationCard/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"TitleLabel"
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 13
 text = "♛  ТЕКУЩАЯ СИТУАЦИЯ"
 autowrap_mode = 2
 
 [node name="SituationBody" type="Label" parent="Dashboard/MarginContainer/VBoxContainer/CardScroll/CardsVBox/SituationCard/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 13
 text = "Совет собирает сведения."
 autowrap_mode = 2
 
@@ -115,12 +115,12 @@ layout_mode = 2
 [node name="Title" type="Label" parent="Dashboard/MarginContainer/VBoxContainer/CardScroll/CardsVBox/ConsequencesCard/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.82, 0.7, 0.46, 1)
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 13
 text = "⚖  БЛИЖАЙШИЕ ПОСЛЕДСТВИЯ"
 
 [node name="ConsequencesLabel" type="Label" parent="Dashboard/MarginContainer/VBoxContainer/CardScroll/CardsVBox/ConsequencesCard/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 13
 text = "• Срочных последствий не ожидается"
 autowrap_mode = 2
 
@@ -140,12 +140,12 @@ layout_mode = 2
 [node name="NewsTitle" type="Label" parent="Dashboard/MarginContainer/VBoxContainer/CardScroll/CardsVBox/NewsCard/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.82, 0.7, 0.46, 1)
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 13
 text = "✉  ВЕСТНИК"
 
 [node name="NewsBody" type="Label" parent="Dashboard/MarginContainer/VBoxContainer/CardScroll/CardsVBox/NewsCard/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 13
 text = "Гонцы собирают известия."
 autowrap_mode = 2
 
