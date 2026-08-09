@@ -12,6 +12,7 @@ const GRID_SIZE := Vector2i(GRID_COLUMNS, GRID_ROWS)
 @export var farm_definition: BuildingDefinition
 @export var mine_definition: BuildingDefinition
 @export var barracks_definition: BuildingDefinition
+@export var background_texture: Texture2D
 
 @onready var building_manager: BuildingManager = $"../BuildingManager" as BuildingManager
 
@@ -54,16 +55,40 @@ func clear_selection() -> void:
 
 
 func _draw() -> void:
-	draw_rect(Rect2(Vector2.ZERO, size), Color(0.18, 0.24, 0.14), true)
-	_draw_terrain()
+	var map_size := Vector2(_cell_size * GRID_COLUMNS, _cell_size * GRID_ROWS)
+	var map_rect := Rect2(Vector2.ZERO, map_size)
+	if background_texture != null:
+		_draw_background_texture(map_rect)
+		draw_rect(map_rect, Color(0.03, 0.04, 0.02, 0.08), true)
+	else:
+		draw_rect(map_rect, Color(0.18, 0.24, 0.14), true)
+		_draw_terrain()
 	for row in GRID_ROWS:
 		for column in GRID_COLUMNS:
 			var cell_rect := Rect2(
 				Vector2(column * _cell_size, row * _cell_size),
 				Vector2(_cell_size, _cell_size)
 			)
-			draw_rect(cell_rect, Color(0.12, 0.17, 0.09, 0.22), true)
-			draw_rect(cell_rect, Color(0.72, 0.70, 0.56, 0.52), false, 1.0)
+			draw_rect(cell_rect, Color(0.06, 0.08, 0.04, 0.06), true)
+			draw_rect(cell_rect, Color(0.82, 0.77, 0.60, 0.46), false, 1.0)
+
+
+func _draw_background_texture(target_rect: Rect2) -> void:
+	var source_size := Vector2(background_texture.get_size())
+	if source_size.x <= 0.0 or source_size.y <= 0.0:
+		return
+	var source_rect := Rect2(Vector2.ZERO, source_size)
+	var target_aspect := target_rect.size.x / target_rect.size.y
+	var source_aspect := source_size.x / source_size.y
+	if source_aspect > target_aspect:
+		var cropped_width := source_size.y * target_aspect
+		source_rect.position.x = (source_size.x - cropped_width) * 0.5
+		source_rect.size.x = cropped_width
+	else:
+		var cropped_height := source_size.x / target_aspect
+		source_rect.position.y = (source_size.y - cropped_height) * 0.5
+		source_rect.size.y = cropped_height
+	draw_texture_rect_region(background_texture, target_rect, source_rect)
 
 
 func _draw_terrain() -> void:

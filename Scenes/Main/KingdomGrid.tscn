@@ -6,6 +6,7 @@
 [ext_resource type="Resource" path="res://Resources/Buildings/Farm.tres" id="4_farm"]
 [ext_resource type="Resource" path="res://Resources/Buildings/Mine.tres" id="5_mine"]
 [ext_resource type="Resource" path="res://Resources/Buildings/Barracks.tres" id="6_barracks"]
+[ext_resource type="Texture2D" path="res://Assets/World/kingdom_building_field.png" id="7_background"]
 
 [node name="KingdomGrid" type="Control"]
 offset_left = 20.0
@@ -20,3 +21,4 @@ lumber_camp_definition = ExtResource("3_lumber_camp")
 farm_definition = ExtResource("4_farm")
 mine_definition = ExtResource("5_mine")
 barracks_definition = ExtResource("6_barracks")
+background_texture = ExtResource("7_background")
