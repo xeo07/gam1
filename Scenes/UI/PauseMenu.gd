@@ -3,7 +3,7 @@ class_name PauseMenu
 
 const MAIN_MENU_SCENE := "res://Scenes/Main/MainMenu.tscn"
 
-@onready var content: VBoxContainer = $Overlay/CenterContainer/MedievalFrame/Content
+@onready var content: VBoxContainer = $Overlay/CenterContainer/MedievalFrame/MarginContainer/Content
 @onready var resume_button: Button = content.get_node("ResumeButton") as Button
 @onready var save_button: Button = content.get_node("SaveButton") as Button
 @onready var load_button: Button = content.get_node("LoadButton") as Button
