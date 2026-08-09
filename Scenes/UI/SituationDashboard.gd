@@ -43,9 +43,9 @@ func _ready() -> void:
 	refresh()
 
 
-func layout_for_viewport(hud_height: float) -> float:
+func layout_for_viewport(hud_height: float, top_bar_height: float) -> float:
 	var viewport := get_viewport().get_visible_rect().size
-	var layout := UILayoutMetrics.calculate(viewport, hud_height)
+	var layout := UILayoutMetrics.calculate(viewport, hud_height, top_bar_height)
 	var rect: Rect2 = layout["dashboard_rect"]
 	dashboard.position = rect.position
 	dashboard.size = rect.size

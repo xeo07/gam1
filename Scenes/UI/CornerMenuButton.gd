@@ -23,6 +23,10 @@ func set_bottom_hud_height(height: float) -> void:
 	_queue_position_update()
 
 
+func get_top_bar_height() -> float:
+	return maxf(60.0, top_bar.get_combined_minimum_size().y)
+
+
 func set_interaction_enabled(enabled: bool) -> void:
 	menu_button.disabled = not enabled
 	next_day_button.disabled = not enabled
@@ -46,4 +50,4 @@ func _update_position() -> void:
 	if not is_inside_tree():
 		return
 	top_bar.position = Vector2.ZERO
-	top_bar.size = Vector2(get_viewport().get_visible_rect().size.x, 60.0)
+	top_bar.size = Vector2(get_viewport().get_visible_rect().size.x, get_top_bar_height())

@@ -3,7 +3,6 @@ extends Node2D
 const GAME_NAME := "Kingdoom"
 const GAME_VERSION := "0.0.1"
 const GRID_MARGIN := 16.0
-const TOP_TOOLBAR_HEIGHT := 60.0
 const MAIN_MENU_SCENE := "res://Scenes/Main/MainMenu.tscn"
 const PENDING_NEW_GAME_PATH := "user://pending_new_game.json"
 const PENDING_LOAD_PATH := "user://pending_load_game.flag"
@@ -434,12 +433,13 @@ func _on_hud_height_changed(_height: float) -> void:
 func _update_game_area() -> void:
 	var viewport_size := get_viewport().get_visible_rect().size
 	var hud_height := bottom_hud.get_hud_height()
-	var dashboard_width := situation_dashboard.layout_for_viewport(hud_height)
-	kingdom_grid.position = Vector2(GRID_MARGIN, GRID_MARGIN + TOP_TOOLBAR_HEIGHT)
+	var top_bar_height := corner_menu_button.get_top_bar_height()
+	var dashboard_width := situation_dashboard.layout_for_viewport(hud_height, top_bar_height)
+	kingdom_grid.position = Vector2(GRID_MARGIN, GRID_MARGIN + top_bar_height)
 	kingdom_grid.size = Vector2(
 		maxf(viewport_size.x - dashboard_width - GRID_MARGIN * 3.0, 1.0),
 		maxf(
-			viewport_size.y - hud_height - GRID_MARGIN * 2.0 - TOP_TOOLBAR_HEIGHT,
+			viewport_size.y - hud_height - GRID_MARGIN * 2.0 - top_bar_height,
 			1.0
 		)
 	)

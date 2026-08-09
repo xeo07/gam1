@@ -6,15 +6,14 @@ const MIN_DASHBOARD_WIDTH := 380.0
 const MAX_DASHBOARD_WIDTH := 520.0
 const TOP_BAR_HEIGHT := 60.0
 const CENTER_GAP := 48.0
-const DASHBOARD_BOTTOM_CLEARANCE := 28.0
 
 
-static func calculate(viewport: Vector2, hud_height: float) -> Dictionary:
+static func calculate(viewport: Vector2, hud_height: float, top_bar_height: float = TOP_BAR_HEIGHT) -> Dictionary:
 	var dashboard_width := clampf(viewport.x * 0.32, MIN_DASHBOARD_WIDTH, MAX_DASHBOARD_WIDTH)
-	var content_top := TOP_BAR_HEIGHT + MARGIN
+	var content_top := top_bar_height + MARGIN
 	var content_height := maxf(
 		300.0,
-		viewport.y - hud_height - content_top - MARGIN - DASHBOARD_BOTTOM_CLEARANCE
+		viewport.y - hud_height - content_top - MARGIN
 	)
 	return {
 		"dashboard_width": dashboard_width,
