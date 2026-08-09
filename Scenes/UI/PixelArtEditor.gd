@@ -5,8 +5,8 @@ signal pixels_changed
 signal random_requested
 
 const TRANSPARENT_INDEX := -1
-const FLAG_CELL_SIZE := 32.0
-const EMBLEM_CELL_SIZE := 34.0
+const FLAG_CELL_SIZE := 20.0
+const EMBLEM_CELL_SIZE := 20.0
 const PALETTE: Array[Color] = [
 	Color(0.03, 0.03, 0.035, 1.0),
 	Color(0.94, 0.92, 0.84, 1.0),
@@ -30,10 +30,10 @@ const PALETTE: Array[Color] = [
 @onready var size_label: Label = $MainContainer/EditorHeader/SizeLabel
 @onready var tool_status_label: Label = $MainContainer/EditorHeader/ToolStatusLabel
 @onready var drawing_surface: Control = $MainContainer/WorkspaceContainer/CanvasPanel/CenterContainer/DrawingSurface
-@onready var pencil_button: Button = $MainContainer/WorkspaceContainer/ToolsPanel/VBoxContainer/PencilButton
-@onready var eraser_button: Button = $MainContainer/WorkspaceContainer/ToolsPanel/VBoxContainer/EraserButton
-@onready var fill_button: Button = $MainContainer/WorkspaceContainer/ToolsPanel/VBoxContainer/FillButton
-@onready var clear_button: Button = $MainContainer/WorkspaceContainer/ToolsPanel/VBoxContainer/ClearButton
+@onready var pencil_button: Button = $MainContainer/WorkspaceContainer/ToolsPanel/VBoxContainer/ToolsGrid/PencilButton
+@onready var eraser_button: Button = $MainContainer/WorkspaceContainer/ToolsPanel/VBoxContainer/ToolsGrid/EraserButton
+@onready var fill_button: Button = $MainContainer/WorkspaceContainer/ToolsPanel/VBoxContainer/ToolsGrid/FillButton
+@onready var clear_button: Button = $MainContainer/WorkspaceContainer/ToolsPanel/VBoxContainer/ToolsGrid/ClearButton
 @onready var grid_check_box: CheckBox = $MainContainer/WorkspaceContainer/ToolsPanel/VBoxContainer/GridCheckBox
 @onready var palette_grid: GridContainer = $MainContainer/WorkspaceContainer/ToolsPanel/VBoxContainer/PaletteGrid
 @onready var preview_texture_rect: TextureRect = $MainContainer/PreviewPanel/HBoxContainer/PreviewTextureRect
@@ -75,7 +75,7 @@ func configure(title: String, width: int, height: int, random_text := "Случ�
 	random_button.text = random_text
 	drawing_surface.custom_minimum_size = Vector2(_grid_width, _grid_height) * _cell_size
 	preview_texture_rect.custom_minimum_size = (
-		Vector2(160, 100) if width != height else Vector2(104, 104)
+		Vector2(96, 60) if width != height else Vector2(60, 60)
 	)
 	_pixels = create_blank_pixels(_grid_width, _grid_height)
 	_last_drag_cell = Vector2i(-1, -1)
@@ -296,14 +296,14 @@ func _build_palette() -> void:
 	_palette_buttons.clear()
 	for index in PALETTE.size():
 		var button := Button.new()
-		button.custom_minimum_size = Vector2(36, 32)
+		button.custom_minimum_size = Vector2(26, 26)
 		button.tooltip_text = "Цвет %d" % (index + 1)
 		button.pressed.connect(_select_color.bind(index))
 		palette_grid.add_child(button)
 		_palette_buttons.append(button)
 	_transparent_button = Button.new()
-	_transparent_button.custom_minimum_size = Vector2(80, 32)
-	_transparent_button.text = "Прозрачный"
+	_transparent_button.custom_minimum_size = Vector2(26, 26)
+	_transparent_button.text = "×"
 	_transparent_button.tooltip_text = "Прозрачный пиксель"
 	_transparent_button.pressed.connect(_select_color.bind(TRANSPARENT_INDEX))
 	palette_grid.add_child(_transparent_button)

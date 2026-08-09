@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Scenes/UI/PixelArtEditor.gd" id="1_editor"]
 
 [node name="PixelArtEditor" type="Control"]
-custom_minimum_size = Vector2(760, 500)
+custom_minimum_size = Vector2(590, 270)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -36,8 +36,9 @@ layout_mode = 2
 text = "16×10"
 
 [node name="ToolStatusLabel" type="Label" parent="MainContainer/EditorHeader"]
-custom_minimum_size = Vector2(190, 0)
+custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
+theme_override_font_sizes/font_size = 12
 text = "Инструмент: Кисть"
 horizontal_alignment = 2
 
@@ -47,7 +48,7 @@ size_flags_vertical = 3
 theme_override_constants/separation = 8
 
 [node name="CanvasPanel" type="PanelContainer" parent="MainContainer/WorkspaceContainer"]
-custom_minimum_size = Vector2(520, 330)
+custom_minimum_size = Vector2(320, 240)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -57,12 +58,12 @@ theme_type_variation = &"PixelEditorCanvasPanel"
 layout_mode = 2
 
 [node name="DrawingSurface" type="Control" parent="MainContainer/WorkspaceContainer/CanvasPanel/CenterContainer"]
-custom_minimum_size = Vector2(512, 320)
+custom_minimum_size = Vector2(320, 240)
 layout_mode = 2
 mouse_default_cursor_shape = 3
 
 [node name="ToolsPanel" type="PanelContainer" parent="MainContainer/WorkspaceContainer"]
-custom_minimum_size = Vector2(205, 0)
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 theme_type_variation = &"PixelEditorToolsPanel"
 
@@ -76,46 +77,59 @@ theme_type_variation = &"PixelEditorTitleLabel"
 text = "Инструменты"
 horizontal_alignment = 1
 
-[node name="PencilButton" type="Button" parent="MainContainer/WorkspaceContainer/ToolsPanel/VBoxContainer"]
+[node name="ToolsGrid" type="GridContainer" parent="MainContainer/WorkspaceContainer/ToolsPanel/VBoxContainer"]
+layout_mode = 2
+columns = 2
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
+
+[node name="PencilButton" type="Button" parent="MainContainer/WorkspaceContainer/ToolsPanel/VBoxContainer/ToolsGrid"]
 layout_mode = 2
 theme_type_variation = &"PixelEditorToolButton"
+size_flags_horizontal = 3
 toggle_mode = true
 button_pressed = true
 text = "Кисть"
 
-[node name="EraserButton" type="Button" parent="MainContainer/WorkspaceContainer/ToolsPanel/VBoxContainer"]
+[node name="EraserButton" type="Button" parent="MainContainer/WorkspaceContainer/ToolsPanel/VBoxContainer/ToolsGrid"]
 layout_mode = 2
 theme_type_variation = &"PixelEditorToolButton"
+size_flags_horizontal = 3
 toggle_mode = true
 text = "Ластик"
 
-[node name="FillButton" type="Button" parent="MainContainer/WorkspaceContainer/ToolsPanel/VBoxContainer"]
+[node name="FillButton" type="Button" parent="MainContainer/WorkspaceContainer/ToolsPanel/VBoxContainer/ToolsGrid"]
 layout_mode = 2
 theme_type_variation = &"PixelEditorToolButton"
+size_flags_horizontal = 3
 toggle_mode = true
 text = "Заливка"
 
-[node name="ClearButton" type="Button" parent="MainContainer/WorkspaceContainer/ToolsPanel/VBoxContainer"]
+[node name="ClearButton" type="Button" parent="MainContainer/WorkspaceContainer/ToolsPanel/VBoxContainer/ToolsGrid"]
 layout_mode = 2
 theme_type_variation = &"PixelEditorToolButton"
+size_flags_horizontal = 3
 text = "Очистить"
 
 [node name="GridCheckBox" type="CheckBox" parent="MainContainer/WorkspaceContainer/ToolsPanel/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 12
 button_pressed = true
 text = "Показывать сетку"
 
 [node name="PaletteTitleLabel" type="Label" parent="MainContainer/WorkspaceContainer/ToolsPanel/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 12
 text = "Палитра"
 
 [node name="PaletteGrid" type="GridContainer" parent="MainContainer/WorkspaceContainer/ToolsPanel/VBoxContainer"]
 layout_mode = 2
-columns = 4
-theme_override_constants/h_separation = 3
-theme_override_constants/v_separation = 3
+columns = 8
+theme_override_constants/h_separation = 2
+theme_override_constants/v_separation = 2
 
 [node name="PreviewPanel" type="PanelContainer" parent="MainContainer"]
+visible = false
 layout_mode = 2
 theme_type_variation = &"PixelEditorPreviewPanel"
 
@@ -126,19 +140,21 @@ theme_override_constants/separation = 12
 
 [node name="PreviewLabel" type="Label" parent="MainContainer/PreviewPanel/HBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 12
 text = "Предпросмотр"
 vertical_alignment = 1
 
 [node name="PreviewTextureRect" type="TextureRect" parent="MainContainer/PreviewPanel/HBoxContainer"]
-custom_minimum_size = Vector2(160, 100)
+custom_minimum_size = Vector2(96, 60)
 layout_mode = 2
 texture_filter = 1
 expand_mode = 1
 stretch_mode = 5
 
 [node name="RandomButton" type="Button" parent="MainContainer/PreviewPanel/HBoxContainer"]
-custom_minimum_size = Vector2(170, 0)
+custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
+theme_override_font_sizes/font_size = 12
 text = "Случайный рисунок"
 
 [node name="ClearConfirmation" type="ConfirmationDialog" parent="."]

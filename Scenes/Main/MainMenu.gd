@@ -369,8 +369,8 @@ func _update_new_game_dialog_layout() -> void:
 	if not is_inside_tree():
 		return
 	var viewport_size := get_viewport().get_visible_rect().size
-	new_game_panel.custom_minimum_size.x = minf(900.0, maxf(viewport_size.x - 32.0, 760.0))
-	identity_tabs.custom_minimum_size.y = clampf(viewport_size.y - 270.0, 235.0, 500.0)
+	new_game_panel.custom_minimum_size.x = clampf(viewport_size.x - 64.0, 640.0, 760.0)
+	identity_tabs.custom_minimum_size.y = clampf(viewport_size.y - 280.0, 300.0, 360.0)
 
 
 func _remove_file(path: String) -> bool:
