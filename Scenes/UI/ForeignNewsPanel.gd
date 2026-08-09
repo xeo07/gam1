@@ -3,6 +3,7 @@ class_name ForeignNewsPanel
 
 @onready var date_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DateLabel
 @onready var news_list: VBoxContainer = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/NewsList
+@onready var scroll_container: ScrollContainer = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer
 @onready var close_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CloseButton
 @onready var news_manager: NewsManager = $"../NewsManager" as NewsManager
 
@@ -36,6 +37,8 @@ func open_report(report: Dictionary) -> void:
 		})
 
 	visible = true
+	scroll_container.scroll_horizontal = 0
+	scroll_container.scroll_vertical = 0
 
 
 func close_report() -> void:
@@ -60,12 +63,18 @@ func _add_article(article: Dictionary) -> void:
 
 	title_label.text = String(article.get("title", "Без заголовка"))
 	title_label.theme_type_variation = &"TitleLabel"
+	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	source_label.text = "День %d • %s" % [
 		int(article.get("day", 0)),
 		_reliability_text(StringName(article.get("reliability", &"reported"))),
 	]
 	details_label.text = String(article.get("body", "Подробности пока неизвестны."))
 	details_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	article_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	source_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	details_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
 	news_list.add_child(article_panel)
 	article_panel.add_child(content)
