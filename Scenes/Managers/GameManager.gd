@@ -1,6 +1,6 @@
 extends Node2D
 
-const GAME_NAME := "Kingdoom"
+const GAME_NAME := "CROWNSCAR"
 const GAME_VERSION := "0.0.1"
 const GRID_MARGIN := 16.0
 const MAIN_MENU_SCENE := "res://Scenes/Main/MainMenu.tscn"

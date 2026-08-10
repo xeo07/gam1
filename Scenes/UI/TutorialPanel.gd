@@ -43,7 +43,7 @@ func _ready() -> void:
 
 func open_offer() -> void:
 	_step = -1
-	title_label.text = "Добро пожаловать в KINGDOOM"
+	title_label.text = "Добро пожаловать в CROWNSCAR"
 	progress_label.text = "Короткое обучение займёт меньше минуты"
 	body_label.text = "Хотите узнать основные действия или сразу начать править королевством?"
 	primary_button.text = "Пройти обучение"

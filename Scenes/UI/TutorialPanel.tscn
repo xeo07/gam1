@@ -42,7 +42,7 @@ theme_override_constants/separation = 18
 [node name="TitleLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"TitleLabel"
-text = "Добро пожаловать в KINGDOOM"
+text = "Добро пожаловать в CROWNSCAR"
 horizontal_alignment = 1
 autowrap_mode = 2
 
