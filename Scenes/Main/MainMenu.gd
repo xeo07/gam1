@@ -7,13 +7,20 @@ const PENDING_NEW_GAME_PATH := "user://pending_new_game.json"
 const PENDING_LOAD_PATH := "user://pending_load_game.flag"
 const LAST_ERROR_PATH := "user://last_menu_error.txt"
 
-@onready var continue_button: Button = $CenterContainer/MainPanel/MarginContainer/VBoxContainer/ContinueButton
-@onready var new_game_button: Button = $CenterContainer/MainPanel/MarginContainer/VBoxContainer/NewGameButton
-@onready var load_game_button: Button = $CenterContainer/MainPanel/MarginContainer/VBoxContainer/LoadGameButton
-@onready var settings_button: Button = $CenterContainer/MainPanel/MarginContainer/VBoxContainer/SettingsButton
-@onready var credits_button: Button = $CenterContainer/MainPanel/MarginContainer/VBoxContainer/CreditsButton
-@onready var exit_button: Button = $CenterContainer/MainPanel/MarginContainer/VBoxContainer/ExitButton
-@onready var main_status_label: Label = $CenterContainer/MainPanel/MarginContainer/VBoxContainer/StatusLabel
+@onready var menu_margin: MarginContainer = $SplitLayout/LeftMenuArea/MenuMargin
+@onready var menu_vbox: VBoxContainer = $SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer
+@onready var logo_area: VBoxContainer = $SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/LogoArea
+@onready var title_label: Label = $SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/LogoArea/TitleLabel
+@onready var subtitle_label: Label = $SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/LogoArea/SubtitleLabel
+@onready var quote_margin: MarginContainer = $SplitLayout/RightVisualArea/QuoteMargin
+@onready var quote_label: Label = $SplitLayout/RightVisualArea/QuoteMargin/QuoteContainer/QuoteLabel
+@onready var new_game_button: Button = $SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/NewGameButton
+@onready var continue_button: Button = $SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/ContinueButton
+@onready var load_game_button: Button = $SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/LoadGameButton
+@onready var settings_button: Button = $SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/SettingsButton
+@onready var credits_button: Button = $SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/CreditsButton
+@onready var exit_button: Button = $SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/ExitButton
+@onready var main_status_label: Label = $SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/StatusLabel
 
 @onready var new_game_dialog: Control = $NewGameDialog
 @onready var new_game_content: VBoxContainer = $NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer
@@ -50,6 +57,7 @@ var _pending_flag_pixels: Array = []
 var _pending_emblem_pixels: Array = []
 var _flag_generation_index := 0
 var _emblem_generation_index := 0
+var _main_menu_buttons: Array[Button] = []
 
 
 func _ready() -> void:
@@ -73,14 +81,30 @@ func _ready() -> void:
 	credits_close_button.pressed.connect(_close_credits_dialog)
 	overwrite_confirmation.confirmed.connect(_start_pending_new_game)
 	delete_confirmation.confirmed.connect(_delete_save)
+	_main_menu_buttons = [
+		new_game_button,
+		continue_button,
+		load_game_button,
+		settings_button,
+		credits_button,
+		exit_button,
+	]
+	for button in _main_menu_buttons:
+		button.mouse_entered.connect(_set_button_accent.bind(button, true))
+		button.mouse_exited.connect(_set_button_accent.bind(button, false))
+		button.focus_entered.connect(_set_button_accent.bind(button, true))
+		button.focus_exited.connect(_set_button_accent.bind(button, false))
 	flag_editor.configure("Флаг", 16, 10, "Случайный флаг")
 	emblem_editor.configure("Герб", 12, 12, "Случайный герб")
 	identity_tabs.set_tab_title(0, "Флаг")
 	identity_tabs.set_tab_title(1, "Герб")
+	get_viewport().size_changed.connect(_update_main_menu_layout)
 	get_viewport().size_changed.connect(_update_new_game_dialog_layout)
+	_update_main_menu_layout.call_deferred()
 	_update_new_game_dialog_layout.call_deferred()
 	_update_save_buttons()
 	_show_last_error()
+	new_game_button.grab_focus.call_deferred()
 
 
 func _open_new_game_dialog() -> void:
@@ -331,6 +355,8 @@ func _update_save_buttons() -> void:
 	var has_save := FileAccess.file_exists(SAVE_PATH)
 	continue_button.disabled = not has_save
 	load_game_button.disabled = not has_save
+	_set_button_accent(continue_button, false)
+	_set_button_accent(load_game_button, false)
 
 
 func _show_last_error() -> void:
@@ -371,6 +397,58 @@ func _update_new_game_dialog_layout() -> void:
 	var viewport_size := get_viewport().get_visible_rect().size
 	new_game_panel.custom_minimum_size.x = clampf(viewport_size.x - 64.0, 640.0, 760.0)
 	identity_tabs.custom_minimum_size.y = clampf(viewport_size.y - 280.0, 300.0, 360.0)
+
+
+func _update_main_menu_layout() -> void:
+	if not is_inside_tree():
+		return
+	var viewport_size := get_viewport().get_visible_rect().size
+	var compact := viewport_size.y < 620.0 or viewport_size.x < 1060.0
+	if compact:
+		menu_margin.add_theme_constant_override("margin_left", 26)
+		menu_margin.add_theme_constant_override("margin_top", 16)
+		menu_margin.add_theme_constant_override("margin_right", 26)
+		menu_margin.add_theme_constant_override("margin_bottom", 14)
+		menu_vbox.add_theme_constant_override("separation", 5)
+		logo_area.custom_minimum_size.y = 88.0
+		title_label.custom_minimum_size.y = 48.0
+		title_label.add_theme_font_size_override("font_size", 38)
+		subtitle_label.add_theme_font_size_override("font_size", 14)
+		quote_margin.offset_top = 34.0
+		quote_margin.offset_bottom = 158.0
+		quote_margin.add_theme_constant_override("margin_left", 34)
+		quote_margin.add_theme_constant_override("margin_right", 34)
+		quote_label.add_theme_font_size_override("font_size", 19)
+		for button in _main_menu_buttons:
+			button.custom_minimum_size.y = 40.0
+			button.add_theme_font_size_override("font_size", 19)
+	else:
+		var height_scale := clampf(viewport_size.y / 720.0, 1.0, 1.35)
+		var horizontal_margin := int(clampf(viewport_size.x * 0.033, 42.0, 62.0))
+		menu_margin.add_theme_constant_override("margin_left", horizontal_margin)
+		menu_margin.add_theme_constant_override("margin_top", int(32.0 * height_scale))
+		menu_margin.add_theme_constant_override("margin_right", horizontal_margin)
+		menu_margin.add_theme_constant_override("margin_bottom", int(22.0 * height_scale))
+		menu_vbox.add_theme_constant_override("separation", int(clampf(8.0 * height_scale, 8.0, 10.0)))
+		logo_area.custom_minimum_size.y = 126.0 * height_scale
+		title_label.custom_minimum_size.y = 72.0 * height_scale
+		title_label.add_theme_font_size_override("font_size", int(clampf(54.0 * height_scale, 54.0, 68.0)))
+		subtitle_label.add_theme_font_size_override("font_size", int(clampf(18.0 * height_scale, 18.0, 22.0)))
+		quote_margin.offset_top = 68.0 * height_scale
+		quote_margin.offset_bottom = 220.0 * height_scale
+		quote_margin.add_theme_constant_override("margin_left", int(clampf(viewport_size.x * 0.055, 72.0, 112.0)))
+		quote_margin.add_theme_constant_override("margin_right", int(clampf(viewport_size.x * 0.055, 72.0, 112.0)))
+		quote_label.add_theme_font_size_override("font_size", int(clampf(25.0 * height_scale, 25.0, 31.0)))
+		for button in _main_menu_buttons:
+			button.custom_minimum_size.y = clampf(52.0 * height_scale, 52.0, 58.0)
+			button.add_theme_font_size_override("font_size", int(clampf(24.0 * height_scale, 24.0, 27.0)))
+
+
+func _set_button_accent(button: Button, active: bool) -> void:
+	var accent := button.get_node_or_null("HoverAccent") as ColorRect
+	if accent == null:
+		return
+	accent.visible = active and not button.disabled
 
 
 func _remove_file(path: String) -> bool:

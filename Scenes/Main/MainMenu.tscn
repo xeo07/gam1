@@ -1,10 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://bmmn7q4k2v5ra"]
+[gd_scene load_steps=9 format=3 uid="uid://bmmn7q4k2v5ra"]
 
 [ext_resource type="Script" uid="uid://dmmn7q4k2v5ra" path="res://Scenes/Main/MainMenu.gd" id="1_menu"]
-[ext_resource type="Theme" path="res://Themes/KingdoomTheme.tres" id="2_theme"]
+[ext_resource type="Theme" path="res://Themes/CrownscarMainMenuTheme.tres" id="2_theme"]
 [ext_resource type="PackedScene" uid="uid://bsdg7q4k2v5ra" path="res://Scenes/UI/SettingsDialog.tscn" id="3_settings"]
 [ext_resource type="PackedScene" path="res://Scenes/UI/PixelArtEditor.tscn" id="4_pixel_editor"]
-[ext_resource type="Texture2D" path="res://Assets/UI/Medieval/castle_landscape.jpg" id="5_castle"]
+[ext_resource type="Texture2D" path="res://Assets/UI/MainMenu/left_black_wood.png" id="5_left_wood"]
+[ext_resource type="Texture2D" path="res://Assets/UI/MainMenu/castle_background.png" id="6_castle"]
+[ext_resource type="FontFile" path="res://Assets/Fonts/Cinzel_Decorative/CinzelDecorative-Regular.ttf" id="7_title_font"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -16,19 +18,25 @@ grow_vertical = 2
 theme = ExtResource("2_theme")
 script = ExtResource("1_menu")
 
-[node name="Background" type="TextureRect" parent="."]
+[node name="SplitLayout" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="LeftMenuArea" type="TextureRect" parent="SplitLayout"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.62
 mouse_filter = 2
-texture = ExtResource("5_castle")
+texture = ExtResource("5_left_wood")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Vignette" type="ColorRect" parent="."]
+[node name="ReadabilityOverlay" type="ColorRect" parent="SplitLayout/LeftMenuArea"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -36,82 +44,350 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.025, 0.018, 0.012, 0.52)
+color = Color(0.005, 0.005, 0.005, 0.27)
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="TopRule" type="ColorRect" parent="SplitLayout/LeftMenuArea"]
+layout_mode = 1
+anchor_right = 1.0
+grow_horizontal = 2
+offset_bottom = 2.0
+mouse_filter = 2
+color = Color(0.31, 0.3, 0.27, 0.9)
+
+[node name="BottomRule" type="ColorRect" parent="SplitLayout/LeftMenuArea"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -2.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+color = Color(0.31, 0.3, 0.27, 0.9)
+
+[node name="MenuMargin" type="MarginContainer" parent="SplitLayout/LeftMenuArea"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 42
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 42
+theme_override_constants/margin_bottom = 22
 
-[node name="MainPanel" type="PanelContainer" parent="CenterContainer"]
-custom_minimum_size = Vector2(440, 0)
-layout_mode = 2
-theme_type_variation = &"SystemMenuPanel"
-
-[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/MainPanel"]
-layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/MainPanel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="SplitLayout/LeftMenuArea/MenuMargin"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="TitleLabel" type="Label" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 52)
+[node name="LogoArea" type="VBoxContainer" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer"]
+custom_minimum_size = Vector2(0, 126)
 layout_mode = 2
-theme_type_variation = &"TitleLabel"
-theme_override_font_sizes/font_size = 30
+theme_override_constants/separation = 6
+
+[node name="TitleLabel" type="Label" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/LogoArea"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.933, 0.902, 0.835, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_fonts/font = ExtResource("7_title_font")
+theme_override_font_sizes/font_size = 54
 text = "CROWNSCAR"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="VersionLabel" type="Label" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+[node name="Divider" type="ColorRect" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/LogoArea"]
+custom_minimum_size = Vector2(0, 2)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.82, 0.7, 0.46, 1)
-text = "Хроники короны · 0.0.1"
+mouse_filter = 2
+color = Color(0.42, 0.12, 0.13, 1)
+
+[node name="SubtitleLabel" type="Label" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/LogoArea"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.69, 0.63, 1)
+theme_override_font_sizes/font_size = 18
+text = "ПОСТРОЙ. ПРАВЬ. ВЫЖИВИ."
 horizontal_alignment = 1
 
-[node name="ContinueButton" type="Button" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 44)
+[node name="MenuSpacer" type="Control" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer"]
+custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
-text = "Продолжить"
 
-[node name="NewGameButton" type="Button" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 44)
+[node name="NewGameButton" type="Button" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer"]
+custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
-text = "Новая игра"
+theme_type_variation = &"MainMenuButton"
+text = "НОВАЯ ИГРА"
 
-[node name="LoadGameButton" type="Button" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 44)
-layout_mode = 2
-text = "Загрузить игру"
+[node name="HoverAccent" type="ColorRect" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/NewGameButton"]
+visible = false
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -28.0
+offset_top = -4.0
+offset_right = 28.0
+offset_bottom = -1.0
+grow_horizontal = 2
+mouse_filter = 2
+color = Color(0.42, 0.12, 0.13, 1)
 
-[node name="SettingsButton" type="Button" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 44)
+[node name="ContinueButton" type="Button" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer"]
+custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
-text = "Настройки"
+theme_type_variation = &"MainMenuButton"
+text = "ПРОДОЛЖИТЬ"
 
-[node name="CreditsButton" type="Button" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 44)
-layout_mode = 2
-text = "Авторы"
+[node name="HoverAccent" type="ColorRect" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/ContinueButton"]
+visible = false
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -28.0
+offset_top = -4.0
+offset_right = 28.0
+offset_bottom = -1.0
+grow_horizontal = 2
+mouse_filter = 2
+color = Color(0.42, 0.12, 0.13, 1)
 
-[node name="ExitButton" type="Button" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 44)
+[node name="LoadGameButton" type="Button" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer"]
+custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
-text = "Выйти"
+theme_type_variation = &"MainMenuButton"
+text = "ЗАГРУЗИТЬ ИГРУ"
 
-[node name="StatusLabel" type="Label" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+[node name="HoverAccent" type="ColorRect" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/LoadGameButton"]
+visible = false
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -28.0
+offset_top = -4.0
+offset_right = 28.0
+offset_bottom = -1.0
+grow_horizontal = 2
+mouse_filter = 2
+color = Color(0.42, 0.12, 0.13, 1)
+
+[node name="SettingsButton" type="Button" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer"]
+custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.82, 0.7, 0.46, 1)
+theme_type_variation = &"MainMenuButton"
+text = "НАСТРОЙКИ"
+
+[node name="HoverAccent" type="ColorRect" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/SettingsButton"]
+visible = false
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -28.0
+offset_top = -4.0
+offset_right = 28.0
+offset_bottom = -1.0
+grow_horizontal = 2
+mouse_filter = 2
+color = Color(0.42, 0.12, 0.13, 1)
+
+[node name="CreditsButton" type="Button" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer"]
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+theme_type_variation = &"MainMenuButton"
+text = "АВТОРЫ"
+
+[node name="HoverAccent" type="ColorRect" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/CreditsButton"]
+visible = false
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -28.0
+offset_top = -4.0
+offset_right = 28.0
+offset_bottom = -1.0
+grow_horizontal = 2
+mouse_filter = 2
+color = Color(0.42, 0.12, 0.13, 1)
+
+[node name="ExitButton" type="Button" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer"]
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+theme_type_variation = &"MainMenuButton"
+text = "ВЫХОД"
+
+[node name="HoverAccent" type="ColorRect" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/ExitButton"]
+visible = false
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -28.0
+offset_top = -4.0
+offset_right = 28.0
+offset_bottom = -1.0
+grow_horizontal = 2
+mouse_filter = 2
+color = Color(0.42, 0.12, 0.13, 1)
+
+[node name="FlexibleSpacer" type="Control" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="StatusLabel" type="Label" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.23, 0.24, 1)
+theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 autowrap_mode = 2
+
+[node name="VersionLabel" type="Label" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.48, 0.47, 0.44, 1)
+theme_override_font_sizes/font_size = 15
+text = "v0.0.1"
+horizontal_alignment = 1
+
+[node name="MetalDivider" type="ColorRect" parent="SplitLayout"]
+custom_minimum_size = Vector2(3, 0)
+layout_mode = 2
+mouse_filter = 2
+color = Color(0.24, 0.23, 0.21, 1)
+
+[node name="RightVisualArea" type="Control" parent="SplitLayout"]
+layout_mode = 2
+size_flags_horizontal = 3
+clip_contents = true
+
+[node name="CastleTexture" type="TextureRect" parent="SplitLayout/RightVisualArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("6_castle")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="DarkOverlay" type="ColorRect" parent="SplitLayout/RightVisualArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.01, 0.015, 0.022, 0.2)
+
+[node name="LeftShade" type="ColorRect" parent="SplitLayout/RightVisualArea"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.12
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.2)
+
+[node name="QuoteMargin" type="MarginContainer" parent="SplitLayout/RightVisualArea"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 68.0
+offset_bottom = 220.0
+grow_horizontal = 2
+theme_override_constants/margin_left = 72
+theme_override_constants/margin_right = 72
+
+[node name="QuoteContainer" type="VBoxContainer" parent="SplitLayout/RightVisualArea/QuoteMargin"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="TopDecoration" type="HBoxContainer" parent="SplitLayout/RightVisualArea/QuoteMargin/QuoteContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="LeftLine" type="ColorRect" parent="SplitLayout/RightVisualArea/QuoteMargin/QuoteContainer/TopDecoration"]
+custom_minimum_size = Vector2(120, 1)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+color = Color(0.42, 0.12, 0.13, 0.85)
+
+[node name="Diamond" type="Label" parent="SplitLayout/RightVisualArea/QuoteMargin/QuoteContainer/TopDecoration"]
+custom_minimum_size = Vector2(34, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.42, 0.12, 0.13, 1)
+theme_override_font_sizes/font_size = 14
+text = "◆"
+horizontal_alignment = 1
+
+[node name="RightLine" type="ColorRect" parent="SplitLayout/RightVisualArea/QuoteMargin/QuoteContainer/TopDecoration"]
+custom_minimum_size = Vector2(120, 1)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+color = Color(0.42, 0.12, 0.13, 0.85)
+
+[node name="QuoteLabel" type="Label" parent="SplitLayout/RightVisualArea/QuoteMargin/QuoteContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.933, 0.902, 0.835, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 25
+text = "«Сильное королевство строится не за день,\nно каждое решение оставляет шрам.»"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="BottomDecoration" type="HBoxContainer" parent="SplitLayout/RightVisualArea/QuoteMargin/QuoteContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="LeftLine" type="ColorRect" parent="SplitLayout/RightVisualArea/QuoteMargin/QuoteContainer/BottomDecoration"]
+custom_minimum_size = Vector2(120, 1)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+color = Color(0.42, 0.12, 0.13, 0.85)
+
+[node name="Diamond" type="Label" parent="SplitLayout/RightVisualArea/QuoteMargin/QuoteContainer/BottomDecoration"]
+custom_minimum_size = Vector2(34, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.42, 0.12, 0.13, 1)
+theme_override_font_sizes/font_size = 14
+text = "◆"
+horizontal_alignment = 1
+
+[node name="RightLine" type="ColorRect" parent="SplitLayout/RightVisualArea/QuoteMargin/QuoteContainer/BottomDecoration"]
+custom_minimum_size = Vector2(120, 1)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+color = Color(0.42, 0.12, 0.13, 0.85)
 
 [node name="NewGameDialog" type="Control" parent="."]
 visible = false
