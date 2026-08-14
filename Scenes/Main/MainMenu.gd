@@ -62,11 +62,13 @@ var _main_menu_buttons: Array[Button] = []
 
 func _ready() -> void:
 	SettingsDialog.apply_saved_settings()
+	_restore_main_menu_scale()
 	_seed_rng.randomize()
 	continue_button.pressed.connect(_request_load)
 	new_game_button.pressed.connect(_open_new_game_dialog)
 	load_game_button.pressed.connect(_open_load_dialog)
 	settings_button.pressed.connect(settings_dialog.open_dialog)
+	settings_dialog.apply_button.pressed.connect(_on_settings_applied_from_menu)
 	credits_button.pressed.connect(_open_credits_dialog)
 	exit_button.pressed.connect(_on_exit_pressed)
 	random_seed_button.pressed.connect(_on_random_seed_pressed)
@@ -406,7 +408,7 @@ func _update_main_menu_layout() -> void:
 	var compact := viewport_size.y < 620.0 or viewport_size.x < 1060.0
 	if compact:
 		menu_margin.add_theme_constant_override("margin_left", 26)
-		menu_margin.add_theme_constant_override("margin_top", 16)
+		menu_margin.add_theme_constant_override("margin_top", 24)
 		menu_margin.add_theme_constant_override("margin_right", 26)
 		menu_margin.add_theme_constant_override("margin_bottom", 14)
 		menu_vbox.add_theme_constant_override("separation", 5)
@@ -426,7 +428,7 @@ func _update_main_menu_layout() -> void:
 		var height_scale := clampf(viewport_size.y / 720.0, 1.0, 1.35)
 		var horizontal_margin := int(clampf(viewport_size.x * 0.033, 42.0, 62.0))
 		menu_margin.add_theme_constant_override("margin_left", horizontal_margin)
-		menu_margin.add_theme_constant_override("margin_top", int(32.0 * height_scale))
+		menu_margin.add_theme_constant_override("margin_top", int(52.0 * height_scale))
 		menu_margin.add_theme_constant_override("margin_right", horizontal_margin)
 		menu_margin.add_theme_constant_override("margin_bottom", int(22.0 * height_scale))
 		menu_vbox.add_theme_constant_override("separation", int(clampf(8.0 * height_scale, 8.0, 10.0)))
@@ -449,6 +451,16 @@ func _set_button_accent(button: Button, active: bool) -> void:
 	if accent == null:
 		return
 	accent.visible = active and not button.disabled
+
+
+func _on_settings_applied_from_menu() -> void:
+	_restore_main_menu_scale.call_deferred()
+
+
+func _restore_main_menu_scale() -> void:
+	var window := get_window()
+	if window != null and not is_equal_approx(window.content_scale_factor, 1.0):
+		window.content_scale_factor = 1.0
 
 
 func _remove_file(path: String) -> bool:

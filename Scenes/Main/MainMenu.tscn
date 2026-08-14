@@ -74,7 +74,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 42
-theme_override_constants/margin_top = 32
+theme_override_constants/margin_top = 52
 theme_override_constants/margin_right = 42
 theme_override_constants/margin_bottom = 22
 
@@ -110,7 +110,7 @@ color = Color(0.42, 0.12, 0.13, 1)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.72, 0.69, 0.63, 1)
 theme_override_font_sizes/font_size = 18
-text = "ПОСТРОЙ. ПРАВЬ. ВЫЖИВИ."
+text = "Построй. Правь. Выживи."
 horizontal_alignment = 1
 
 [node name="MenuSpacer" type="Control" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer"]
@@ -121,7 +121,7 @@ layout_mode = 2
 custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
 theme_type_variation = &"MainMenuButton"
-text = "НОВАЯ ИГРА"
+text = "Новая игра"
 
 [node name="HoverAccent" type="ColorRect" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/NewGameButton"]
 visible = false
@@ -143,7 +143,7 @@ color = Color(0.42, 0.12, 0.13, 1)
 custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
 theme_type_variation = &"MainMenuButton"
-text = "ПРОДОЛЖИТЬ"
+text = "Продолжить"
 
 [node name="HoverAccent" type="ColorRect" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/ContinueButton"]
 visible = false
@@ -165,7 +165,7 @@ color = Color(0.42, 0.12, 0.13, 1)
 custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
 theme_type_variation = &"MainMenuButton"
-text = "ЗАГРУЗИТЬ ИГРУ"
+text = "Загрузить игру"
 
 [node name="HoverAccent" type="ColorRect" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/LoadGameButton"]
 visible = false
@@ -187,7 +187,7 @@ color = Color(0.42, 0.12, 0.13, 1)
 custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
 theme_type_variation = &"MainMenuButton"
-text = "НАСТРОЙКИ"
+text = "Настройки"
 
 [node name="HoverAccent" type="ColorRect" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/SettingsButton"]
 visible = false
@@ -209,7 +209,7 @@ color = Color(0.42, 0.12, 0.13, 1)
 custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
 theme_type_variation = &"MainMenuButton"
-text = "АВТОРЫ"
+text = "Авторы"
 
 [node name="HoverAccent" type="ColorRect" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/CreditsButton"]
 visible = false
@@ -231,7 +231,7 @@ color = Color(0.42, 0.12, 0.13, 1)
 custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
 theme_type_variation = &"MainMenuButton"
-text = "ВЫХОД"
+text = "Выход"
 
 [node name="HoverAccent" type="ColorRect" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/ExitButton"]
 visible = false
