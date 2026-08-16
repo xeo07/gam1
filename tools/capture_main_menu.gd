@@ -29,6 +29,12 @@ func _capture() -> void:
 	if arguments.size() >= 3 and arguments[2] == "new_game":
 		state = "new_game"
 		menu.call("_open_new_game_dialog")
+		if arguments.size() >= 4 and arguments[3] == "emblem":
+			state = "new_game_emblem"
+			var tabs := menu.get_node(
+				"NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SymbolTabs"
+			) as TabContainer
+			tabs.current_tab = 1
 		for _frame in 5:
 			await process_frame
 	RenderingServer.force_draw(false)

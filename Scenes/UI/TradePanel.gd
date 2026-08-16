@@ -137,7 +137,7 @@ func _add_offer_control(offer: Dictionary) -> void:
 	details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	details.add_theme_constant_override("separation", 3)
 	offer_name_label.add_theme_color_override(
-		"font_color", Color(0.94, 0.76, 0.36)
+		"font_color", Color(0.933, 0.902, 0.835)
 	)
 	offer_name_label.add_theme_font_size_override("font_size", 16)
 	requirement_label.add_theme_font_size_override("font_size", 13)

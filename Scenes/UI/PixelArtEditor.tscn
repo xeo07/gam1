@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Scenes/UI/PixelArtEditor.gd" id="1_editor"]
 
 [node name="PixelArtEditor" type="Control"]
-custom_minimum_size = Vector2(590, 270)
+custom_minimum_size = Vector2(760, 360)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -54,7 +54,7 @@ size_flags_vertical = 3
 theme_override_constants/separation = 8
 
 [node name="CanvasPanel" type="PanelContainer" parent="MainContainer/WorkspaceContainer"]
-custom_minimum_size = Vector2(320, 240)
+custom_minimum_size = Vector2(410, 310)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -64,12 +64,12 @@ theme_type_variation = &"PixelEditorCanvasPanel"
 layout_mode = 2
 
 [node name="DrawingSurface" type="Control" parent="MainContainer/WorkspaceContainer/CanvasPanel/CenterContainer"]
-custom_minimum_size = Vector2(320, 240)
+custom_minimum_size = Vector2(384, 288)
 layout_mode = 2
 mouse_default_cursor_shape = 3
 
 [node name="ToolsPanel" type="PanelContainer" parent="MainContainer/WorkspaceContainer"]
-custom_minimum_size = Vector2(250, 0)
+custom_minimum_size = Vector2(290, 0)
 layout_mode = 2
 theme_type_variation = &"PixelEditorToolsPanel"
 

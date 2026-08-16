@@ -11,6 +11,9 @@ const WINDOW_SIZES: Array[Vector2i] = [
 @onready var fullscreen_check_box: CheckBox = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/FullscreenCheckBox
 @onready var window_size_option_button: OptionButton = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/WindowSizeOptionButton
 @onready var ui_scale_slider: HSlider = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/UiScaleSlider
+@onready var master_volume_slider: HSlider = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MasterVolumeSlider
+@onready var music_volume_slider: HSlider = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MusicVolumeSlider
+@onready var sfx_volume_slider: HSlider = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SfxVolumeSlider
 @onready var apply_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ApplyButton
 @onready var close_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CloseButton
 
@@ -48,6 +51,9 @@ func _on_apply_pressed() -> void:
 			0.8,
 			1.4
 		),
+		"master_volume": clampf(float(master_volume_slider.value), 0.0, 1.0),
+		"music_volume": clampf(float(music_volume_slider.value), 0.0, 1.0),
+		"sfx_volume": clampf(float(sfx_volume_slider.value), 0.0, 1.0),
 	}
 	if _write_settings(settings):
 		apply_settings(settings)
@@ -63,6 +69,9 @@ func _load_controls_from_settings() -> void:
 	var size_index := WINDOW_SIZES.find(saved_size)
 	window_size_option_button.select(maxi(size_index, 0))
 	ui_scale_slider.value = float(settings["ui_scale"])
+	master_volume_slider.value = float(settings["master_volume"])
+	music_volume_slider.value = float(settings["music_volume"])
+	sfx_volume_slider.value = float(settings["sfx_volume"])
 
 
 static func apply_saved_settings() -> void:
@@ -76,6 +85,9 @@ static func apply_settings(settings: Dictionary) -> void:
 	var window := scene_tree.root
 	if window == null:
 		return
+	var audio_manager := scene_tree.root.get_node_or_null("AudioManager")
+	if audio_manager != null:
+		audio_manager.apply_volume_settings(settings)
 	window.content_scale_factor = float(settings.get("ui_scale", 1.0))
 	var fullscreen := bool(settings.get("fullscreen", false))
 	if fullscreen:
@@ -94,6 +106,9 @@ static func read_settings() -> Dictionary:
 		"window_width": 1280,
 		"window_height": 720,
 		"ui_scale": 1.0,
+		"master_volume": 0.85,
+		"music_volume": 0.65,
+		"sfx_volume": 0.8,
 	}
 	if not FileAccess.file_exists(SETTINGS_PATH):
 		return defaults
@@ -111,6 +126,9 @@ static func read_settings() -> Dictionary:
 		"window_width": int(data["window_width"]),
 		"window_height": int(data["window_height"]),
 		"ui_scale": float(data["ui_scale"]),
+		"master_volume": float(data.get("master_volume", defaults["master_volume"])),
+		"music_volume": float(data.get("music_volume", defaults["music_volume"])),
+		"sfx_volume": float(data.get("sfx_volume", defaults["sfx_volume"])),
 	}
 
 
@@ -136,7 +154,17 @@ static func _is_valid_settings(data: Dictionary) -> bool:
 		return false
 	var size := Vector2i(int(data["window_width"]), int(data["window_height"]))
 	var scale := float(data["ui_scale"])
-	return size in WINDOW_SIZES and scale >= 0.8 and scale <= 1.4
+	if size not in WINDOW_SIZES or scale < 0.8 or scale > 1.4:
+		return false
+	for key in ["master_volume", "music_volume", "sfx_volume"]:
+		if not data.has(key):
+			continue
+		if not (data[key] is int or data[key] is float):
+			return false
+		var volume := float(data[key])
+		if volume < 0.0 or volume > 1.0:
+			return false
+	return true
 
 
 static func _is_integer_value(value: Variant) -> bool:

@@ -136,28 +136,41 @@ func _rebuild_choices() -> void:
 		var choice: Dictionary = choice_value
 		var choice_id: StringName = choice.get("choice_id", &"")
 		var choice_panel := PanelContainer.new()
-		var choice_content := VBoxContainer.new()
-		choice_content.add_theme_constant_override("separation", 4)
+		var choice_content := HBoxContainer.new()
+		var choice_details := VBoxContainer.new()
+		choice_panel.custom_minimum_size = Vector2(0, 92)
+		choice_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		choice_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		choice_content.add_theme_constant_override("separation", 12)
+		choice_details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		choice_details.add_theme_constant_override("separation", 1)
 		choice_panel.add_child(choice_content)
+		choice_content.add_child(choice_details)
 
 		var choice_title := Label.new()
 		choice_title.text = String(choice.get("text", ""))
 		choice_title.theme_type_variation = &"SectionTitleLabel"
+		choice_title.add_theme_font_size_override("font_size", 18)
 		choice_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		choice_content.add_child(choice_title)
+		choice_details.add_child(choice_title)
 
 		var description_label := Label.new()
 		description_label.text = String(choice.get("description", ""))
+		description_label.add_theme_font_size_override("font_size", 16)
 		description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		choice_content.add_child(description_label)
+		choice_details.add_child(description_label)
 
 		var requirements_label := Label.new()
 		requirements_label.text = _format_requirements(choice)
+		requirements_label.add_theme_font_size_override("font_size", 15)
 		requirements_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		choice_content.add_child(requirements_label)
+		choice_details.add_child(requirements_label)
 
 		var choice_button := Button.new()
 		choice_button.text = "Выбрать"
+		choice_button.custom_minimum_size = Vector2(132, 0)
+		choice_button.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		choice_button.add_theme_font_size_override("font_size", 16)
 		choice_button.pressed.connect(_on_choice_pressed.bind(choice_id))
 		choice_content.add_child(choice_button)
 		choices_container.add_child(choice_panel)

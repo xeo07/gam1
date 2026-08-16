@@ -1,7 +1,7 @@
 extends Node2D
 
 const GAME_NAME := "CROWNSCAR"
-const GAME_VERSION := "0.0.1"
+const GAME_VERSION := "1.0.0"
 const GRID_MARGIN := 16.0
 const MAIN_MENU_SCENE := "res://Scenes/Main/MainMenu.tscn"
 const PENDING_NEW_GAME_PATH := "user://pending_new_game.json"
@@ -59,6 +59,7 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
+	AudioManager.play_game_music()
 	_register_windows()
 	save_manager.load_failed.connect(_on_load_failed)
 	save_manager.game_loaded.connect(_on_game_loaded)
@@ -205,7 +206,7 @@ func _finish_initialization(show_tutorial: bool = false) -> void:
 	loading_overlay.visible = false
 	get_tree().paused = false
 	_update_event_lock()
-	if show_tutorial:
+	if show_tutorial and TutorialPanel.should_offer():
 		tutorial_panel.open_offer()
 
 
@@ -521,12 +522,6 @@ func _has_visible_report() -> bool:
 
 func _prepare_responsive_windows() -> void:
 	UIWindowLayout.make_body_scrollable(
-		army_panel, [&"TitleLabel", &"SummaryLabel"], [&"StatusLabel", &"CloseButton"]
-	)
-	UIWindowLayout.make_body_scrollable(
-		war_panel, [&"TitleLabel"], [&"StatusLabel", &"CloseButton"]
-	)
-	UIWindowLayout.make_body_scrollable(
 		kingdom_stats_panel, [&"TitleLabel"], [&"CloseButton"]
 	)
 	UIWindowLayout.make_body_scrollable(
@@ -551,8 +546,8 @@ func _prepare_responsive_windows() -> void:
 func _update_window_layouts(hud_height: float) -> void:
 	UIWindowLayout.fit_window(kingdom_stats_panel, hud_height, Vector2(720, 680))
 	UIWindowLayout.fit_window(population_panel, hud_height, Vector2(860, 640))
-	UIWindowLayout.fit_window(army_panel, hud_height, Vector2(760, 680))
-	UIWindowLayout.fit_window(war_panel, hud_height, Vector2(760, 680))
+	UIWindowLayout.fit_window(army_panel, hud_height, Vector2(940, 560))
+	UIWindowLayout.fit_window(war_panel, hud_height, Vector2(940, 560))
 	UIWindowLayout.fit_window(build_panel, hud_height, Vector2(420, 360))
 	UIWindowLayout.fit_window(hiring_panel, hud_height, Vector2(420, 300))
 	UIWindowLayout.fit_window(relations_panel, hud_height, Vector2(1040, 680))

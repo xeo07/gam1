@@ -25,8 +25,9 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="Overlay/CenterContainer"]
-custom_minimum_size = Vector2(720, 640)
+custom_minimum_size = Vector2(760, 640)
 layout_mode = 2
+theme_type_variation = &"SystemMenuPanel"
 
 [node name="MarginContainer" type="MarginContainer" parent="Overlay/CenterContainer/PanelContainer"]
 layout_mode = 2
@@ -50,9 +51,10 @@ layout_mode = 2
 text = "Дата: День 1, Месяц 1, Год 1"
 
 [node name="BodyScroll" type="ScrollContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 72)
+custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
 horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
 
 [node name="BodyLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/BodyScroll"]
 layout_mode = 2
@@ -65,14 +67,16 @@ theme_type_variation = &"SectionTitleLabel"
 text = "Решение правителя"
 
 [node name="ChoicesScroll" type="ScrollContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 220)
+custom_minimum_size = Vector2(0, 330)
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
 
 [node name="ChoicesContainer" type="VBoxContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ChoicesScroll"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_override_constants/separation = 8
 
 [node name="StatusLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]

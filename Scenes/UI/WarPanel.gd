@@ -8,17 +8,20 @@ const STATUS_DISPLAY_NAMES: Dictionary = {
 	&"war": "В состоянии войны",
 }
 
-@onready var state_option_button: OptionButton = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StateOptionButton
-@onready var state_status_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StateStatusLabel
-@onready var relation_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/RelationLabel
-@onready var enemy_strength_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/EnemyStrengthLabel
-@onready var declare_war_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DeclareWarButton
-@onready var campaign_status_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CampaignStatusLabel
-@onready var soldiers_list: VBoxContainer = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SoldiersScrollContainer/SoldiersList
-@onready var selected_strength_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SelectedStrengthLabel
-@onready var start_campaign_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StartCampaignButton
-@onready var status_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatusLabel
-@onready var close_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CloseButton
+@onready var content_root: VBoxContainer = $Overlay/GameAreaMargin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer
+@onready var target_root: VBoxContainer = content_root.get_node("MainContent/MainSplit/TargetColumn/TargetPanel/TargetMargin/VBoxContainer") as VBoxContainer
+@onready var soldiers_root: VBoxContainer = content_root.get_node("MainContent/MainSplit/CitizensColumn") as VBoxContainer
+@onready var state_option_button: OptionButton = target_root.get_node("StateOptionButton") as OptionButton
+@onready var state_status_label: Label = target_root.get_node("StateStatusLabel") as Label
+@onready var relation_label: Label = target_root.get_node("RelationLabel") as Label
+@onready var enemy_strength_label: Label = target_root.get_node("EnemyStrengthLabel") as Label
+@onready var declare_war_button: Button = target_root.get_node("DeclareWarButton") as Button
+@onready var campaign_status_label: Label = content_root.get_node("MainContent/MainSplit/TargetColumn/CampaignPanel/CampaignMargin/CampaignStatusLabel") as Label
+@onready var soldiers_list: VBoxContainer = soldiers_root.get_node("SoldiersScrollContainer/SoldiersList") as VBoxContainer
+@onready var selected_strength_label: Label = soldiers_root.get_node("SelectedStrengthLabel") as Label
+@onready var start_campaign_button: Button = soldiers_root.get_node("StartCampaignButton") as Button
+@onready var status_label: Label = content_root.get_node("StatusLabel") as Label
+@onready var close_button: Button = content_root.get_node("CloseButton") as Button
 @onready var war_manager: WarManager = $"../WarManager" as WarManager
 @onready var army_manager: ArmyManager = $"../ArmyManager" as ArmyManager
 @onready var population_manager: PopulationManager = $"../PopulationManager" as PopulationManager

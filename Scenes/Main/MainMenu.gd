@@ -10,8 +10,11 @@ const LAST_ERROR_PATH := "user://last_menu_error.txt"
 @onready var menu_margin: MarginContainer = $SplitLayout/LeftMenuArea/MenuMargin
 @onready var menu_vbox: VBoxContainer = $SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer
 @onready var logo_area: VBoxContainer = $SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/LogoArea
+@onready var logo_top_spacer: Control = $SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/LogoArea/TopSpacer
 @onready var title_label: Label = $SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/LogoArea/TitleLabel
+@onready var title_ornament: TextureRect = $SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/LogoArea/TitleOrnament
 @onready var subtitle_label: Label = $SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/LogoArea/SubtitleLabel
+@onready var footer_ornament: TextureRect = $SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/FooterOrnament
 @onready var quote_margin: MarginContainer = $SplitLayout/RightVisualArea/QuoteMargin
 @onready var quote_label: Label = $SplitLayout/RightVisualArea/QuoteMargin/QuoteContainer/QuoteLabel
 @onready var new_game_button: Button = $SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/NewGameButton
@@ -62,6 +65,7 @@ var _main_menu_buttons: Array[Button] = []
 
 func _ready() -> void:
 	SettingsDialog.apply_saved_settings()
+	AudioManager.play_menu_music()
 	_restore_main_menu_scale()
 	_seed_rng.randomize()
 	continue_button.pressed.connect(_request_load)
@@ -191,7 +195,7 @@ func _start_pending_new_game() -> void:
 		"world_seed": _pending_world_seed,
 		"flag_pixels": PixelArtEditor.duplicate_pixels(_pending_flag_pixels),
 		"emblem_pixels": PixelArtEditor.duplicate_pixels(_pending_emblem_pixels),
-		"show_tutorial": true,
+		"show_tutorial": TutorialPanel.should_offer(),
 	}
 	pending_file.store_string(JSON.stringify(pending_data, "\t"))
 	pending_file.flush()
@@ -397,8 +401,8 @@ func _update_new_game_dialog_layout() -> void:
 	if not is_inside_tree():
 		return
 	var viewport_size := get_viewport().get_visible_rect().size
-	new_game_panel.custom_minimum_size.x = clampf(viewport_size.x - 64.0, 640.0, 760.0)
-	identity_tabs.custom_minimum_size.y = clampf(viewport_size.y - 280.0, 300.0, 360.0)
+	new_game_panel.custom_minimum_size.x = clampf(viewport_size.x - 64.0, 720.0, 940.0)
+	identity_tabs.custom_minimum_size.y = clampf(viewport_size.y - 250.0, 340.0, 460.0)
 
 
 func _update_main_menu_layout() -> void:
@@ -413,9 +417,12 @@ func _update_main_menu_layout() -> void:
 		menu_margin.add_theme_constant_override("margin_bottom", 14)
 		menu_vbox.add_theme_constant_override("separation", 5)
 		logo_area.custom_minimum_size.y = 88.0
+		logo_top_spacer.custom_minimum_size.y = 20.0
 		title_label.custom_minimum_size.y = 48.0
 		title_label.add_theme_font_size_override("font_size", 38)
+		title_ornament.custom_minimum_size.y = 18.0
 		subtitle_label.add_theme_font_size_override("font_size", 14)
+		footer_ornament.visible = false
 		quote_margin.offset_top = 34.0
 		quote_margin.offset_bottom = 158.0
 		quote_margin.add_theme_constant_override("margin_left", 34)
@@ -433,9 +440,13 @@ func _update_main_menu_layout() -> void:
 		menu_margin.add_theme_constant_override("margin_bottom", int(22.0 * height_scale))
 		menu_vbox.add_theme_constant_override("separation", int(clampf(8.0 * height_scale, 8.0, 10.0)))
 		logo_area.custom_minimum_size.y = 126.0 * height_scale
+		logo_top_spacer.custom_minimum_size.y = clampf(32.0 * height_scale, 32.0, 40.0)
 		title_label.custom_minimum_size.y = 72.0 * height_scale
 		title_label.add_theme_font_size_override("font_size", int(clampf(54.0 * height_scale, 54.0, 68.0)))
+		title_ornament.custom_minimum_size.y = clampf(30.0 * height_scale, 30.0, 38.0)
 		subtitle_label.add_theme_font_size_override("font_size", int(clampf(18.0 * height_scale, 18.0, 22.0)))
+		footer_ornament.visible = true
+		footer_ornament.custom_minimum_size.y = clampf(52.0 * height_scale, 52.0, 62.0)
 		quote_margin.offset_top = 68.0 * height_scale
 		quote_margin.offset_bottom = 220.0 * height_scale
 		quote_margin.add_theme_constant_override("margin_left", int(clampf(viewport_size.x * 0.055, 72.0, 112.0)))

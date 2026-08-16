@@ -1,12 +1,13 @@
-[gd_scene load_steps=9 format=3 uid="uid://bmmn7q4k2v5ra"]
+[gd_scene load_steps=10 format=3 uid="uid://bmmn7q4k2v5ra"]
 
 [ext_resource type="Script" uid="uid://dmmn7q4k2v5ra" path="res://Scenes/Main/MainMenu.gd" id="1_menu"]
 [ext_resource type="Theme" path="res://Themes/CrownscarMainMenuTheme.tres" id="2_theme"]
 [ext_resource type="PackedScene" uid="uid://bsdg7q4k2v5ra" path="res://Scenes/UI/SettingsDialog.tscn" id="3_settings"]
 [ext_resource type="PackedScene" path="res://Scenes/UI/PixelArtEditor.tscn" id="4_pixel_editor"]
 [ext_resource type="Texture2D" path="res://Assets/UI/MainMenu/left_black_wood.png" id="5_left_wood"]
-[ext_resource type="Texture2D" path="res://Assets/UI/MainMenu/castle_background.png" id="6_castle"]
-[ext_resource type="FontFile" path="res://Assets/Fonts/Cinzel_Decorative/CinzelDecorative-Regular.ttf" id="7_title_font"]
+[ext_resource type="Texture2D" path="res://Assets/UI/MainMenu/throne_room_background.png" id="6_castle"]
+[ext_resource type="Texture2D" path="res://Assets/UI/MainMenu/ornament_large.png" id="7_ornament_large"]
+[ext_resource type="Texture2D" path="res://Assets/UI/MainMenu/ornament_thin.png" id="8_ornament_thin"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -30,7 +31,7 @@ theme_override_constants/separation = 0
 [node name="LeftMenuArea" type="TextureRect" parent="SplitLayout"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.62
+size_flags_stretch_ratio = 0.58
 mouse_filter = 2
 texture = ExtResource("5_left_wood")
 expand_mode = 1
@@ -44,7 +45,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.005, 0.005, 0.005, 0.27)
+color = Color(0.005, 0.005, 0.005, 0.42)
 
 [node name="TopRule" type="ColorRect" parent="SplitLayout/LeftMenuArea"]
 layout_mode = 1
@@ -63,6 +64,14 @@ anchor_bottom = 1.0
 offset_top = -2.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 2
+color = Color(0.31, 0.3, 0.27, 0.9)
+
+[node name="LeftRule" type="ColorRect" parent="SplitLayout/LeftMenuArea"]
+layout_mode = 1
+anchor_bottom = 1.0
+offset_right = 2.0
+grow_vertical = 2
 mouse_filter = 2
 color = Color(0.31, 0.3, 0.27, 0.9)
 
@@ -87,30 +96,38 @@ custom_minimum_size = Vector2(0, 126)
 layout_mode = 2
 theme_override_constants/separation = 6
 
+[node name="TopSpacer" type="Control" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/LogoArea"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
 [node name="TitleLabel" type="Label" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/LogoArea"]
 custom_minimum_size = Vector2(0, 72)
 layout_mode = 2
+theme_type_variation = &"TitleLabel"
 theme_override_colors/font_color = Color(0.933, 0.902, 0.835, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 3
-theme_override_fonts/font = ExtResource("7_title_font")
 theme_override_font_sizes/font_size = 54
 text = "CROWNSCAR"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Divider" type="ColorRect" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/LogoArea"]
-custom_minimum_size = Vector2(0, 2)
+[node name="TitleOrnament" type="TextureRect" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/LogoArea"]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 mouse_filter = 2
-color = Color(0.42, 0.12, 0.13, 1)
+modulate = Color(0.86, 0.86, 0.86, 0.88)
+texture = ExtResource("8_ornament_thin")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="SubtitleLabel" type="Label" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer/LogoArea"]
+visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(0.72, 0.69, 0.63, 1)
 theme_override_font_sizes/font_size = 18
-text = "Построй. Правь. Выживи."
+text = ""
 horizontal_alignment = 1
 
 [node name="MenuSpacer" type="Control" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer"]
@@ -253,6 +270,15 @@ color = Color(0.42, 0.12, 0.13, 1)
 layout_mode = 2
 size_flags_vertical = 3
 
+[node name="FooterOrnament" type="TextureRect" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer"]
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+mouse_filter = 2
+modulate = Color(0.72, 0.72, 0.72, 0.64)
+texture = ExtResource("7_ornament_large")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="StatusLabel" type="Label" parent="SplitLayout/LeftMenuArea/MenuMargin/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.68, 0.23, 0.24, 1)
@@ -264,7 +290,7 @@ autowrap_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0.48, 0.47, 0.44, 1)
 theme_override_font_sizes/font_size = 15
-text = "v0.0.1"
+text = "v1.0.0"
 horizontal_alignment = 1
 
 [node name="MetalDivider" type="ColorRect" parent="SplitLayout"]
@@ -298,7 +324,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.01, 0.015, 0.022, 0.2)
+color = Color(0.01, 0.015, 0.022, 0.12)
 
 [node name="LeftShade" type="ColorRect" parent="SplitLayout/RightVisualArea"]
 layout_mode = 1
@@ -417,7 +443,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="NewGameDialog/Overlay/CenterContainer"]
-custom_minimum_size = Vector2(760, 0)
+custom_minimum_size = Vector2(940, 0)
 layout_mode = 2
 theme_type_variation = &"SystemMenuPanel"
 
@@ -479,7 +505,7 @@ theme_override_font_sizes/font_size = 14
 text = "Случайный seed"
 
 [node name="SymbolTabs" type="TabContainer" parent="NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 360)
+custom_minimum_size = Vector2(0, 460)
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -502,7 +528,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 horizontal_scroll_mode = 1
-vertical_scroll_mode = 1
+vertical_scroll_mode = 0
 
 [node name="FlagPixelArtEditor" parent="NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SymbolTabs/FlagTab/EditorViewport/ScrollContainer" instance=ExtResource("4_pixel_editor")]
 layout_mode = 2
@@ -526,7 +552,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 horizontal_scroll_mode = 1
-vertical_scroll_mode = 1
+vertical_scroll_mode = 0
 
 [node name="EmblemPixelArtEditor" parent="NewGameDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SymbolTabs/EmblemTab/EditorViewport/ScrollContainer" instance=ExtResource("4_pixel_editor")]
 layout_mode = 2
@@ -704,7 +730,7 @@ horizontal_alignment = 1
 
 [node name="VersionLabel" type="Label" parent="CreditsDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Версия игры: 0.0.1"
+text = "Версия игры: 1.0.0"
 horizontal_alignment = 1
 
 [node name="CloseButton" type="Button" parent="CreditsDialog/Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]

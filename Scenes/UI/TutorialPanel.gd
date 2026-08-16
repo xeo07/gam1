@@ -3,25 +3,27 @@ class_name TutorialPanel
 
 signal tutorial_closed(skipped: bool)
 
+const COMPLETION_PATH := "user://tutorial_completed.flag"
+
 const STEPS: Array[Dictionary] = [
 	{
-		"title": "1. Ваше королевство",
-		"body": "Слева находится земля королевства. Каждая клетка доступна для строительства. Кнопка ☰ теперь расположена над полем и не занимает клетку."
+		"title": "Ваше королевство",
+		"body": "Слева находятся земли вашего королевства. На свободных клетках можно возводить здания. Меню управления открывается кнопкой ☰ в левом верхнем углу."
 	},
 	{
-		"title": "2. Как построить здание",
+		"title": "Как построить здание",
 		"body": "Нажмите «Жители» внизу, затем «Строительство». Выберите здание — окно закроется. После этого нажмите на свободную клетку поля."
 	},
 	{
-		"title": "3. Ресурсы и жители",
+		"title": "Ресурсы и жители",
 		"body": "Справа внизу показаны еда, дерево, камень и золото. Строения тратят ресурсы, а жители нужны для работы и армии."
 	},
 	{
-		"title": "4. Время и события",
+		"title": "Время и события",
 		"body": "Кнопка «Новый день» двигает время вперёд. Следите за событиями и принимайте решения: они меняют ресурсы, стабильность и отношения."
 	},
 	{
-		"title": "5. Мир вокруг",
+		"title": "Мир вокруг",
 		"body": "Откройте «Геополитика», чтобы изучать соседей, отправлять гонцов и шпионов. Сохранение и настройки находятся в меню ☰."
 	},
 ]
@@ -51,6 +53,18 @@ func open_offer() -> void:
 	visible = true
 	get_tree().paused = true
 	primary_button.grab_focus()
+
+
+static func should_offer() -> bool:
+	return not FileAccess.file_exists(COMPLETION_PATH)
+
+
+static func mark_completed() -> void:
+	var completion_file := FileAccess.open(COMPLETION_PATH, FileAccess.WRITE)
+	if completion_file == null:
+		return
+	completion_file.store_8(1)
+	completion_file.flush()
 
 
 func skip() -> void:
@@ -83,6 +97,7 @@ func _show_step() -> void:
 
 
 func _close(skipped: bool) -> void:
+	mark_completed()
 	visible = false
 	get_tree().paused = false
 	tutorial_closed.emit(skipped)

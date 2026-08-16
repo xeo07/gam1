@@ -2,7 +2,7 @@ extends Control
 class_name KingdomGrid
 
 const GRID_COLUMNS := 10
-const GRID_ROWS := 6
+const GRID_ROWS := 7
 const MAXIMUM_CELL_SIZE := 96.0
 const MINIMUM_CELL_SIZE := 12.0
 const GRID_SIZE := Vector2i(GRID_COLUMNS, GRID_ROWS)
@@ -59,7 +59,7 @@ func _draw() -> void:
 	var map_rect := Rect2(Vector2.ZERO, map_size)
 	if background_texture != null:
 		_draw_background_texture(map_rect)
-		draw_rect(map_rect, Color(0.03, 0.04, 0.02, 0.08), true)
+		draw_rect(map_rect, Color(0.018, 0.022, 0.02, 0.34), true)
 	else:
 		draw_rect(map_rect, Color(0.18, 0.24, 0.14), true)
 		_draw_terrain()
@@ -69,8 +69,8 @@ func _draw() -> void:
 				Vector2(column * _cell_size, row * _cell_size),
 				Vector2(_cell_size, _cell_size)
 			)
-			draw_rect(cell_rect, Color(0.06, 0.08, 0.04, 0.06), true)
-			draw_rect(cell_rect, Color(0.82, 0.77, 0.60, 0.46), false, 1.0)
+			draw_rect(cell_rect, Color(0.04, 0.045, 0.04, 0.08), true)
+			draw_rect(cell_rect, Color(0.66, 0.64, 0.59, 0.26), false, 1.0)
 
 
 func _draw_background_texture(target_rect: Rect2) -> void:

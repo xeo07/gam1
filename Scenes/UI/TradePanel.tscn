@@ -42,7 +42,7 @@ theme_override_constants/separation = 10
 
 [node name="TitleLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/RootVBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.941176, 0.756863, 0.360784, 1)
+theme_override_colors/font_color = Color(0.933, 0.902, 0.835, 1)
 theme_override_font_sizes/font_size = 22
 text = "ТОРГОВЛЯ"
 horizontal_alignment = 1
@@ -84,13 +84,13 @@ autowrap_mode = 2
 
 [node name="BlockReasonLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/RootVBox/PartnerCard/PartnerMargin/PartnerVBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.941176, 0.756863, 0.360784, 1)
+theme_override_colors/font_color = Color(0.933, 0.902, 0.835, 1)
 theme_override_font_sizes/font_size = 13
 autowrap_mode = 2
 
 [node name="OffersTitleLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/RootVBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.941176, 0.756863, 0.360784, 1)
+theme_override_colors/font_color = Color(0.933, 0.902, 0.835, 1)
 theme_override_font_sizes/font_size = 15
 text = "ДОСТУПНЫЕ СДЕЛКИ"
 
@@ -109,7 +109,7 @@ theme_override_constants/separation = 8
 [node name="StatusLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/RootVBox"]
 custom_minimum_size = Vector2(0, 0)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.941176, 0.756863, 0.360784, 1)
+theme_override_colors/font_color = Color(0.933, 0.902, 0.835, 1)
 theme_override_font_sizes/font_size = 14
 autowrap_mode = 2
 horizontal_alignment = 1

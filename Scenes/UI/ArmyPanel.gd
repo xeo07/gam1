@@ -1,19 +1,21 @@
 extends CanvasLayer
 class_name ArmyPanel
 
-@onready var summary_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SummaryLabel
-@onready var soldiers_list: ItemList = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SoldiersList
-@onready var citizen_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/CitizenLabel
-@onready var current_unit_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/CurrentUnitLabel
-@onready var unit_type_option_button: OptionButton = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/UnitTypeOptionButton
-@onready var assign_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/AssignButton
-@onready var equipment_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/EquipmentLabel
-@onready var equip_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/EquipButton
-@onready var unequip_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/UnequipButton
-@onready var remove_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/RemoveButton
-@onready var strength_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsPanel/VBoxContainer/StrengthLabel
-@onready var status_label: Label = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatusLabel
-@onready var close_button: Button = $Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CloseButton
+@onready var content_root: VBoxContainer = $Overlay/GameAreaMargin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer
+@onready var summary_label: Label = content_root.get_node("Header/SummaryLabel") as Label
+@onready var soldiers_list: ItemList = content_root.get_node("MainContent/MainSplit/CitizensColumn/SoldiersList") as ItemList
+@onready var details_root: VBoxContainer = content_root.get_node("MainContent/MainSplit/DetailsPanel/DetailsMargin/VBoxContainer") as VBoxContainer
+@onready var citizen_label: Label = details_root.get_node("CitizenLabel") as Label
+@onready var current_unit_label: Label = details_root.get_node("CurrentUnitLabel") as Label
+@onready var unit_type_option_button: OptionButton = details_root.get_node("UnitTypeOptionButton") as OptionButton
+@onready var assign_button: Button = details_root.get_node("AssignButton") as Button
+@onready var equipment_label: Label = details_root.get_node("EquipmentLabel") as Label
+@onready var equip_button: Button = details_root.get_node("EquipmentButtons/EquipButton") as Button
+@onready var unequip_button: Button = details_root.get_node("EquipmentButtons/UnequipButton") as Button
+@onready var remove_button: Button = details_root.get_node("RemoveButton") as Button
+@onready var strength_label: Label = details_root.get_node("StrengthLabel") as Label
+@onready var status_label: Label = content_root.get_node("StatusLabel") as Label
+@onready var close_button: Button = content_root.get_node("CloseButton") as Button
 @onready var army_manager: ArmyManager = $"../ArmyManager" as ArmyManager
 @onready var population_manager: PopulationManager = $"../PopulationManager" as PopulationManager
 @onready var special_goods_manager: SpecialGoodsManager = $"../SpecialGoodsManager" as SpecialGoodsManager
@@ -174,6 +176,7 @@ func _show_details(citizen_id: int) -> void:
 		equipment_label.text = _get_equipment_text(assignment)
 		strength_label.text = "Сила бойца: %d" % army_manager.calculate_unit_strength(citizen_id)
 		_select_unit_type(unit_type)
+	_set_details_controls_visible(true)
 	_update_buttons(assignment)
 
 
@@ -256,7 +259,7 @@ func _update_summary() -> void:
 
 
 func _clear_details() -> void:
-	citizen_label.text = ""
+	citizen_label.text = "Выберите бойца в списке слева"
 	current_unit_label.text = ""
 	equipment_label.text = ""
 	strength_label.text = ""
@@ -265,3 +268,17 @@ func _clear_details() -> void:
 	unequip_button.disabled = true
 	remove_button.disabled = true
 	equip_button.tooltip_text = "Сначала назначьте тип войск"
+	_set_details_controls_visible(false)
+
+
+func _set_details_controls_visible(has_selection: bool) -> void:
+	for control in [
+		current_unit_label,
+		strength_label,
+		unit_type_option_button,
+		assign_button,
+		equipment_label,
+		equip_button.get_parent(),
+		remove_button,
+	]:
+		(control as Control).visible = has_selection

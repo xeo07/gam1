@@ -5,8 +5,8 @@ signal pixels_changed
 signal random_requested
 
 const TRANSPARENT_INDEX := -1
-const FLAG_CELL_SIZE := 20.0
-const EMBLEM_CELL_SIZE := 20.0
+const FLAG_CELL_SIZE := 24.0
+const EMBLEM_CELL_SIZE := 24.0
 const PALETTE: Array[Color] = [
 	Color(0.03, 0.03, 0.035, 1.0),
 	Color(0.94, 0.92, 0.84, 1.0),
@@ -24,6 +24,21 @@ const PALETTE: Array[Color] = [
 	Color(0.35, 0.18, 0.07, 1.0),
 	Color(0.48, 0.16, 0.62, 1.0),
 	Color(0.08, 0.62, 0.61, 1.0),
+	Color(0.72, 0.70, 0.65, 1.0),
+	Color(0.47, 0.58, 0.68, 1.0),
+	Color(0.42, 0.08, 0.10, 1.0),
+	Color(0.68, 0.10, 0.18, 1.0),
+	Color(0.18, 0.48, 0.68, 1.0),
+	Color(0.10, 0.23, 0.42, 1.0),
+	Color(0.28, 0.40, 0.12, 1.0),
+	Color(0.52, 0.58, 0.20, 1.0),
+	Color(0.78, 0.60, 0.20, 1.0),
+	Color(0.78, 0.70, 0.52, 1.0),
+	Color(0.55, 0.28, 0.12, 1.0),
+	Color(0.58, 0.22, 0.42, 1.0),
+	Color(0.28, 0.16, 0.38, 1.0),
+	Color(0.54, 0.68, 0.66, 1.0),
+	Color(0.66, 0.46, 0.34, 1.0),
 ]
 
 @onready var editor_title_label: Label = $MainContainer/EditorHeader/EditorTitleLabel
@@ -296,13 +311,13 @@ func _build_palette() -> void:
 	_palette_buttons.clear()
 	for index in PALETTE.size():
 		var button := Button.new()
-		button.custom_minimum_size = Vector2(26, 26)
+		button.custom_minimum_size = Vector2(30, 30)
 		button.tooltip_text = "Цвет %d" % (index + 1)
 		button.pressed.connect(_select_color.bind(index))
 		palette_grid.add_child(button)
 		_palette_buttons.append(button)
 	_transparent_button = Button.new()
-	_transparent_button.custom_minimum_size = Vector2(26, 26)
+	_transparent_button.custom_minimum_size = Vector2(30, 30)
 	_transparent_button.text = "×"
 	_transparent_button.tooltip_text = "Прозрачный пиксель"
 	_transparent_button.pressed.connect(_select_color.bind(TRANSPARENT_INDEX))

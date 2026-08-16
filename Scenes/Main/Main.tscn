@@ -1,116 +1,117 @@
-[gd_scene load_steps=49 format=3 uid="uid://45u4jy3awi5k"]
+[gd_scene format=3 uid="uid://45u4jy3awi5k"]
 
 [ext_resource type="Script" uid="uid://cfwg6exp8s3wf" path="res://Scenes/Managers/GameManager.gd" id="1_qtv3y"]
-[ext_resource type="PackedScene" uid="uid://bgsm7q4k2v5ra" path="res://Scenes/Managers/GameSessionManager.tscn" id="2_session"]
 [ext_resource type="PackedScene" uid="uid://c76soeywiel3l" path="res://Scenes/Managers/TimeManager/TimeManager.tscn" id="2_cmk6n"]
-[ext_resource type="PackedScene" uid="uid://bq7q4h5m2rx8p" path="res://Scenes/Managers/ResourceManager.tscn" id="3_resource_manager"]
-[ext_resource type="PackedScene" uid="uid://bsgm7q4k2v5ra" path="res://Scenes/Managers/SpecialGoodsManager.tscn" id="3_special_goods_manager"]
-[ext_resource type="PackedScene" uid="uid://dpc8wmn3v6j2a" path="res://Scenes/Managers/PopulationManager.tscn" id="4_population_manager"]
-[ext_resource type="PackedScene" uid="uid://bamr7q4k2v5ra" path="res://Scenes/Managers/ArmyManager.tscn" id="4_army_manager"]
-[ext_resource type="PackedScene" uid="uid://bwmr7q4k2v5ra" path="res://Scenes/Managers/WarManager.tscn" id="4_war_manager"]
-[ext_resource type="PackedScene" uid="uid://dh5sam2x7k4qa" path="res://Scenes/Managers/BuildingManager.tscn" id="5_building_manager"]
-[ext_resource type="PackedScene" uid="uid://bmx7q3wak2r5a" path="res://Scenes/Managers/EconomyManager.tscn" id="6_economy_manager"]
-[ext_resource type="PackedScene" path="res://Scenes/Managers/StabilityManager.tscn" id="6_stability_manager"]
-[ext_resource type="PackedScene" path="res://Scenes/Managers/EventManager.tscn" id="6_event_manager"]
-[ext_resource type="PackedScene" uid="uid://bq8m3v7k2r5ha" path="res://Scenes/Managers/WorldManager.tscn" id="7_world_manager"]
-[ext_resource type="PackedScene" uid="uid://dx7m3rav2k5ra" path="res://Scenes/Managers/DiplomacyManager.tscn" id="8_diplomacy_manager"]
-[ext_resource type="PackedScene" path="res://Scenes/Managers/ContractManager.tscn" id="8_contract_manager"]
-[ext_resource type="PackedScene" uid="uid://ct8m3rav2k5ha" path="res://Scenes/Managers/TradeManager.tscn" id="9_trade_manager"]
-[ext_resource type="PackedScene" uid="uid://csp7m3rav2k5a" path="res://Scenes/Managers/SpyManager.tscn" id="9_spy_manager"]
-[ext_resource type="PackedScene" path="res://Scenes/Managers/MessengerManager.tscn" id="9_messenger_manager"]
-[ext_resource type="PackedScene" path="res://Scenes/Managers/EventJournalManager.tscn" id="9_event_journal"]
-[ext_resource type="PackedScene" path="res://Scenes/Managers/StoryChainManager.tscn" id="9_story_chain"]
-[ext_resource type="PackedScene" path="res://Scenes/Managers/TerritoryManager.tscn" id="9_territory_manager"]
-[ext_resource type="PackedScene" uid="uid://cv8m3q7k2r5ha" path="res://Scenes/Managers/NewsManager.tscn" id="7_news_manager"]
-[ext_resource type="PackedScene" uid="uid://cs8m3rav2k5ha" path="res://Scenes/Managers/SaveManager.tscn" id="10_save_manager"]
-[ext_resource type="PackedScene" uid="uid://bm7x3rak5v2ha" path="res://Scenes/Main/KingdomGrid.tscn" id="6_kingdom_grid"]
+[ext_resource type="PackedScene" uid="uid://bgsm7q4k2v5ra" path="res://Scenes/Managers/GameSessionManager.tscn" id="2_session"]
+[ext_resource type="PackedScene" path="res://Scenes/UI/ArmyQuickMenu.tscn" id="3_army_quick"]
 [ext_resource type="PackedScene" path="res://Scenes/UI/BottomHUD.tscn" id="3_bottom_hud"]
-[ext_resource type="PackedScene" path="res://Scenes/UI/SituationDashboard.tscn" id="3_situation_dashboard"]
 [ext_resource type="PackedScene" path="res://Scenes/UI/CornerMenuButton.tscn" id="3_corner_menu"]
 [ext_resource type="PackedScene" path="res://Scenes/UI/PopulationQuickMenu.tscn" id="3_population_quick"]
-[ext_resource type="PackedScene" path="res://Scenes/UI/ArmyQuickMenu.tscn" id="3_army_quick"]
+[ext_resource type="PackedScene" uid="uid://bq7q4h5m2rx8p" path="res://Scenes/Managers/ResourceManager.tscn" id="3_resource_manager"]
 [ext_resource type="PackedScene" path="res://Scenes/UI/ResourceQuickMenu.tscn" id="3_resource_quick"]
+[ext_resource type="PackedScene" path="res://Scenes/UI/SituationDashboard.tscn" id="3_situation_dashboard"]
+[ext_resource type="PackedScene" uid="uid://bsgm7q4k2v5ra" path="res://Scenes/Managers/SpecialGoodsManager.tscn" id="3_special_goods_manager"]
+[ext_resource type="PackedScene" uid="uid://bamr7q4k2v5ra" path="res://Scenes/Managers/ArmyManager.tscn" id="4_army_manager"]
+[ext_resource type="PackedScene" uid="uid://dpc8wmn3v6j2a" path="res://Scenes/Managers/PopulationManager.tscn" id="4_population_manager"]
 [ext_resource type="PackedScene" uid="uid://bsmn7q4k2v5ra" path="res://Scenes/UI/SideMenu.tscn" id="4_side_menu"]
 [ext_resource type="PackedScene" path="res://Scenes/UI/KingdomStatsPanel.tscn" id="4_stats_panel"]
-[ext_resource type="PackedScene" uid="uid://cwv7k3oap2h5x" path="res://Scenes/UI/PopulationPanel.tscn" id="5_population_panel"]
+[ext_resource type="PackedScene" uid="uid://bwmr7q4k2v5ra" path="res://Scenes/Managers/WarManager.tscn" id="4_war_manager"]
 [ext_resource type="PackedScene" uid="uid://bapn7q4k2v5ra" path="res://Scenes/UI/ArmyPanel.tscn" id="5_army_panel"]
+[ext_resource type="PackedScene" uid="uid://dh5sam2x7k4qa" path="res://Scenes/Managers/BuildingManager.tscn" id="5_building_manager"]
+[ext_resource type="PackedScene" uid="uid://cwv7k3oap2h5x" path="res://Scenes/UI/PopulationPanel.tscn" id="5_population_panel"]
 [ext_resource type="PackedScene" uid="uid://bwpl7q4k2v5ra" path="res://Scenes/UI/WarPanel.tscn" id="5_war_panel"]
+[ext_resource type="PackedScene" uid="uid://bmx7q3wak2r5a" path="res://Scenes/Managers/EconomyManager.tscn" id="6_economy_manager"]
+[ext_resource type="PackedScene" path="res://Scenes/Managers/EventManager.tscn" id="6_event_manager"]
+[ext_resource type="PackedScene" uid="uid://bm7x3rak5v2ha" path="res://Scenes/Main/KingdomGrid.tscn" id="6_kingdom_grid"]
+[ext_resource type="PackedScene" path="res://Scenes/Managers/StabilityManager.tscn" id="6_stability_manager"]
 [ext_resource type="PackedScene" uid="uid://cph8m3v7k2x5a" path="res://Scenes/UI/BuildPanel.tscn" id="7_build_panel"]
+[ext_resource type="PackedScene" uid="uid://cv8m3q7k2r5ha" path="res://Scenes/Managers/NewsManager.tscn" id="7_news_manager"]
+[ext_resource type="PackedScene" uid="uid://bq8m3v7k2r5ha" path="res://Scenes/Managers/WorldManager.tscn" id="7_world_manager"]
+[ext_resource type="PackedScene" path="res://Scenes/Managers/ContractManager.tscn" id="8_contract_manager"]
+[ext_resource type="PackedScene" uid="uid://dx7m3rav2k5ra" path="res://Scenes/Managers/DiplomacyManager.tscn" id="8_diplomacy_manager"]
 [ext_resource type="PackedScene" uid="uid://bs7m4rav2k5ra" path="res://Scenes/UI/HiringPanel.tscn" id="8_hiring_panel"]
-[ext_resource type="PackedScene" uid="uid://bsv7m3rak2r5a" path="res://Scenes/UI/RelationsPanel.tscn" id="9_relations_panel"]
-[ext_resource type="PackedScene" uid="uid://dt8m3rav2k5ha" path="res://Scenes/UI/TradePanel.tscn" id="10_trade_panel"]
-[ext_resource type="PackedScene" uid="uid://csgp7q4k2v5ra" path="res://Scenes/UI/SpecialGoodsPanel.tscn" id="10_special_goods_panel"]
-[ext_resource type="PackedScene" uid="uid://dn8m3q7v2k5ra" path="res://Scenes/UI/ForeignNewsPanel.tscn" id="10_foreign_news_panel"]
-[ext_resource type="PackedScene" uid="uid://cyr7m3rav2k5a" path="res://Scenes/UI/SpyReportPanel.tscn" id="10_spy_report_panel"]
-[ext_resource type="PackedScene" uid="uid://bwrp7q4k2v5ra" path="res://Scenes/UI/WarReportPanel.tscn" id="10_war_report_panel"]
-[ext_resource type="PackedScene" path="res://Scenes/UI/InternalEventPanel.tscn" id="10_internal_event_panel"]
-[ext_resource type="PackedScene" uid="uid://dsv8m3ra2k5ha" path="res://Scenes/UI/SaveLoadPanel.tscn" id="11_save_load_panel"]
 [ext_resource type="PackedScene" uid="uid://bh6m3q8v2k5ra" path="res://Scenes/UI/DailyReportPanel.tscn" id="9_daily_report_panel"]
+[ext_resource type="PackedScene" path="res://Scenes/Managers/EventJournalManager.tscn" id="9_event_journal"]
+[ext_resource type="PackedScene" path="res://Scenes/Managers/MessengerManager.tscn" id="9_messenger_manager"]
+[ext_resource type="PackedScene" uid="uid://bsv7m3rak2r5a" path="res://Scenes/UI/RelationsPanel.tscn" id="9_relations_panel"]
+[ext_resource type="PackedScene" uid="uid://csp7m3rav2k5a" path="res://Scenes/Managers/SpyManager.tscn" id="9_spy_manager"]
+[ext_resource type="PackedScene" path="res://Scenes/Managers/StoryChainManager.tscn" id="9_story_chain"]
+[ext_resource type="PackedScene" path="res://Scenes/Managers/TerritoryManager.tscn" id="9_territory_manager"]
+[ext_resource type="PackedScene" uid="uid://ct8m3rav2k5ha" path="res://Scenes/Managers/TradeManager.tscn" id="9_trade_manager"]
+[ext_resource type="PackedScene" uid="uid://dn8m3q7v2k5ra" path="res://Scenes/UI/ForeignNewsPanel.tscn" id="10_foreign_news_panel"]
+[ext_resource type="PackedScene" path="res://Scenes/UI/InternalEventPanel.tscn" id="10_internal_event_panel"]
+[ext_resource type="PackedScene" uid="uid://cs8m3rav2k5ha" path="res://Scenes/Managers/SaveManager.tscn" id="10_save_manager"]
+[ext_resource type="PackedScene" uid="uid://csgp7q4k2v5ra" path="res://Scenes/UI/SpecialGoodsPanel.tscn" id="10_special_goods_panel"]
+[ext_resource type="PackedScene" uid="uid://cyr7m3rav2k5a" path="res://Scenes/UI/SpyReportPanel.tscn" id="10_spy_report_panel"]
+[ext_resource type="PackedScene" uid="uid://dt8m3rav2k5ha" path="res://Scenes/UI/TradePanel.tscn" id="10_trade_panel"]
+[ext_resource type="PackedScene" uid="uid://bwrp7q4k2v5ra" path="res://Scenes/UI/WarReportPanel.tscn" id="10_war_report_panel"]
+[ext_resource type="PackedScene" uid="uid://dsv8m3ra2k5ha" path="res://Scenes/UI/SaveLoadPanel.tscn" id="11_save_load_panel"]
 [ext_resource type="PackedScene" uid="uid://bpsm7q4k2v5ra" path="res://Scenes/UI/PauseMenu.tscn" id="12_pause_menu"]
 [ext_resource type="PackedScene" path="res://Scenes/UI/TutorialPanel.tscn" id="13_tutorial_panel"]
 
 [node name="Game" type="Node2D" unique_id=1430445199]
 script = ExtResource("1_qtv3y")
 
-[node name="GameSessionManager" parent="." instance=ExtResource("2_session")]
+[node name="GameSessionManager" parent="." unique_id=773015723 instance=ExtResource("2_session")]
 
 [node name="TimeManager" parent="." unique_id=1825858998 instance=ExtResource("2_cmk6n")]
 
-[node name="ResourceManager" parent="." instance=ExtResource("3_resource_manager")]
+[node name="ResourceManager" parent="." unique_id=1749270396 instance=ExtResource("3_resource_manager")]
 
-[node name="SpecialGoodsManager" parent="." instance=ExtResource("3_special_goods_manager")]
+[node name="SpecialGoodsManager" parent="." unique_id=1108564318 instance=ExtResource("3_special_goods_manager")]
 
-[node name="PopulationManager" parent="." instance=ExtResource("4_population_manager")]
+[node name="PopulationManager" parent="." unique_id=2119436597 instance=ExtResource("4_population_manager")]
 
-[node name="ArmyManager" parent="." instance=ExtResource("4_army_manager")]
+[node name="ArmyManager" parent="." unique_id=1535435435 instance=ExtResource("4_army_manager")]
 
-[node name="WarManager" parent="." instance=ExtResource("4_war_manager")]
+[node name="WarManager" parent="." unique_id=2014657089 instance=ExtResource("4_war_manager")]
 
-[node name="BuildingManager" parent="." instance=ExtResource("5_building_manager")]
+[node name="BuildingManager" parent="." unique_id=32783448 instance=ExtResource("5_building_manager")]
 
-[node name="EconomyManager" parent="." instance=ExtResource("6_economy_manager")]
+[node name="EconomyManager" parent="." unique_id=1876542200 instance=ExtResource("6_economy_manager")]
 
-[node name="StabilityManager" parent="." instance=ExtResource("6_stability_manager")]
+[node name="StabilityManager" parent="." unique_id=1109129430 instance=ExtResource("6_stability_manager")]
 
-[node name="EventManager" parent="." instance=ExtResource("6_event_manager")]
+[node name="EventManager" parent="." unique_id=1537543312 instance=ExtResource("6_event_manager")]
 
-[node name="WorldManager" parent="." instance=ExtResource("7_world_manager")]
+[node name="WorldManager" parent="." unique_id=1400485391 instance=ExtResource("7_world_manager")]
 
-[node name="DiplomacyManager" parent="." instance=ExtResource("8_diplomacy_manager")]
+[node name="DiplomacyManager" parent="." unique_id=346853320 instance=ExtResource("8_diplomacy_manager")]
 
-[node name="ContractManager" parent="." instance=ExtResource("8_contract_manager")]
+[node name="ContractManager" parent="." unique_id=93408897 instance=ExtResource("8_contract_manager")]
 
-[node name="TradeManager" parent="." instance=ExtResource("9_trade_manager")]
+[node name="TradeManager" parent="." unique_id=207236857 instance=ExtResource("9_trade_manager")]
 
-[node name="SpyManager" parent="." instance=ExtResource("9_spy_manager")]
+[node name="SpyManager" parent="." unique_id=335087273 instance=ExtResource("9_spy_manager")]
 
-[node name="MessengerManager" parent="." instance=ExtResource("9_messenger_manager")]
+[node name="MessengerManager" parent="." unique_id=966563014 instance=ExtResource("9_messenger_manager")]
 
-[node name="EventJournalManager" parent="." instance=ExtResource("9_event_journal")]
+[node name="EventJournalManager" parent="." unique_id=1541240218 instance=ExtResource("9_event_journal")]
 
-[node name="StoryChainManager" parent="." instance=ExtResource("9_story_chain")]
+[node name="StoryChainManager" parent="." unique_id=1059437951 instance=ExtResource("9_story_chain")]
 
-[node name="TerritoryManager" parent="." instance=ExtResource("9_territory_manager")]
+[node name="TerritoryManager" parent="." unique_id=2025375429 instance=ExtResource("9_territory_manager")]
 
-[node name="NewsManager" parent="." instance=ExtResource("7_news_manager")]
+[node name="NewsManager" parent="." unique_id=2132192504 instance=ExtResource("7_news_manager")]
 
-[node name="SaveManager" parent="." instance=ExtResource("10_save_manager")]
+[node name="SaveManager" parent="." unique_id=986854252 instance=ExtResource("10_save_manager")]
 
-[node name="KingdomGrid" parent="." instance=ExtResource("6_kingdom_grid")]
+[node name="KingdomGrid" parent="." unique_id=1132430516 instance=ExtResource("6_kingdom_grid")]
+layout_mode = 3
+anchors_preset = 0
 
-[node name="LoadingOverlay" type="CanvasLayer" parent="."]
+[node name="LoadingOverlay" type="CanvasLayer" parent="." unique_id=1254399324]
 layer = 100
 
-[node name="Background" type="ColorRect" parent="LoadingOverlay"]
+[node name="Background" type="ColorRect" parent="LoadingOverlay" unique_id=1160358608]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 0
 color = Color(0.035, 0.03, 0.026, 1)
 
-[node name="CenterContainer" type="CenterContainer" parent="LoadingOverlay/Background"]
+[node name="CenterContainer" type="CenterContainer" parent="LoadingOverlay/Background" unique_id=979045935]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -118,55 +119,55 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="LoadingOverlay/Background/CenterContainer"]
+[node name="Label" type="Label" parent="LoadingOverlay/Background/CenterContainer" unique_id=628534010]
 layout_mode = 2
 theme_type_variation = &"TitleLabel"
 text = "Загрузка..."
 
-[node name="SituationDashboard" parent="." instance=ExtResource("3_situation_dashboard")]
+[node name="SituationDashboard" parent="." unique_id=2114632722 instance=ExtResource("3_situation_dashboard")]
 
-[node name="BottomHUD" parent="." instance=ExtResource("3_bottom_hud")]
+[node name="BottomHUD" parent="." unique_id=1139840789 instance=ExtResource("3_bottom_hud")]
 
-[node name="CornerMenuButton" parent="." instance=ExtResource("3_corner_menu")]
+[node name="CornerMenuButton" parent="." unique_id=1070764356 instance=ExtResource("3_corner_menu")]
 
-[node name="PopulationQuickMenu" parent="." instance=ExtResource("3_population_quick")]
+[node name="PopulationQuickMenu" parent="." unique_id=354520978 instance=ExtResource("3_population_quick")]
 
-[node name="ArmyQuickMenu" parent="." instance=ExtResource("3_army_quick")]
+[node name="ArmyQuickMenu" parent="." unique_id=969293475 instance=ExtResource("3_army_quick")]
 
-[node name="ResourceQuickMenu" parent="." instance=ExtResource("3_resource_quick")]
+[node name="ResourceQuickMenu" parent="." unique_id=1633064906 instance=ExtResource("3_resource_quick")]
 
-[node name="SideMenu" parent="." instance=ExtResource("4_side_menu")]
+[node name="SideMenu" parent="." unique_id=1179585075 instance=ExtResource("4_side_menu")]
 
-[node name="KingdomStatsPanel" parent="." instance=ExtResource("4_stats_panel")]
+[node name="KingdomStatsPanel" parent="." unique_id=1472843980 instance=ExtResource("4_stats_panel")]
 
-[node name="PopulationPanel" parent="." instance=ExtResource("5_population_panel")]
+[node name="PopulationPanel" parent="." unique_id=483803872 instance=ExtResource("5_population_panel")]
 
-[node name="ArmyPanel" parent="." instance=ExtResource("5_army_panel")]
+[node name="ArmyPanel" parent="." unique_id=17205590 instance=ExtResource("5_army_panel")]
 
-[node name="WarPanel" parent="." instance=ExtResource("5_war_panel")]
+[node name="WarPanel" parent="." unique_id=1571375172 instance=ExtResource("5_war_panel")]
 
-[node name="BuildPanel" parent="." instance=ExtResource("7_build_panel")]
+[node name="BuildPanel" parent="." unique_id=343609654 instance=ExtResource("7_build_panel")]
 
-[node name="HiringPanel" parent="." instance=ExtResource("8_hiring_panel")]
+[node name="HiringPanel" parent="." unique_id=595722095 instance=ExtResource("8_hiring_panel")]
 
-[node name="RelationsPanel" parent="." instance=ExtResource("9_relations_panel")]
+[node name="RelationsPanel" parent="." unique_id=36657915 instance=ExtResource("9_relations_panel")]
 
-[node name="TradePanel" parent="." instance=ExtResource("10_trade_panel")]
+[node name="TradePanel" parent="." unique_id=1862814074 instance=ExtResource("10_trade_panel")]
 
-[node name="SpecialGoodsPanel" parent="." instance=ExtResource("10_special_goods_panel")]
+[node name="SpecialGoodsPanel" parent="." unique_id=188308328 instance=ExtResource("10_special_goods_panel")]
 
-[node name="SaveLoadPanel" parent="." instance=ExtResource("11_save_load_panel")]
+[node name="SaveLoadPanel" parent="." unique_id=1425954325 instance=ExtResource("11_save_load_panel")]
 
-[node name="ForeignNewsPanel" parent="." instance=ExtResource("10_foreign_news_panel")]
+[node name="ForeignNewsPanel" parent="." unique_id=905347925 instance=ExtResource("10_foreign_news_panel")]
 
-[node name="SpyReportPanel" parent="." instance=ExtResource("10_spy_report_panel")]
+[node name="SpyReportPanel" parent="." unique_id=727204407 instance=ExtResource("10_spy_report_panel")]
 
-[node name="WarReportPanel" parent="." instance=ExtResource("10_war_report_panel")]
+[node name="WarReportPanel" parent="." unique_id=1899696474 instance=ExtResource("10_war_report_panel")]
 
-[node name="InternalEventPanel" parent="." instance=ExtResource("10_internal_event_panel")]
+[node name="InternalEventPanel" parent="." unique_id=1321907219 instance=ExtResource("10_internal_event_panel")]
 
-[node name="DailyReportPanel" parent="." instance=ExtResource("9_daily_report_panel")]
+[node name="DailyReportPanel" parent="." unique_id=921846943 instance=ExtResource("9_daily_report_panel")]
 
-[node name="PauseMenu" parent="." instance=ExtResource("12_pause_menu")]
+[node name="PauseMenu" parent="." unique_id=482289452 instance=ExtResource("12_pause_menu")]
 
-[node name="TutorialPanel" parent="." instance=ExtResource("13_tutorial_panel")]
+[node name="TutorialPanel" parent="." unique_id=345286115 instance=ExtResource("13_tutorial_panel")]

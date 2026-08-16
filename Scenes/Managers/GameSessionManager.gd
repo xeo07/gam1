@@ -111,7 +111,7 @@ static func generate_default_flag(rng: RandomNumberGenerator) -> Array:
 	var accent := rng.randi_range(1, PixelArtEditor.PALETTE.size() - 1)
 	while accent == primary or accent == secondary:
 		accent = 1 + (accent % (PixelArtEditor.PALETTE.size() - 1))
-	var pattern := rng.randi_range(0, 7)
+	var pattern := rng.randi_range(0, 15)
 	var pixels: Array = []
 	for y in FLAG_SIZE.y:
 		var row: Array = []
@@ -126,6 +126,14 @@ static func generate_default_flag(rng: RandomNumberGenerator) -> Array:
 				5: color = primary if x < FLAG_SIZE.x / 3 else (secondary if x < FLAG_SIZE.x * 2 / 3 else accent)
 				6: color = accent if x <= 1 or x >= FLAG_SIZE.x - 2 or y <= 1 or y >= FLAG_SIZE.y - 2 else (primary if y < FLAG_SIZE.y / 2 else secondary)
 				7: color = accent if absi(x - FLAG_SIZE.x / 2) <= y / 2 else (primary if x < FLAG_SIZE.x / 2 else secondary)
+				8: color = accent if absi(x - FLAG_SIZE.x / 2) <= 1 or absi(y - FLAG_SIZE.y / 2) <= 1 else (primary if (x < FLAG_SIZE.x / 2) == (y < FLAG_SIZE.y / 2) else secondary)
+				9: color = primary if y < FLAG_SIZE.y / 3 else (accent if y < FLAG_SIZE.y * 2 / 3 else secondary)
+				10: color = accent if absi(x * FLAG_SIZE.y - y * FLAG_SIZE.x) <= FLAG_SIZE.y or absi((FLAG_SIZE.x - 1 - x) * FLAG_SIZE.y - y * FLAG_SIZE.x) <= FLAG_SIZE.y else (primary if y < FLAG_SIZE.y / 2 else secondary)
+				11: color = accent if (x / 2) % 2 == 0 else (primary if y < FLAG_SIZE.y / 2 else secondary)
+				12: color = accent if absi(x - FLAG_SIZE.x / 2) * 2 + absi(y - FLAG_SIZE.y / 2) * 3 <= 8 else (primary if x < FLAG_SIZE.x / 2 else secondary)
+				13: color = accent if y in [2, 3, 6, 7] else (primary if y < FLAG_SIZE.y / 2 else secondary)
+				14: color = accent if x >= FLAG_SIZE.x / 3 and x < FLAG_SIZE.x * 2 / 3 else (primary if x < FLAG_SIZE.x / 2 else secondary)
+				15: color = accent if x in [4, 5] or y in [4, 5] else (primary if y < FLAG_SIZE.y / 2 else secondary)
 			row.append(color)
 		pixels.append(row)
 	return pixels
@@ -139,7 +147,7 @@ static func generate_default_emblem(rng: RandomNumberGenerator) -> Array:
 	var detail := rng.randi_range(1, PixelArtEditor.PALETTE.size() - 1)
 	while detail == background or detail == symbol:
 		detail = 1 + (detail % (PixelArtEditor.PALETTE.size() - 1))
-	var pattern := rng.randi_range(0, 7)
+	var pattern := rng.randi_range(0, 15)
 	var pixels: Array = []
 	for y in EMBLEM_SIZE.y:
 		var row: Array = []
@@ -168,6 +176,31 @@ static func generate_default_emblem(rng: RandomNumberGenerator) -> Array:
 					elif distance in [4, 5] and (x == 5 or y == 5 or x + y in [6, 16] or x - y in [-6, 6]): color = symbol
 				7:
 					if y in [4, 5] and mx >= 2 or y in [3, 6] and mx in [1, 2, 4, 5] or y >= 7 and mx in [4, 5]: color = symbol
+				8:
+					if x in [5, 6] and y >= 1 and y <= 9 or y in [4, 5] and x >= 2 and x <= 9: color = symbol
+					if y == 10 and x >= 4 and x <= 7: color = detail
+				9:
+					if y in [3, 4] and mx in [1, 3, 5] or y >= 5 and y <= 9 and mx >= 1: color = symbol
+					if y in [7, 8] and mx in [3, 4]: color = detail
+				10:
+					if y >= 2 and y <= 6 and mx >= y - 1 or y in [7, 8] and mx in [4, 5] or y == 9 and mx >= 3: color = symbol
+					if y == 3 and mx in [4, 5]: color = detail
+				11:
+					if y >= 2 and y <= 7 and absi(x - 5) <= (y - 1) / 2 or y >= 7 and y <= 10 and x in [5, 6]: color = symbol
+					if y in [4, 6] and x in [4, 7]: color = detail
+				12:
+					if y in [3, 4] and mx in [1, 3, 5] or y in [5, 6] and mx >= 1 or y in [7, 8] and mx in [2, 3, 4, 5]: color = symbol
+					if y == 5 and mx in [3, 4]: color = detail
+				13:
+					var star_distance := absi(x - 5) + absi(y - 5)
+					if star_distance <= 2 or x in [5, 6] and y in [1, 9] or y in [5, 6] and x in [1, 9]: color = symbol
+					if star_distance <= 1: color = detail
+				14:
+					if x + y in [7, 8, 13, 14] and y >= 2 and y <= 9 or x - y in [-3, -2, 3, 4] and y >= 2 and y <= 9: color = symbol
+					if y in [5, 6] and x in [5, 6]: color = detail
+				15:
+					if y >= 2 and y <= 9 and (mx == maxi(1, (y - 1) / 3) or y == 2) or y == 10 and mx >= 4: color = symbol
+					if y in [5, 6] and mx in [4, 5]: color = detail
 			row.append(color)
 		pixels.append(row)
 	return pixels

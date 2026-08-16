@@ -11,10 +11,16 @@ config_version=5
 [application]
 
 config/name="CROWNSCAR"
+run/main_scene="uid://bmmn7q4k2v5ra"
+config/icon="res://Assets/UI/AppIcon/crownscar_icon.png"
+config/windows_native_icon="res://Assets/UI/AppIcon/crownscar_icon.png"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="kingdoom"
-run/main_scene="uid://bmmn7q4k2v5ra"
 config/features=PackedStringArray("4.7", "Forward Plus")
+
+[autoload]
+
+AudioManager="*res://Scripts/Audio/AudioManager.gd"
 
 [display]
 
@@ -51,3 +57,5 @@ ui_cancel={
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+environment/defaults/default_clear_color=Color(0.09, 0.095, 0.1, 1)
+textures/vram_compression/import_etc2_astc=true
